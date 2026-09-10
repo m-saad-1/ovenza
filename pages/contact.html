@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - crust</title>
+    <link rel="icon" type="image/avif" href="../assets/images/logo.avif">
+    <meta name="description" content="Get in touch with crust for reservations, delivery, or general inquiries.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"></noscript>
+    <link rel="stylesheet" href="../assets/css/style.bundle.css?v=16">
+    <!-- Component Loader -->
+    <script defer src="../assets/js/config.js"></script>
+    <script defer src="../assets/js/loader.js?v=11"></script>
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="crust" width="80" height="80" fetchpriority="high" decoding="sync"/>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  <div class="loader-spinner"></div>
+</div>
+
+    <main>
+        <section class="contact-page" style="padding: 2.5rem 0; background-color: var(--clr-background);">
+            <div class="container">
+                <div class="section-header" style="margin-bottom: 3rem;">
+                    <h2 style="font-size: 2.5rem; color: var(--clr-text-primary);">Contact Us</h2>
+                    <p style="color: var(--clr-text-secondary, #666); font-size: 1.1rem;">Questions, suggestions or compliments? We are always available to listen to you.</p>
+                </div>
+                
+                <div class="contact-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; align-items: start;">
+                    <div class="contact-info-col" style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                        <h3 style="color: var(--clr-primary); margin-bottom: 1.5rem;">Contact Information</h3>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 2.5rem; color: var(--clr-text-secondary, #555); line-height: 1.6;">
+                            <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: flex-start;">
+                                <span style="color: var(--clr-primary); display: flex; align-items: center; justify-content: center; height: 1.5rem; width: 1.5rem;">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </span>
+                                <div>
+                                    <strong style="color: var(--clr-text-primary); display: block;">Our Location</strong>
+                                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0 0 0; line-height: 1.6; list-style-type: disc;">
+                                        <li>Hospital Road Central Park, Lahore</li><li>8A Commercial, Pak Arab, Lahore</li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: flex-start;">
+                                <span style="color: var(--clr-primary); display: flex; align-items: center; justify-content: center; height: 1.5rem; width: 1.5rem;">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"></path></svg>
+                                </span>
+                                <div>
+                                    <strong style="color: var(--clr-text-primary); display: block;">Phone / WhatsApp</strong>
+                                    +92 03001013556
+                                </div>
+                            </li>
+                            <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: flex-start;">
+                                <span style="color: var(--clr-primary); display: flex; align-items: center; justify-content: center; height: 1.5rem; width: 1.5rem;">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </span>
+                                <div>
+                                    <strong style="color: var(--clr-text-primary); display: block;">Email</strong>
+                                    info@crust.com
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <h3 id="horarios" style="color: var(--clr-primary); margin-bottom: 1rem;">Opening Hours</h3>
+                        <ul style="list-style: none; padding: 0; margin-bottom: 2.5rem; color: var(--clr-text-secondary, #555);">
+                            <li style="margin-bottom: 0.5rem;"><strong>Open Daily:</strong> 11:00 AM - 2:00 AM</li>
+                        </ul>
+                        
+                        <h3 style="color: var(--clr-primary); margin-bottom: 1rem;">Social Networks</h3>
+                        <div class="social-links" style="display: flex; gap: 1rem;">
+                            <a href="#" style="background: var(--clr-surface); padding: 0.5rem 1rem; border-radius: 50px; color: var(--clr-text-primary); font-weight: 600; text-decoration: none;">Instagram</a>
+                            <a href="#" style="background: var(--clr-surface); padding: 0.5rem 1rem; border-radius: 50px; color: var(--clr-text-primary); font-weight: 600; text-decoration: none;">Facebook</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form-col">
+                        <form class="contact-form" style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);" id="contactForm">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary);">Send a Message</h3>
+                            <div class="form-group" style="margin-bottom: 1.2rem;">
+                                <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--clr-text-secondary, #444);">Name</label>
+                                <input type="text" placeholder="Your name" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.2rem;">
+                                <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--clr-text-secondary, #444);">Email</label>
+                                <input type="email" placeholder="your@email.com" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.2rem;">
+                                <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--clr-text-secondary, #444);">Subject</label>
+                                <select required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; background: white;">
+                                    <option value="">Select the subject...</option>
+                                    <option>Question</option>
+                                    <option>Suggestion</option>
+                                    <option>Compliment</option>
+                                    <option>Complaint</option>
+                                    <option>Others</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 1.5rem;">
+                                <label style="display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--clr-text-secondary, #444);">Message</label>
+                                <textarea rows="5" placeholder="How can we help?" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 50px;">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="localizacao" style="margin-top: 2.5rem; background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--clr-primary); margin-bottom: 1.5rem; text-align: center;">Directions</h3>
+                    <div class="map-placeholder" style="height: 350px; background: #eee; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                        <iframe title="Map showing crust location" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3407.412356976214!2d74.3496924754425!3d31.34758788142704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391901ab9825b293%3A0x6b6f3ff80e5ab140!2sCentral%20Park%20Housing%20Scheme%2C%20Lahore%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2.5rem; text-align: center;">
+                    <h3 style="color: var(--clr-primary); margin-bottom: 2rem;">Frequently Asked Questions</h3>
+                    <div style="max-width: 800px; margin: 0 auto; text-align: left;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                            <strong style="color: var(--clr-text-primary); display: block; margin-bottom: 0.5rem;">Do you accept meal vouchers?</strong>
+                            <p style="color: var(--clr-text-secondary, #666); font-size: 0.95rem;">Yes, we accept major meal vouchers.</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                            <strong style="color: var(--clr-text-primary); display: block; margin-bottom: 0.5rem;">Does the restaurant have a kids area?</strong>
+                            <p style="color: var(--clr-text-secondary, #666); font-size: 0.95rem;">Yes, we have a recreational area with monitors on weekends.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 3rem; border-radius: 16px; max-width: 400px; text-align: center;">
+            <div style="color: #2E7D32; display: flex; justify-content: center; margin-bottom: 1rem;">
+                                <svg viewBox="0 0 24 24" width="60" height="60" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+            <h3 style="color: var(--clr-primary); margin-bottom: 1rem;">Message Sent!</h3>
+            <p style="color: var(--clr-text-secondary, #666); margin-bottom: 2rem;">Thank you for contacting us. We will reply soon.</p>
+            <button onclick="document.getElementById('contactModal').style.display='none'" class="btn btn-primary" style="width: 100%; border-radius: 50px;">Close</button>
+        </div>
+    </div>
+    <script defer src="../assets/js/search.js?v=2"></script>
+<script defer src="../assets/js/script.bundle.js"></script>
+    <script>
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('contactModal').style.display = 'flex';
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+

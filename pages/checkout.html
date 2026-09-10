@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - crust</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo.avif">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"></noscript>
+    <link rel="stylesheet" href="../assets/css/style.bundle.css?v=16">
+    <!-- Component Loader -->
+    <script defer src="../assets/js/config.js"></script>
+    <script defer src="../assets/js/loader.js?v=11"></script>
+</head>
+<body>
+<div id="page-loader" class="page-loader">
+  <div class="loader-spinner"></div>
+</div>
+
+    <main>
+        <section class="cart-page" style="padding: 2.5rem 0; background-color: var(--clr-background); min-height: 70vh;">
+            <div class="container">
+                <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem;">Checkout</h2>
+                </div>
+                               <style>
+                    .checkout-input {
+                        padding: 1rem 1.2rem; border: 1px solid #e0e0e0; border-radius: 12px; outline: none; font-family: var(--ff-body); font-size: 1rem; transition: border-color 0.3s; background: #fafafa; width: 100%; box-sizing: border-box;
+                    }
+                    .checkout-input:focus {
+                        border-color: var(--clr-primary);
+                        background: #fff;
+                        box-shadow: 0 0 0 4px rgba(167, 2, 1, 0.1);
+                    }
+                    .checkout-grid {
+                        display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+                    }
+                    .payment-label {
+                        display: flex;
+                        align-items: center;
+                        padding: 1rem 0.5rem;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        background: #fff;
+                        flex-direction: column;
+                        justify-content: center;
+                        gap: 0.5rem;
+                    }
+                    .payment-label:hover {
+                        border-color: var(--clr-primary); background: #fffbfb;
+                    }
+                    .payment-label:has(input:checked) {
+                        border-color: var(--clr-primary); background: #fffbfb; box-shadow: 0 4px 10px rgba(167, 2, 1, 0.08);
+                    }
+                    .payment-label input[type="radio"] {
+                        accent-color: var(--clr-primary);
+                        transform: scale(1.2);
+                        flex-shrink: 0;
+                        margin: 0;
+                    }
+                    .payment-label > span {
+                        font-weight: 600; color: inherit; font-size: 0.95rem;
+                        white-space: normal;
+                        text-align: center;
+                        flex: none;
+                        line-height: 1.2;
+                        padding-left: 0;
+                    }
+                    .field-label {
+                        display: block; font-size: 0.9rem; font-weight: 600; color: var(--clr-text-secondary, #555); margin-bottom: 0.5rem; text-align: left;
+                    }
+                    .checkout-details-box {
+                        background: #fff;
+                        border: 1px solid #eee;
+                        border-radius: var(--border-radius-lg);
+                        padding: 2.5rem;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+                        display: flex;
+                        flex-direction: column;
+                        border-radius: 20px;
+                    }
+                    @media (max-width: 600px) {
+                        .checkout-grid { grid-template-columns: 1fr; }
+                        #payment-methods-container { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+                        .payment-label > span { font-size: 0.85rem; }
+                        .payment-label input[type="radio"] { transform: scale(1.1); }
+                    }
+                    html.dark-mode #payment-instructions {
+                        background: #2a2a2a !important;
+                        color: #ddd !important;
+                    }
+                    html.dark-mode .checkout-summary-box span {
+                        color: #fff !important;
+                    }
+                </style>
+                <form id="checkout-form" class="cart-grid-wrapper" style="align-items: start;">
+                    
+                    <div class="checkout-form-sections" style="display: flex; flex-direction: column; gap: 2rem; width: 100%;">
+                        <!-- Guest Checkout Banner -->
+                        <div id="checkout-auth-banner" style="background: rgba(167, 2, 1, 0.05); border: 1px solid var(--clr-primary); padding: 1.5rem; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <h4 style="margin: 0 0 0.5rem 0; font-size: 1.2rem; color: var(--clr-text-primary);">Guest Checkout</h4>
+                                <p style="margin: 0; font-size: 0.95rem; opacity: 0.8; color: var(--clr-text-primary);">Login to save your address and checkout information.</p>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <a href="profile.html" class="btn btn-outline-primary" style="border: 1px solid var(--clr-primary); color: #fff; border-radius: 50px; padding: 0.6rem 1.5rem; font-weight: 600; text-decoration: none;">Sign In</a>
+                                <a href="profile.html" class="btn btn-primary" style="border-radius: 50px; padding: 0.6rem 1.5rem; font-weight: 600; text-decoration: none;">Register</a>
+                            </div>
+                        </div>
+
+                        <!-- Customer Details -->
+                        <div class="checkout-details-box">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 0.8rem; text-align: left;">Customer Details</h3>
+                            <div class="checkout-grid">
+                                <div style="grid-column: 1 / -1;">
+                                    <label for="cust-name" class="field-label">Full Name</label>
+                                    <input type="text" id="cust-name" class="checkout-input" placeholder="e.g. John Doe" required>
+                                </div>
+                                <div>
+                                    <label for="cust-phone" class="field-label">Phone Number</label>
+                                    <input type="tel" id="cust-phone" class="checkout-input" placeholder="0300 1234567" required>
+                                </div>
+                                <div>
+                                    <label for="cust-email" class="field-label">Email Address</label>
+                                    <input type="email" id="cust-email" class="checkout-input" placeholder="name@example.com" required>
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label for="cust-address" class="field-label">Delivery Address</label>
+                                    <textarea id="cust-address" class="checkout-input" placeholder="House/Apartment #, Street, etc." required rows="2" style="resize: none;"></textarea>
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label for="cust-city" class="field-label">City / Area</label>
+                                    <input type="text" id="cust-city" class="checkout-input" placeholder="e.g. DC Colony, Gujranwala" required>
+                                </div>
+                                <div style="grid-column: 1 / -1;">
+                                    <label for="cust-notes" class="field-label">Additional Order Notes (Optional)</label>
+                                    <textarea id="cust-notes" class="checkout-input" placeholder="Any special instructions?" rows="2" style="resize: none;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Details -->
+                        <div class="checkout-details-box">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 0.8rem;">Payment Details</h3>
+                            <div class="checkout-grid" id="payment-methods-container">
+                                <label class="payment-label">
+                                    <input type="radio" name="payment_method" value="Cash on Delivery" checked>
+                                    <span style="font-weight: 600;">Cash on Delivery</span>
+                                </label>
+                                <label class="payment-label">
+                                    <input type="radio" name="payment_method" value="Easypaisa">
+                                    <span style="font-weight: 600;">Easypaisa</span>
+                                </label>
+                                <label class="payment-label">
+                                    <input type="radio" name="payment_method" value="JazzCash">
+                                    <span style="font-weight: 600;">JazzCash</span>
+                                </label>
+                                <label class="payment-label">
+                                    <input type="radio" name="payment_method" value="Wallet">
+                                    <span style="font-weight: 600; display:flex; align-items:center; gap:0.5rem;">
+                                        Wallet
+                                        <span id="wallet-balance-display" style="font-size:0.8rem; background:rgba(167,2,1,0.1); color:var(--clr-primary); padding:0.1rem 0.4rem; border-radius:4px; display:none;"></span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div id="payment-instructions" style="margin-top: 1.5rem; padding: 1.2rem; background: #f8f9fa; border-left: 4px solid var(--clr-primary); border-radius: 8px; color: var(--clr-text-secondary, #555); display: none; font-size: 0.95rem; line-height: 1.5;">
+                                <!-- Dynamic instructions injected here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="checkout-summary-box" style="padding: 2.5rem; border-radius: 20px; position: sticky; top: 100px; width: 100%; display: flex; flex-direction: column;">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 0.8rem;">Order Summary</h3>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1.2rem; color: var(--clr-text-secondary, #555); font-size: 1.1rem;">
+                            <span>Subtotal</span>
+                            <span class="subtotal-val" style="font-weight: 600; color: var(--clr-text-primary, #333);">Rs 0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; color: var(--clr-text-secondary, #555); font-size: 1.1rem; border-bottom: 1px dashed #ddd; padding-bottom: 1.5rem;">
+                            <span>Delivery Fee</span>
+                            <span style="font-weight: 600; color: var(--clr-text-primary, #333);">Rs 12</span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 2.5rem; font-size: 1.6rem; font-weight: 800;">
+                            <span>Total</span>
+                            <span class="total-val" style="color: var(--clr-primary);">Rs 0</span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 50px; padding: 1.2rem; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(167, 2, 1, 0.3);">Place Order</button>
+                        <a href="cart.html" style="display: block; text-align: center; margin-top: 1.5rem; color: #777; font-weight: 600; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='var(--clr-primary)';" onmouseout="this.style.color='#777';">&larr; Back to Cart</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script defer src="../assets/js/search.js"></script>
+    <script defer src="../assets/js/script.bundle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            // Handle Auth Banner and Auto-fill
+            if (isLoggedIn) {
+                const authBanner = document.getElementById('checkout-auth-banner');
+                if(authBanner) authBanner.style.display = 'none';
+
+                const pName = localStorage.getItem('profileName');
+                const pEmail = localStorage.getItem('profileEmail');
+                
+                if(pName) document.getElementById('cust-name').value = pName;
+                if(pEmail) document.getElementById('cust-email').value = pEmail;
+                
+                // Mock default address fetch for logged in user
+                document.getElementById('cust-phone').value = "+92 03001013556";
+                document.getElementById('cust-address').value = "House 45, Street 1, DC Colony";
+                document.getElementById('cust-city').value = "Gujranwala";
+            }
+
+            // Wallet Balance Display Logic
+            const walletBalance = 2500; // Hardcoded from Profile page sync
+            window.userWalletBalance = walletBalance; // Expose for script.bundle.js
+            
+            const walletDisplay = document.getElementById('wallet-balance-display');
+            if (isLoggedIn) {
+                walletDisplay.textContent = 'Rs ' + walletBalance.toLocaleString();
+                walletDisplay.style.display = 'inline-block';
+            }
+
+        });
+    </script>
+</body>
+</html>
+
+
