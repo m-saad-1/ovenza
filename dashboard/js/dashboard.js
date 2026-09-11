@@ -230,3 +230,33 @@ window.updateSalesChart = function(duration) {
     salesChartInstance.data.datasets[0].data = data;
     salesChartInstance.update();
 };
+
+// Dark Mode Toggle Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if (darkModeToggle) {
+        // Initialize state
+        const isDarkMode = document.documentElement.classList.contains('dark-mode');
+        darkModeToggle.checked = isDarkMode;
+
+        darkModeToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                document.documentElement.classList.add('dark-mode');
+                localStorage.setItem('crust_theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+                localStorage.setItem('crust_theme', 'light');
+            }
+        });
+    }
+
+    // Apply theme on load if it was set
+    const savedTheme = localStorage.getItem('crust_theme');
+    if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark-mode');
+        if (darkModeToggle) darkModeToggle.checked = false;
+    } else if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+        if (darkModeToggle) darkModeToggle.checked = true;
+    }
+});

@@ -2480,3 +2480,15 @@ html.dark-mode .empty-state,
 html.dark-mode .no-data {
   color: var(--clr-text-muted);
 }
+
+/* Toggle Switch Styles */
+#dark-mode-toggle:checked + span {
+    background-color: var(--clr-primary) !important;
+}
+#dark-mode-toggle:checked + span > span {
+    transform: translateX(16px);
+}
+
+html.dark-mode .kds-column {
+  background-color: var(--clr-bg-app);
+}
