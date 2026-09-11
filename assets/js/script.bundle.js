@@ -175,11 +175,33 @@
         
         /* Checkout Form Styling inside modal */
         .cc-input {
-            width: 100%; padding: 0.8rem 1rem; border: 1px solid #ddd; border-radius: 8px;
-            margin-bottom: 1rem; font-family: inherit; font-size: 1rem; background: var(--clr-background); color: var(--clr-text-primary);
+            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--clr-border, #ddd); border-radius: 8px;
+            margin-bottom: 1rem; font-family: inherit; font-size: 1rem; background: var(--clr-background, #fff); color: var(--clr-text-primary);
+        }
+        .cc-input:focus {
+            outline: none; border-color: var(--clr-primary);
         }
         .cc-label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--clr-text-secondary); }
         
+        /* Method Selector Styling */
+        .cc-method-label {
+            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; 
+            border: 1px solid var(--clr-border, #ddd); border-radius: 8px; cursor: pointer; text-align: center;
+            transition: all 0.3s; background: var(--clr-surface, #fff);
+        }
+        .cc-method-label:hover { border-color: var(--clr-primary); }
+        .cc-method-label input[type="radio"] { accent-color: var(--clr-primary); transform: scale(1.2); margin: 0; }
+        .cc-method-label:has(input:checked) { border-color: var(--clr-primary); background: rgba(167,2,1,0.05); }
+
+        /* Order Type Toggle */
+        .cc-type-label {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem; 
+            border: 1px solid var(--clr-border, #ddd); border-radius: 8px; cursor: pointer; text-align: center;
+            transition: all 0.3s; background: var(--clr-surface, #fff); font-weight: 600; color: var(--clr-text-primary);
+        }
+        .cc-type-label input[type="radio"] { accent-color: var(--clr-primary); }
+        .cc-type-label:has(input:checked) { border-color: var(--clr-primary); background: rgba(167,2,1,0.05); color: var(--clr-primary); }
+
         @media (max-width: 768px) {
             .cc-modal-overlay { justify-content: center; align-items: flex-end; }
             .cc-modal-sheet { height: 90vh; transform: translateY(100%); border-radius: 20px 20px 0 0; }
@@ -189,6 +211,12 @@
         html.dark-mode .cc-input {
             border-color: var(--clr-border);
             background: var(--clr-surface);
+        }
+        html.dark-mode .cc-method-label, html.dark-mode .cc-type-label {
+            background: var(--clr-surface);
+        }
+        html.dark-mode .cc-method-label:has(input:checked), html.dark-mode .cc-type-label:has(input:checked) {
+            background: rgba(167,2,1,0.15);
         }
     </style>
     <div class="cc-modal-overlay" id="custom-cart-modal">
@@ -202,7 +230,7 @@
                 <div id="cc-cart-view">
                     <div id="cc-cart-items"></div>
                     <div id="cc-cart-empty" style="display:none; text-align:center; padding: 2rem;">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1.5rem; display:inline-block;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--clr-border, #ccc)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1.5rem; display:inline-block;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                         <h3 style="font-size: 1.5rem; color: var(--clr-text-primary); margin-bottom: 0.5rem;">Your cart is empty</h3>
                         <p style="color: var(--clr-text-secondary); margin-bottom: 2rem;">It looks like you haven't added any delicious items to your order yet.</p>
                         <button class="btn btn-primary" onclick="document.getElementById('cc-modal-close').click()" style="padding: 0.8rem 2rem; border-radius: 50px;">Explore Menu</button>
@@ -211,19 +239,30 @@
                         <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color: var(--clr-text-primary);">
                             <span>Subtotal</span><span id="cc-subtotal">Rs 0</span>
                         </div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:1rem; color: var(--clr-text-primary);">
-                            <span>Delivery</span><span>Rs 12</span>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:1rem; color: var(--clr-text-primary);" id="cc-delivery-fee-row">
+                            <span>Delivery Fee</span><span>Rs 12</span>
                         </div>
                         <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.2rem; margin-bottom:1.5rem; color: var(--clr-text-primary);">
                             <span>Total</span><span id="cc-total">Rs 12</span>
                         </div>
-                        <button class="btn btn-primary" style="width:100%; padding:1rem;" id="cc-go-checkout">Proceed to Checkout</button>
+                        <button class="btn btn-primary" style="width:100%; padding:1rem; border-radius:50px; font-weight:700;" id="cc-go-checkout">Proceed to Checkout</button>
                     </div>
                 </div>
                 
                 <!-- Checkout Form -->
                 <div id="cc-checkout-view" style="display:none;">
                     <form id="cc-checkout-form">
+                        
+                        <label class="cc-label" style="margin-bottom:0.8rem;">Order Type</label>
+                        <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
+                            <label class="cc-type-label">
+                                <input type="radio" name="cc_order_type" value="Delivery" checked> Delivery
+                            </label>
+                            <label class="cc-type-label">
+                                <input type="radio" name="cc_order_type" value="Pickup"> Pickup
+                            </label>
+                        </div>
+                        
                         <label class="cc-label">Phone Number *</label>
                         <input type="tel" id="cc-phone" class="cc-input" required placeholder="0300 1234567">
                         
@@ -233,30 +272,37 @@
                         <label class="cc-label">Email (Optional)</label>
                         <input type="email" id="cc-email" class="cc-input" placeholder="name@example.com">
                         
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <label class="cc-label">Delivery Area/City *</label>
-                            <a href="#" id="cc-edit-location" style="font-size:0.85rem; color:var(--clr-primary); text-decoration:none;">Edit</a>
-                        </div>
-                        <input type="text" id="cc-city" class="cc-input" required readonly style="background:var(--clr-surface); cursor:not-allowed;">
-                        
-                        <label class="cc-label">Delivery Address *</label>
-                        <textarea id="cc-address" class="cc-input" required placeholder="House/Apartment #, Street, etc." rows="2"></textarea>
-                        
-                        <label class="cc-label">Payment Method</label>
-                        <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.5rem; color: var(--clr-text-primary);">
-                            <label style="display:flex; align-items:center; gap:0.5rem; padding:0.8rem; border:1px solid var(--clr-border, #ddd); border-radius:8px;">
-                                <input type="radio" name="cc_payment" value="Cash on Delivery" checked> Cash on Delivery
-                            </label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; padding:0.8rem; border:1px solid var(--clr-border, #ddd); border-radius:8px;">
-                                <input type="radio" name="cc_payment" value="Card on Delivery"> Card on Delivery
-                            </label>
-                            <label style="display:flex; align-items:center; gap:0.5rem; padding:0.8rem; border:1px solid var(--clr-border, #ddd); border-radius:8px;">
-                                <input type="radio" name="cc_payment" value="Wallet"> Wallet
-                            </label>
+                        <!-- Delivery Location Field -->
+                        <div id="cc-delivery-area-group">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <label class="cc-label" id="cc-location-label">Delivery Area/City *</label>
+                                <a href="#" id="cc-edit-location" style="font-size:0.85rem; color:var(--clr-primary); text-decoration:none;">Edit</a>
+                            </div>
+                            <input type="text" id="cc-city" class="cc-input" required readonly style="background:var(--clr-background, #f5f5f5); cursor:not-allowed; border-color:var(--clr-border, #ddd);">
                         </div>
                         
-                        <button type="submit" class="btn btn-primary" style="width:100%; padding:1rem;" id="cc-place-order">Place Order</button>
-                        <button type="button" class="btn btn-outline" style="width:100%; padding:1rem; margin-top:0.5rem;" id="cc-back-cart">Back to Cart</button>
+                        <!-- Delivery Address Field -->
+                        <div id="cc-delivery-address-group">
+                            <label class="cc-label">Delivery Address *</label>
+                            <textarea id="cc-address" class="cc-input" required placeholder="House/Apartment #, Street, etc." rows="2"></textarea>
+                        </div>
+                        
+                        <label class="cc-label" style="margin-top:0.5rem; margin-bottom:0.8rem;">Payment Method</label>
+                        <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
+                            <label class="cc-method-label">
+                                <input type="radio" name="cc_payment" value="Cash on Delivery" checked>
+                                <span style="font-size:0.9rem; font-weight:600; color:var(--clr-text-primary);">Cash on Delivery</span>
+                            </label>
+                            <label class="cc-method-label">
+                                <input type="radio" name="cc_payment" value="Wallet">
+                                <span style="font-size:0.9rem; font-weight:600; color:var(--clr-text-primary);">Wallet</span>
+                            </label>
+                        </div>
+                        
+                        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+                            <button type="button" class="btn btn-outline" style="flex:1; padding:1rem; border-radius:50px; font-weight:600;" id="cc-back-cart">Back to Cart</button>
+                            <button type="submit" class="btn btn-primary" style="flex:1; padding:1rem; border-radius:50px; font-weight:700;" id="cc-place-order">Place Order</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -271,6 +317,35 @@
     const cartView = document.getElementById('cc-cart-view');
     const checkoutView = document.getElementById('cc-checkout-view');
     const modalTitle = document.getElementById('cc-modal-title');
+    
+    // Order Type Toggle Logic
+    const orderTypeRadios = document.querySelectorAll('input[name="cc_order_type"]');
+    const deliveryAreaGroup = document.getElementById('cc-delivery-area-group');
+    const deliveryAddressGroup = document.getElementById('cc-delivery-address-group');
+    const locationLabel = document.getElementById('cc-location-label');
+    const cityInput = document.getElementById('cc-city');
+    const addressInput = document.getElementById('cc-address');
+    
+    let originalCityValue = '';
+    
+    orderTypeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            if(e.target.value === 'Pickup') {
+                locationLabel.textContent = 'Pickup Outlet';
+                originalCityValue = cityInput.value;
+                cityInput.value = 'Main Branch (Default)';
+                deliveryAddressGroup.style.display = 'none';
+                addressInput.removeAttribute('required');
+                document.getElementById('cc-edit-location').style.display = 'none';
+            } else {
+                locationLabel.textContent = 'Delivery Area/City *';
+                cityInput.value = originalCityValue || localStorage.getItem('tl_location_name') || '';
+                deliveryAddressGroup.style.display = 'block';
+                addressInput.setAttribute('required', 'true');
+                document.getElementById('cc-edit-location').style.display = 'block';
+            }
+        });
+    });
     
     function openModal() {
         modal.classList.add('active');
@@ -352,11 +427,11 @@
                 <img src="${imagePath}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;">
                 <div style="flex:1;">
                     <h4 style="margin:0; font-size:1rem; color:var(--clr-text-primary);">${item.title}</h4>
-                    ${item.size ? `<p style="margin:0; font-size:0.8rem; color:#888;">${item.size}</p>` : ''}
+                    ${item.size ? `<p style="margin:0; font-size:0.8rem; color:var(--clr-text-secondary);">${item.size}</p>` : ''}
                     <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
-                        <button onclick="window.CartManager.updateItemQty(${index}, ${item.qty-1}); setTimeout(()=>window._renderCC(), 50)" style="width:24px; height:24px; border-radius:50%; border:1px solid #ddd; background:var(--clr-surface); color:var(--clr-text-primary); cursor:pointer;">-</button>
+                        <button onclick="window.CartManager.updateItemQty(${index}, ${item.qty-1}); setTimeout(()=>window._renderCC(), 50)" style="width:24px; height:24px; border-radius:50%; border:1px solid var(--clr-border, #ddd); background:var(--clr-surface); color:var(--clr-text-primary); cursor:pointer;">-</button>
                         <span style="color:var(--clr-text-primary);">${item.qty}</span>
-                        <button onclick="window.CartManager.updateItemQty(${index}, ${item.qty+1}); setTimeout(()=>window._renderCC(), 50)" style="width:24px; height:24px; border-radius:50%; border:1px solid #ddd; background:var(--clr-surface); color:var(--clr-text-primary); cursor:pointer;">+</button>
+                        <button onclick="window.CartManager.updateItemQty(${index}, ${item.qty+1}); setTimeout(()=>window._renderCC(), 50)" style="width:24px; height:24px; border-radius:50%; border:1px solid var(--clr-border, #ddd); background:var(--clr-surface); color:var(--clr-text-primary); cursor:pointer;">+</button>
                     </div>
                 </div>
                 <div style="text-align:right;">
@@ -385,12 +460,24 @@
         checkoutView.style.display = 'block';
         modalTitle.textContent = 'Checkout';
         
+        // Auto-fill logged in user
+        if(localStorage.getItem('isLoggedIn') === 'true') {
+            document.getElementById('cc-phone').value = localStorage.getItem('userPhone') || localStorage.getItem('customerPhone') || '';
+            document.getElementById('cc-name').value = localStorage.getItem('userName') || localStorage.getItem('customerName') || 'John Doe';
+            document.getElementById('cc-email').value = localStorage.getItem('userEmail') || localStorage.getItem('customerEmail') || 'john@example.com';
+        }
+
         // Populate City automatically
         const locName = localStorage.getItem('tl_location_name');
         const locArea = localStorage.getItem('tl_location_area');
         let cityStr = locName || '';
         if(locArea) cityStr += ` (${locArea})`;
-        document.getElementById('cc-city').value = cityStr;
+        originalCityValue = cityStr;
+        
+        // Only override if it's Delivery
+        if(document.querySelector('input[name="cc_order_type"]:checked').value === 'Delivery') {
+            document.getElementById('cc-city').value = cityStr;
+        }
     }
     
     document.getElementById('cc-go-checkout').addEventListener('click', showCheckoutView);
@@ -408,7 +495,10 @@
                 const locArea = localStorage.getItem('tl_location_area');
                 let cityStr = locName || '';
                 if(locArea) cityStr += ` (${locArea})`;
-                document.getElementById('cc-city').value = cityStr;
+                originalCityValue = cityStr;
+                if(document.querySelector('input[name="cc_order_type"]:checked').value === 'Delivery') {
+                    document.getElementById('cc-city').value = cityStr;
+                }
             });
             observer.observe(document.getElementById('current-location-text'), { characterData: true, childList: true, subtree: true });
         }
@@ -424,9 +514,10 @@
         const city = document.getElementById('cc-city').value;
         const address = document.getElementById('cc-address').value;
         const payment = document.querySelector('input[name="cc_payment"]:checked').value;
-        const total = window.CartManager.getSubtotal() + 12;
+        const orderType = document.querySelector('input[name="cc_order_type"]:checked').value;
+        const total = window.CartManager.getSubtotal() + (orderType === 'Delivery' ? 12 : 0);
         
-        if(!city) {
+        if(orderType === 'Delivery' && !city) {
             alert('Please select a Delivery Area/City first.');
             return;
         }
@@ -439,11 +530,12 @@
             total: total,
             status: "Pending",
             paymentMethod: payment,
+            type: orderType,
             customer: {
                 name: name || 'Guest',
                 phone: phone,
                 email: email,
-                address: address,
+                address: orderType === 'Delivery' ? address : 'Pickup',
                 city: city,
                 notes: ""
             },
@@ -454,31 +546,113 @@
         orders.unshift(newOrder);
         localStorage.setItem("hdm_orders", JSON.stringify(orders));
         
-        // Show compact confirmation modal with images
-        let itemsHtml = window.CartManager.state.items.map(item => {
-            let img = item.image;
-            if(!window.location.pathname.includes('/pages/')) img = img.replace('../', './');
-            return `<div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
-                <img src="${img}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;">
-                <div style="font-size:0.85rem; color:var(--clr-text-primary);"><strong>${item.qty}x</strong> ${item.title}</div>
-            </div>`;
-        }).join('');
-        
-        const confirmHtml = `
-        <div class="modal-overlay active" id="cc-confirm-modal" style="z-index:10010; display:flex;">
-            <div class="modal-sheet" style="max-width:400px; padding:2rem; text-align:center; background:var(--clr-surface); color:var(--clr-text-primary); border-radius:16px;">
-                <div style="width:60px; height:60px; border-radius:50%; background:#e8f5e9; color:#4CAF50; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        // Show the huge confirmation modal "like the previous one"
+        const confirmHtml = \`
+            <div class="modal-overlay active" id="order-confirm-modal" style="z-index:10015; display:flex; padding: 1rem; align-items:center; justify-content:center;">
+              <div class="modal-sheet" style="max-width:850px; width:100%; max-height:90vh; padding:0; display:flex; flex-direction:column; background:var(--clr-surface, #fff); overflow:hidden; border-radius:24px;">
+                
+                <div class="scrollable-content" style="flex:1; overflow-y:auto; display:flex; flex-direction:row;">
+                  <!-- Left side: Customer Info -->
+                  <div class="modal-left-pane" style="flex:1; background:var(--clr-primary); color:white; padding: 3rem 2.5rem; display:flex; flex-direction:column; justify-content:center;">
+                    <div style="margin-bottom: 2rem;">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.9;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff;">Order Confirmed!</h2>
+                      <p style="opacity: 0.9; font-size: 1.05rem; line-height: 1.5; margin: 0;">Thank you for your order, \${name || 'Guest'}!</p>
+                    </div>
+                    
+                    <div style="background: rgba(0,0,0,0.15); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                      <h4 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 1rem; color: #fff;">\${orderType === 'Pickup' ? 'Pickup Details' : 'Delivery Details'}</h4>
+                      
+                      <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.8; flex-shrink:0; margin-top:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <div>
+                          <p style="margin:0; font-weight:600; font-size:1rem; color:#fff;">\${orderType === 'Pickup' ? 'Pickup Outlet' : city}</p>
+                          \${orderType === 'Delivery' ? \`<p style="margin:0.2rem 0 0; opacity:0.8; font-size:0.9rem; line-height:1.4;">\${address}</p>\` : ''}
+                        </div>
+                      </div>
+                      
+                      <div style="display: flex; align-items: center; gap: 1rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.8; flex-shrink:0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <p style="margin:0; font-weight:500; font-size:1rem; color:#fff;">\${phone}</p>
+                      </div>
+                    </div>
+                    
+                    <!-- Desktop buttons (hidden on mobile) -->
+                    <div id="order-confirm-modal-buttons-desktop" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                      <button class="confirm-modal-submit btn btn-primary" style="flex:1; border-radius:50px; padding:0.8rem 1rem; font-weight:700; cursor:pointer; background:#fff; color:var(--clr-primary);" onclick="window.location.href='\${window.location.pathname.includes('/pages/') ? 'orders.html' : 'pages/orders.html'}'">View Orders</button>
+                    </div>
+                  </div>
+                  
+                  <!-- Right side: Order Summary -->
+                  <div class="modal-right-pane" style="flex:1; padding: 3rem 2.5rem; display:flex; flex-direction:column; background:var(--clr-surface, #fff);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
+                      <h3 style="font-size: 1.3rem; font-weight: 700; margin:0; color:var(--clr-text-primary);">Order Summary</h3>
+                      <span style="background: rgba(167, 2, 1, 0.1); color: var(--clr-primary); font-size: 0.85rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 50px;">ORD-\${orderId}</span>
+                    </div>
+                    
+                    <div style="flex:1; overflow-y:auto; padding-right:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--clr-border, #eee);">
+                      \${window.CartManager.state.items.map(m=>{
+                          let imgPath = m.image;
+                          if(!window.location.pathname.includes('/pages/')) imgPath = imgPath.replace('../', './');
+                          return \`
+                        <div style="display:flex; justify-content:space-between; margin-bottom:1rem; align-items:center;">
+                          <div style="display:flex; gap:1rem; align-items:center;">
+                            <img src="\${imgPath}" style="width:48px; height:48px; border-radius:8px; object-fit:cover;">
+                            <div>
+                              <p style="margin:0; font-weight:600; font-size:0.95rem; color:var(--clr-text-primary);">\${m.qty}x \${m.title}</p>
+                              \${m.size ? \`<p style="margin:0; font-size:0.8rem; color:var(--clr-text-secondary);">\${m.size}</p>\`:''}
+                            </div>
+                          </div>
+                          <span style="font-weight:600; font-size:0.95rem; color:var(--clr-text-primary);">Rs \${(m.basePrice + (m.addonsTotal||0)) * m.qty}</span>
+                        </div>
+                      \`}).join('')}
+                    </div>
+                    
+                    <div>
+                      <div style="display:flex; justify-content:space-between; margin-bottom:0.8rem; color:var(--clr-text-secondary); font-size:0.95rem;">
+                        <span>Subtotal</span>
+                        <span style="font-weight:500;">Rs \${total - (orderType === 'Delivery' ? 12 : 0)}</span>
+                      </div>
+                      \${orderType === 'Delivery' ? \`
+                      <div style="display:flex; justify-content:space-between; margin-bottom:1.2rem; color:var(--clr-text-secondary); font-size:0.95rem;">
+                        <span>Delivery Fee</span>
+                        <span style="font-weight:500;">Rs 12</span>
+                      </div>\` : ''}
+                      <div style="display:flex; justify-content:space-between; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--clr-border, #eee); font-size:1.2rem; font-weight:700; color:var(--clr-text-primary);">
+                        <span>Total</span>
+                        <span>Rs \${total}</span>
+                      </div>
+                      <div style="margin-top:1rem; text-align:right; color:var(--clr-text-secondary); font-size:0.85rem;">
+                        Payment Method: <strong>\${payment}</strong>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 style="margin-bottom:0.5rem; color:var(--clr-text-primary);">Order Confirmed!</h3>
-                <p style="color:var(--clr-text-secondary); font-size:0.9rem; margin-bottom:1.5rem;">Order #${orderId} has been placed successfully.</p>
-                <div style="text-align:left; background:var(--clr-background, #f9f9f9); padding:1rem; border-radius:8px; margin-bottom:1.5rem; border:1px solid var(--clr-border, #eee);">
-                    ${itemsHtml}
+  
+                <!-- Sticky Mobile Buttons (hidden on desktop) -->
+                <div id="order-confirm-modal-buttons-mobile" style="display: flex; gap: 1rem; padding: 1rem; background: var(--clr-surface); border-top: 1px solid var(--clr-border, rgba(0,0,0,0.05)); z-index: 10;">
+                  <button class="confirm-modal-submit btn btn-primary" style="flex:1; border-radius:50px; padding:0.8rem 0.5rem; font-weight:700; cursor:pointer; font-size: 0.95rem;" onclick="window.location.href='\${window.location.pathname.includes('/pages/') ? 'orders.html' : 'pages/orders.html'}'">View Orders</button>
                 </div>
-                <button class="btn btn-primary" style="width:100%;" onclick="window.location.href='${window.location.pathname.includes('/pages/') ? 'orders.html' : 'pages/orders.html'}'">View Orders</button>
+  
+              </div>
             </div>
-        </div>
-        `;
+            <style>
+              #order-confirm-modal-buttons-mobile { display: none !important; }
+              html.dark-mode #order-confirm-modal .modal-right-pane { background: var(--clr-surface) !important; }
+              html.dark-mode #order-confirm-modal-buttons-mobile { border-top-color: var(--clr-border, rgba(255,255,255,0.05)) !important; }
+              html.dark-mode #order-confirm-modal .modal-right-pane h3 { border-bottom-color: var(--clr-border, rgba(255,255,255,0.05)) !important; }
+              html.dark-mode #order-confirm-modal .modal-right-pane > div:nth-child(3) { border-top-color: var(--clr-border, rgba(255,255,255,0.05)) !important; }
+              @media (max-width: 768px) {
+                #order-confirm-modal-buttons-desktop { display: none !important; }
+                #order-confirm-modal-buttons-mobile { display: flex !important; }
+                #order-confirm-modal .scrollable-content { flex-direction: column !important; }
+                #order-confirm-modal .modal-left-pane { padding: 1.5rem !important; justify-content: flex-start !important; flex: none !important; }
+                #order-confirm-modal .modal-left-pane h2 { font-size: 1.5rem !important; margin-bottom: 0.2rem !important; }
+                #order-confirm-modal .modal-left-pane p { margin-bottom: 1rem !important; font-size: 0.95rem !important; }
+                #order-confirm-modal .modal-right-pane { padding: 1.5rem !important; flex: none !important; }
+              }
+            </style>
+        \`;
         
         document.body.insertAdjacentHTML('beforeend', confirmHtml);
         
