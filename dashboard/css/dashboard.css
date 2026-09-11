@@ -2492,3 +2492,18 @@ html.dark-mode .no-data {
 html.dark-mode .kds-column {
   background-color: var(--clr-bg-app);
 }
+
+html.dark-mode .pos-type-btn {
+  color: #d1d5db; /* Lighter gray for inactive */
+}
+html.dark-mode .pos-type-btn:hover,
+html.dark-mode .pos-type-btn.active {
+  color: #ffffff !important;
+}
+
+html.dark-mode .pos-category-btn {
+  color: #ffffff;
+}
+html.dark-mode .pos-category-btn.active {
+  color: var(--clr-primary) !important;
+}

@@ -150,10 +150,10 @@ function renderKDSBoard(state) {
             </div>
         `;
 
-        if (kStatus === 'New') colNew.appendChild(card);
-        else if (kStatus === 'Preparing') colPrep.appendChild(card);
-        else if (kStatus === 'Ready') colReady.appendChild(card);
-        else if (kStatus === 'Completed' && colCompleted) colCompleted.appendChild(card);
+        if (kStatus === 'New') colNew.prepend(card);
+        else if (kStatus === 'Preparing') colPrep.prepend(card);
+        else if (kStatus === 'Ready') colReady.prepend(card);
+        else if (kStatus === 'Completed' && colCompleted) colCompleted.prepend(card);
     });
 
     // Update counts
