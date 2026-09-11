@@ -1,4 +1,5 @@
-(()=>{function H(e){typeof e=="string"&&(e=e.replace(",","."));let t=parseFloat(e);if(isNaN(t))return e;let o=t.toFixed(2).replace(".",",");return o.endsWith(",00")?o.substring(0,o.length-3):o.includes(",")&&o.endsWith("0")?o.substring(0,o.length-1):o}function V(){let e=document.querySelector(".mobile-menu-btn"),t=document.querySelector(".nav-center");!e||!t||(e.addEventListener("click",()=>{t.classList.toggle("active"),e.classList.toggle("open")}),document.querySelectorAll(".nav-center a").forEach(o=>{o.addEventListener("click",()=>{t.classList.remove("active"),e.classList.remove("open")})}))}function G(){let e=document.querySelector(".navbar");e&&window.addEventListener("scroll",()=>{e.style.boxShadow=window.scrollY>50?"0 4px 20px rgba(0,0,0,0.05)":"none"})}function K(){let e=document.getElementById("notification-btn"),t=document.getElementById("notification-panel");!e||!t||(e.addEventListener("click",o=>{o.stopPropagation(),t.classList.toggle("show")}),document.addEventListener("click",o=>{t.contains(o.target)||t.classList.remove("show")}))}function Z(){let e=document.getElementById("lightbox"),t=document.getElementById("lightbox-img"),o=document.querySelector(".lightbox-close");if(!e)return;document.addEventListener("click",r=>{let n=r.target.closest(".lightbox-trigger");if(!n)return;r.preventDefault(),e.style.display="flex",requestAnimationFrame(()=>{e.classList.add("show")});let d=n.src||n.currentSrc||(n.querySelector("source")?n.querySelector("source").getAttribute("data-src")||n.querySelector("source").src:""),s=e.querySelector("video");d.endsWith(".mp4")||n.tagName.toLowerCase()==="video"?(t&&(t.style.display="none"),s||(s=document.createElement("video"),Object.assign(s.style,{maxWidth:"90%",maxHeight:"80vh",borderRadius:"8px",boxShadow:"0 10px 25px rgba(0,0,0,0.5)"}),s.controls=!0,s.autoplay=!0,s.className="lightbox-video",e.appendChild(s)),s.style.display="block",s.src=d,s.play()):(s&&(s.style.display="none",s.pause()),t&&(t.style.display="block",t.src=d))});let i=()=>{e.classList.remove("show");let r=e.querySelector("video");r&&r.pause(),setTimeout(()=>{e.style.display="none"},300)};return o&&o.addEventListener("click",i),e.addEventListener("click",r=>{(r.target===e||r.target===o)&&i()}),document.addEventListener("keydown",r=>{r.key==="Escape"&&e.classList.contains("show")&&i()}),e}function ee(){if(!("IntersectionObserver"in window))return;let e=new IntersectionObserver((t,o)=>{t.forEach(i=>{if(!i.isIntersecting)return;let r=i.target,n=r.querySelector("source[data-src]");n&&(n.src=n.dataset.src,r.load(),r.play().catch(()=>{}),n.removeAttribute("data-src")),o.unobserve(r)})},{rootMargin:"0px 0px 200px 0px"});document.querySelectorAll("video").forEach(t=>{t.querySelector("source[data-src]")&&e.observe(t)})}var O={state:{items:[]},init(){let e=localStorage.getItem("hdm_cart");if(e)try{this.state.items=JSON.parse(e)}catch{}let t=document.querySelector(".floating-cart-bar");t&&(t.style.cursor="pointer",t.addEventListener("click",()=>{let o=window.location.pathname.includes("/pages/");window.location.href=o?"cart.html":"pages/cart.html"})),this.updateUI()},save(){localStorage.setItem("hdm_cart",JSON.stringify(this.state.items)),this.updateUI(),window.renderCartPage&&window.renderCartPage()},addItem(e){let t=this.state.items.find(o=>o.title===e.title&&o.size===e.size&&o.addonsTotal===e.addonsTotal&&JSON.stringify(o.extras||[])===JSON.stringify(e.extras||[]));t?t.qty+=e.qty:this.state.items.push(e),this.save()},updateItemQty(e,t){t<1||this.state.items[e]&&(this.state.items[e].qty=t,this.save())},removeItem(e){this.state.items.splice(e,1),this.save()},getTotalItems(){return this.state.items.reduce((e,t)=>e+t.qty,0)},getSubtotal(){return this.state.items.reduce((e,t)=>e+(t.basePrice+(t.addonsTotal||0))*t.qty,0)},updateUI(){let e=window.innerWidth,t=this.getTotalItems(),o=this.getSubtotal(),i=`Rs ${H(o)}`;document.querySelectorAll('a[href*="cart.html"] .badge').forEach(y=>{y.textContent=t,y.style.display=t>0?"flex":"none"});let r=document.querySelector(".floating-cart-bar"),n=document.querySelector(".chatbot-widget");if(r)if(t>0&&!window.location.pathname.includes("cart.html")&&!window.location.pathname.includes("checkout.html")){r.style.display="flex",document.documentElement.style.setProperty("--cart-offset","75px");let y=r.querySelector(".cart-count"),l=r.querySelector(".cart-total");y&&(y.textContent=`${t} item${t>1?"s":""}`),l&&(l.textContent=i),n&&e<=768&&(n.style.bottom="152px")}else r.style.display="none",document.documentElement.style.setProperty("--cart-offset","0px"),n&&e<=768&&(n.style.bottom="84px");let d=(JSON.parse(localStorage.getItem("hdm_orders"))||[]).filter(y=>y.status!=="DELIVERED"&&y.status!=="CANCELLED").length;document.querySelectorAll('a[href*="orders.html"]').forEach(y=>{if(y.closest(".mobile-tab-bar")){let l=y.querySelector(".orders-badge");l||(l=document.createElement("span"),l.className="badge orders-badge",l.style.position="absolute",l.style.top="0",l.style.right="10px",l.style.backgroundColor="var(--clr-badge-danger, var(--clr-primary))",l.style.color="white",l.style.borderRadius="50%",l.style.width="18px",l.style.height="18px",l.style.fontSize="0.7rem",l.style.display="flex",l.style.alignItems="center",l.style.justifyContent="center",y.style.position="relative",y.appendChild(l)),l.textContent=d,l.style.display=d>0?"flex":"none"}});let s=document.getElementById("desktop-floating-orders");s&&s.remove()}};function te(){let e=window.location.pathname.includes("cart.html"),t=window.location.pathname.includes("checkout.html");!e&&!t||(window.renderCartPage=function(){let o=O.state.items,i=document.querySelector(".empty-cart-state"),r=document.querySelector(".checkout-summary-box"),n=document.querySelector(".cart-items-wrapper");if(o.length===0){if(n&&(n.style.display="none"),r&&(r.style.display="none"),i&&(i.style.display="block"),t&&!window.isOrdering){alert("Your cart is empty. Redirecting to menu."),window.location.href="menu.html";return}}else n&&(n.style.display="block"),r&&(r.style.display="flex"),i&&(i.style.display="none");n&&(n.innerHTML="",o.forEach((u,E)=>{let b=(u.basePrice+(u.addonsTotal||0))*u.qty;n.insertAdjacentHTML("beforeend",`
+(()=>{function H(e){typeof e=="string"&&(e=e.replace(",","."));let t=parseFloat(e);if(isNaN(t))return e;let o=t.toFixed(2).replace(".",",");return o.endsWith(",00")?o.substring(0,o.length-3):o.includes(",")&&o.endsWith("0")?o.substring(0,o.length-1):o}function V(){let e=document.querySelector(".mobile-menu-btn"),t=document.querySelector(".nav-center");!e||!t||(e.addEventListener("click",()=>{t.classList.toggle("active"),e.classList.toggle("open")}),document.querySelectorAll(".nav-center a").forEach(o=>{o.addEventListener("click",(ev)=>{// Check if this link goes to contact.html — intercept and open modal instead
+const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.includes("#")){const cm=document.getElementById("contact-modal");if(cm){ev.preventDefault();t.classList.remove("active");e.classList.remove("open");if(typeof window._tl_openModal==="function"){window._tl_openModal(cm,"contact-modal");}else{cm.classList.add("active");document.body.style.overflow="hidden";}return;}}t.classList.remove("active"),e.classList.remove("open")})}))}function G(){let e=document.querySelector(".navbar");e&&window.addEventListener("scroll",()=>{e.style.boxShadow=window.scrollY>50?"0 4px 20px rgba(0,0,0,0.05)":"none"})}function K(){let e=document.getElementById("notification-btn"),t=document.getElementById("notification-panel");!e||!t||(e.addEventListener("click",o=>{o.stopPropagation(),t.classList.toggle("show")}),document.addEventListener("click",o=>{t.contains(o.target)||t.classList.remove("show")}))}function Z(){let e=document.getElementById("lightbox"),t=document.getElementById("lightbox-img"),o=document.querySelector(".lightbox-close");if(!e)return;document.addEventListener("click",r=>{let n=r.target.closest(".lightbox-trigger");if(!n)return;r.preventDefault(),e.style.display="flex",requestAnimationFrame(()=>{e.classList.add("show")});let d=n.src||n.currentSrc||(n.querySelector("source")?n.querySelector("source").getAttribute("data-src")||n.querySelector("source").src:""),s=e.querySelector("video");d.endsWith(".mp4")||n.tagName.toLowerCase()==="video"?(t&&(t.style.display="none"),s||(s=document.createElement("video"),Object.assign(s.style,{maxWidth:"90%",maxHeight:"80vh",borderRadius:"8px",boxShadow:"0 10px 25px rgba(0,0,0,0.5)"}),s.controls=!0,s.autoplay=!0,s.className="lightbox-video",e.appendChild(s)),s.style.display="block",s.src=d,s.play()):(s&&(s.style.display="none",s.pause()),t&&(t.style.display="block",t.src=d))});let i=()=>{e.classList.remove("show");let r=e.querySelector("video");r&&r.pause(),setTimeout(()=>{e.style.display="none"},300)};return o&&o.addEventListener("click",i),e.addEventListener("click",r=>{(r.target===e||r.target===o)&&i()}),document.addEventListener("keydown",r=>{r.key==="Escape"&&e.classList.contains("show")&&i()}),e}function ee(){if(!("IntersectionObserver"in window))return;let e=new IntersectionObserver((t,o)=>{t.forEach(i=>{if(!i.isIntersecting)return;let r=i.target,n=r.querySelector("source[data-src]");n&&(n.src=n.dataset.src,r.load(),r.play().catch(()=>{}),n.removeAttribute("data-src")),o.unobserve(r)})},{rootMargin:"0px 0px 200px 0px"});document.querySelectorAll("video").forEach(t=>{t.querySelector("source[data-src]")&&e.observe(t)})}var O={state:{items:[]},init(){let e=localStorage.getItem("hdm_cart");if(e)try{this.state.items=JSON.parse(e)}catch{}let t=document.querySelector(".floating-cart-bar");t&&(t.style.cursor="pointer",t.addEventListener("click",()=>{let o=window.location.pathname.includes("/pages/");window.location.href=o?"cart.html":"pages/cart.html"})),this.updateUI()},save(){localStorage.setItem("hdm_cart",JSON.stringify(this.state.items)),this.updateUI(),window.renderCartPage&&window.renderCartPage()},addItem(e){let t=this.state.items.find(o=>o.title===e.title&&o.size===e.size&&o.addonsTotal===e.addonsTotal&&JSON.stringify(o.extras||[])===JSON.stringify(e.extras||[]));t?t.qty+=e.qty:this.state.items.push(e),this.save()},updateItemQty(e,t){t<1||this.state.items[e]&&(this.state.items[e].qty=t,this.save())},removeItem(e){this.state.items.splice(e,1),this.save()},getTotalItems(){return this.state.items.reduce((e,t)=>e+t.qty,0)},getSubtotal(){return this.state.items.reduce((e,t)=>e+(t.basePrice+(t.addonsTotal||0))*t.qty,0)},updateUI(){let e=window.innerWidth,t=this.getTotalItems(),o=this.getSubtotal(),i=`Rs ${H(o)}`;document.querySelectorAll('a[href*="cart.html"] .badge').forEach(y=>{y.textContent=t,y.style.display=t>0?"flex":"none"});let r=document.querySelector(".floating-cart-bar"),n=document.querySelector(".chatbot-widget");if(r)if(t>0&&!window.location.pathname.includes("cart.html")&&!window.location.pathname.includes("checkout.html")){r.style.display="flex",document.documentElement.style.setProperty("--cart-offset","75px");let y=r.querySelector(".cart-count"),l=r.querySelector(".cart-total");y&&(y.textContent=`${t} item${t>1?"s":""}`),l&&(l.textContent=i),n&&e<=768&&(n.style.bottom="152px")}else r.style.display="none",document.documentElement.style.setProperty("--cart-offset","0px"),n&&e<=768&&(n.style.bottom="84px");let d=(JSON.parse(localStorage.getItem("hdm_orders"))||[]).filter(y=>y.status!=="DELIVERED"&&y.status!=="CANCELLED").length;document.querySelectorAll('a[href*="orders.html"]').forEach(y=>{if(y.closest(".mobile-tab-bar")){let l=y.querySelector(".orders-badge");l||(l=document.createElement("span"),l.className="badge orders-badge",l.style.position="absolute",l.style.top="0",l.style.right="10px",l.style.backgroundColor="var(--clr-badge-danger, var(--clr-primary))",l.style.color="white",l.style.borderRadius="50%",l.style.width="18px",l.style.height="18px",l.style.fontSize="0.7rem",l.style.display="flex",l.style.alignItems="center",l.style.justifyContent="center",y.style.position="relative",y.appendChild(l)),l.textContent=d,l.style.display=d>0?"flex":"none"}});let s=document.getElementById("desktop-floating-orders");s&&s.remove()}};function te(){let e=window.location.pathname.includes("cart.html"),t=window.location.pathname.includes("checkout.html");!e&&!t||(window.renderCartPage=function(){let o=O.state.items,i=document.querySelector(".empty-cart-state"),r=document.querySelector(".checkout-summary-box"),n=document.querySelector(".cart-items-wrapper");if(o.length===0){if(n&&(n.style.display="none"),r&&(r.style.display="none"),i&&(i.style.display="block"),t&&!window.isOrdering){alert("Your cart is empty. Redirecting to menu."),window.location.href="menu.html";return}}else n&&(n.style.display="block"),r&&(r.style.display="flex"),i&&(i.style.display="none");n&&(n.innerHTML="",o.forEach((u,E)=>{let b=(u.basePrice+(u.addonsTotal||0))*u.qty;n.insertAdjacentHTML("beforeend",`
                 <div class="cart-item">
                     <img src="${u.image}" class="cart-item-img lightbox-trigger" alt="${u.title}">
                     <div class="cart-item-details">
@@ -661,3 +662,227 @@
         closeModal();
     });
 })();
+
+// ===== FIXES PATCH =====
+// 1. Cart badge: hide by default until items added
+(function hideBadgeDefault() {
+    // Inject a style that hides badge until JS reveals it
+    const style = document.createElement('style');
+    style.textContent = `
+        a[href*="cart.html"] .badge { display: none !important; }
+        a[href*="cart.html"] .badge.has-items { display: flex !important; }
+    `;
+    document.head.appendChild(style);
+    
+    // After CartManager initializes, it will set display via updateUI
+    // We also watch for the badge to be set to "flex" by updateUI and apply has-items class
+    const observer = new MutationObserver(() => {
+        document.querySelectorAll('a[href*="cart.html"] .badge').forEach(badge => {
+            const count = parseInt(badge.textContent) || 0;
+            if (count > 0) {
+                badge.classList.add('has-items');
+            } else {
+                badge.classList.remove('has-items');
+            }
+        });
+    });
+    
+    // Observe badge changes after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('a[href*="cart.html"] .badge').forEach(b => {
+                observer.observe(b, { characterData: true, childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+            });
+        });
+    } else {
+        document.querySelectorAll('a[href*="cart.html"] .badge').forEach(b => {
+            observer.observe(b, { characterData: true, childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+        });
+    }
+})();
+
+// 2. Orders page: comprehensive renderer with full details and fixed progress pipeline
+(function fixOrdersPage() {
+    if (!window.location.pathname.includes('orders.html')) return;
+    
+    const STAGES = ["Pending", "Confirmed", "Preparing", "Out for Delivery", "Delivered"];
+    
+    function getProgressPercent(statusIndex) {
+        if (statusIndex <= 0) return 0;
+        if (statusIndex >= STAGES.length - 1) return 100;
+        return (statusIndex / (STAGES.length - 1)) * 100;
+    }
+    
+    function renderFullOrders() {
+        const wrapper = document.querySelector('.dynamic-orders-wrapper');
+        const emptyState = document.querySelector('.empty-orders-state');
+        if (!wrapper) return;
+        
+        let orders = JSON.parse(localStorage.getItem('hdm_orders')) || [];
+        const STAGE_DELAY_MS = 6000;
+        
+        if (orders.length === 0) {
+            wrapper.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'block';
+            return;
+        }
+        
+        wrapper.style.display = 'block';
+        if (emptyState) emptyState.style.display = 'none';
+        
+        let needsUpdate = false;
+        let html = '';
+        
+        orders.forEach(order => {
+            let currentStatusIndex = STAGES.indexOf(order.status);
+            if (currentStatusIndex === -1) currentStatusIndex = 0;
+            
+            const now = Date.now();
+            if (!order.lastUpdated) order.lastUpdated = now;
+            
+            // Auto progression
+            if (currentStatusIndex < STAGES.length - 1) {
+                const timeElapsed = now - order.lastUpdated;
+                const stagesToAdvance = Math.floor(timeElapsed / STAGE_DELAY_MS);
+                if (stagesToAdvance > 0) {
+                    currentStatusIndex = Math.min(STAGES.length - 1, currentStatusIndex + stagesToAdvance);
+                    order.status = STAGES[currentStatusIndex];
+                    order.lastUpdated = now - (timeElapsed % STAGE_DELAY_MS);
+                    needsUpdate = true;
+                }
+            }
+            
+            const progressPercent = getProgressPercent(currentStatusIndex);
+            const isDelivered = order.status === 'Delivered';
+            
+            // Build timeline steps
+            const stepsHtml = STAGES.map((stage, idx) => {
+                let cls = 'timeline-step';
+                if (idx < currentStatusIndex) cls += ' completed';
+                else if (idx === currentStatusIndex && !isDelivered) cls += ' pulsing completed';
+                else if (idx === currentStatusIndex && isDelivered) cls += ' completed';
+                return `<div class="${cls}"><div class="step-icon"></div><span>${stage}</span></div>`;
+            }).join('');
+            
+            // Build items html with images and full details
+            let itemsHtml = '';
+            if (order.items && order.items.length > 0) {
+                itemsHtml = order.items.map(item => {
+                    let imgPath = item.image || '';
+                    if (imgPath && !window.location.pathname.includes('/pages/')) {
+                        imgPath = imgPath.replace('../', './');
+                    }
+                    const itemPrice = (item.basePrice || item.price || 0);
+                    const itemTotal = itemPrice * item.qty;
+                    const sizeText = item.size ? `<span style="font-size:0.8rem;color:var(--clr-text-secondary);">Size: ${item.size}</span>` : '';
+                    const extrasText = item.extras && item.extras.length > 0 ? `<span style="font-size:0.8rem;color:var(--clr-text-secondary);">+ ${item.extras.join(', ')}</span>` : '';
+                    return `
+                        <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                            ${imgPath ? `<img loading="lazy" src="${imgPath}" alt="${item.title}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : `<div style="width:52px;height:52px;border-radius:8px;background:var(--clr-primary);opacity:0.2;flex-shrink:0;"></div>`}
+                            <div style="flex:1;min-width:0;">
+                                <p style="font-weight:600;font-size:0.9rem;margin:0 0 0.2rem;color:var(--clr-text-primary);">${item.title} <span style="color:var(--clr-text-secondary);">x${item.qty}</span></p>
+                                ${sizeText}
+                                ${extrasText}
+                            </div>
+                            <span style="font-weight:700;font-size:0.9rem;color:var(--clr-text-primary);white-space:nowrap;flex-shrink:0;">Rs ${itemTotal}</span>
+                        </div>`;
+                }).join('');
+            }
+            
+            // Customer info section
+            const cust = order.customer || {};
+            const custHtml = (cust.phone || cust.name || cust.address) ? `
+                <div style="background:rgba(0,0,0,0.03);border-left:3px solid var(--clr-primary);border-radius:0 8px 8px 0;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.88rem;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;">
+                        ${cust.phone ? `<div><span style="color:var(--clr-text-secondary);font-weight:600;">Phone:</span> <span style="color:var(--clr-text-primary);">${cust.phone}</span></div>` : ''}
+                        ${cust.name ? `<div><span style="color:var(--clr-text-secondary);font-weight:600;">Name:</span> <span style="color:var(--clr-text-primary);">${cust.name}</span></div>` : ''}
+                        ${cust.email ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Email:</span> <span style="color:var(--clr-text-primary);">${cust.email}</span></div>` : ''}
+                        ${(cust.address && cust.address !== 'Pickup') ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Address:</span> <span style="color:var(--clr-text-primary);">${cust.address}</span></div>` : ''}
+                        ${cust.city ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Area/City:</span> <span style="color:var(--clr-text-primary);">${cust.city}</span></div>` : ''}
+                        ${cust.notes ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Notes:</span> <span style="color:var(--clr-text-primary);">${cust.notes}</span></div>` : ''}
+                    </div>
+                </div>` : '';
+            
+            // Totals
+            const subtotal = order.items ? order.items.reduce((sum, i) => sum + (i.basePrice || i.price || 0) * i.qty, 0) : order.total;
+            const deliveryFee = order.type === 'Pickup' ? 0 : 12;
+            const grandTotal = order.total || (subtotal + deliveryFee);
+            
+            const statusBadgeColor = isDelivered ? '#e8f5e9' : 'rgba(167,2,1,0.1)';
+            const statusTextColor = isDelivered ? '#2e7d32' : 'var(--clr-primary)';
+            
+            html += `
+            <div class="order-card" style="background:var(--clr-surface,#fff);border-radius:16px;padding:1.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.05);margin-bottom:1.5rem;border:1px solid rgba(0,0,0,0.05);">
+                <!-- Header row -->
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+                    <div>
+                        <p style="font-size:0.75rem;color:#999;margin:0 0 0.15rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Order #${order.id || 'ORD-???'}</p>
+                        <p style="font-size:0.85rem;color:var(--clr-text-secondary,#666);margin:0 0 0.25rem;">${order.date || ''}</p>
+                        <p style="font-size:0.82rem;color:var(--clr-text-secondary);margin:0;">
+                            ${order.type ? `<strong>${order.type}</strong> &bull; ` : ''}
+                            ${order.paymentMethod || 'Cash on Delivery'}
+                        </p>
+                    </div>
+                    <span style="background:${statusBadgeColor};color:${statusTextColor};font-size:0.78rem;font-weight:700;padding:0.3rem 0.8rem;border-radius:50px;text-transform:uppercase;">${order.status}</span>
+                </div>
+                
+                <!-- Progress Timeline -->
+                <div class="order-timeline" style="margin-bottom:1.5rem;">
+                    <div class="timeline-track">
+                        <div class="timeline-progress" style="width:${progressPercent}%;"></div>
+                    </div>
+                    ${stepsHtml}
+                </div>
+                
+                ${!isDelivered ? `<p style="font-size:0.85rem;color:var(--clr-primary);font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Est. Delivery: ~35 mins</p>` : `<p style="font-size:0.85rem;color:#2e7d32;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>Delivered Successfully</p>`}
+                
+                <!-- Customer Details -->
+                ${custHtml}
+                
+                <!-- Order Items -->
+                <div style="border-top:1px solid rgba(0,0,0,0.05);padding-top:0.75rem;margin-bottom:0.75rem;">
+                    ${itemsHtml}
+                </div>
+                
+                <!-- Totals -->
+                <div style="border-top:1px solid rgba(0,0,0,0.05);padding-top:0.75rem;">
+                    ${subtotal !== grandTotal ? `
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;font-size:0.88rem;color:var(--clr-text-secondary);">
+                        <span>Subtotal</span><span>Rs ${subtotal}</span>
+                    </div>
+                    ${deliveryFee > 0 ? `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;font-size:0.88rem;color:var(--clr-text-secondary);"><span>Delivery Fee</span><span>Rs ${deliveryFee}</span></div>` : ''}` : ''}
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-size:0.9rem;font-weight:600;color:var(--clr-text-primary);">Total</span>
+                        <span style="font-size:1.15rem;font-weight:800;color:var(--clr-text-primary);">Rs ${grandTotal}</span>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+                    <a href="${window.location.pathname.includes('/pages/') ? 'menu.html' : 'pages/menu.html'}" class="btn btn-primary" style="border-radius:50px;padding:0.6rem 1.25rem;font-size:0.85rem;font-weight:600;text-decoration:none;">Reorder</a>
+                </div>
+            </div>`;
+        });
+        
+        if (wrapper.innerHTML !== html) {
+            wrapper.innerHTML = html;
+        }
+        
+        if (needsUpdate) {
+            localStorage.setItem('hdm_orders', JSON.stringify(orders));
+        }
+    }
+    
+    // Run immediately and then on interval
+    document.addEventListener('DOMContentLoaded', () => {
+        renderFullOrders();
+        setInterval(renderFullOrders, 1500);
+    });
+    
+    // Also run now if DOM is already ready
+    if (document.readyState !== 'loading') {
+        renderFullOrders();
+        setInterval(renderFullOrders, 1500);
+    }
+})();
+
