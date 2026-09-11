@@ -132,10 +132,10 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-    name: "crust Restaurant",
-    phone: "+92 03001013556",
-    email: "contact@crust.com",
-    whatsapp: "+92 03001013556",
+    name: "AlltimePizza Restaurant",
+    phone: "+92 335 4477774",
+    email: "contact@AlltimePizza.com",
+    whatsapp: "+92 335 4477774",
     address: "123 Food Street, Karachi, Pakistan",
     map: "https://maps.google.com/?q=karachi"
 };

@@ -88,7 +88,7 @@ function initAnalyticsCharts() {
         plugins: { legend: { position: 'right' } }
     };
 
-    const brandColor = '#FB6815';
+    const brandColor = '#D90000';
     const accentColor = '#3b82f6';
     const successColor = '#10b981';
     const warningColor = '#f59e0b';
@@ -174,7 +174,7 @@ function initAnalyticsCharts() {
     analyticsCharts.branchRevenue = new Chart(document.getElementById('chartBranchRevenue'), {
         type: 'doughnut',
         data: {
-            labels: ['Hospital Road Central Park, Lahore', 'Hospital Road Central Park, Lahore', '8A Commercial, Pak Arab, Lahore'],
+            labels: ['G-13/4, Islamabad, Pakistan 011', 'G-13/4, Islamabad, Pakistan 011', 'G-13/4, Islamabad, Pakistan 011'],
             datasets: [{
                 data: [55, 30, 15],
                 backgroundColor: [brandColor, accentColor, warningColor]

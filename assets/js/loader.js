@@ -14,7 +14,7 @@
   <div class="container">
     <div class="nav-left" style="display: flex; align-items: center; gap: 0.5rem; max-width: calc(100% - 130px);">
       <a href="${v("index.html")}" class="logo" style="flex-shrink: 0;">
-        <img fetchpriority="high" decoding="sync" src="${r}" alt="crust Logo" class="header-logo" width="120" height="40">
+        <img fetchpriority="high" decoding="sync" src="${r}" alt="AlltimePizza Logo" class="header-logo" width="120" height="40">
       </a>
       <div id="change-location-btn" style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; flex: 1; min-width: 0; max-width: 200px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -152,7 +152,7 @@
           <li><span>Email:</span> ${e.brand.email}</li>
           <li><span>Location:</span> 
             <ul style="padding-left: 1rem; margin-top: 0.2rem; display: block; list-style-type: disc;">
-              <li>Hospital Road Central Park, Lahore</li><li>8A Commercial, Pak Arab, Lahore</li>
+              <li>G-13/4, Islamabad, Pakistan 011</li><li>G-13/4, Islamabad, Pakistan 011</li>
             </ul>
           </li>
         </ul>
@@ -287,7 +287,7 @@ ${s}`)}function Y(){const e=window.BB_CONFIG;E("beforeend","body",`
       </div>
     </div>
   </div>
-</div>`)}function V(){const e=["F-6 Markaz, Islamabad","Blue Area, Islamabad","G-9 Markaz, Islamabad","E-7, Islamabad","DHA Phase 1, Lahore","Gulberg III, Lahore","Model Town, Lahore","Johar Town, Lahore","Clifton Block 5, Karachi","Defence Phase 6, Karachi","Hospital Road Central Park, Lahore, Karachi","8A Commercial, Pak Arab, Lahore, Karachi","Saddar, Rawalpindi","Bahria Town Phase 4, Rawalpindi","Westridge, Rawalpindi","Cantt Area, Peshawar","Hayatabad Phase 3, Peshawar","Satellite Town, Gujranwala","DC Colony, Gujranwala","Civil Lines, Faisalabad"],n=["crust \u2013 Hospital Road Central Park, Lahore","crust \u2013 8A Commercial, Pak Arab, Lahore"],r=(c,o)=>c.map((t,p)=>`<div class="loc-option-item" data-value="${o}-${p}" data-label="${t}">${t}</div>`).join(""),i=new Date;i.setSeconds(0,0),i.setMinutes(Math.ceil(i.getMinutes()/15)*15);const s=i.getHours().toString().padStart(2,"0"),a=i.getMinutes().toString().padStart(2,"0");E("beforeend","body",`
+</div>`)}function V(){const e=["F-6 Markaz, Islamabad","Blue Area, Islamabad","G-9 Markaz, Islamabad","E-7, Islamabad","DHA Phase 1, Lahore","Gulberg III, Lahore","Model Town, Lahore","Johar Town, Lahore","Clifton Block 5, Karachi","Defence Phase 6, Karachi","G-13/4, Islamabad, Pakistan 011, Karachi","G-13/4, Islamabad, Pakistan 011, Karachi","Saddar, Rawalpindi","Bahria Town Phase 4, Rawalpindi","Westridge, Rawalpindi","Cantt Area, Peshawar","Hayatabad Phase 3, Peshawar","Satellite Town, Gujranwala","DC Colony, Gujranwala","Civil Lines, Faisalabad"],n=["AlltimePizza \u2013 G-13/4, Islamabad, Pakistan 011","AlltimePizza \u2013 G-13/4, Islamabad, Pakistan 011"],r=(c,o)=>c.map((t,p)=>`<div class="loc-option-item" data-value="${o}-${p}" data-label="${t}">${t}</div>`).join(""),i=new Date;i.setSeconds(0,0),i.setMinutes(Math.ceil(i.getMinutes()/15)*15);const s=i.getHours().toString().padStart(2,"0"),a=i.getMinutes().toString().padStart(2,"0");E("beforeend","body",`
 <div class="modal-overlay" id="location-modal" role="dialog" aria-modal="true" aria-labelledby="location-modal-title" style="z-index:10000;" aria-labelledby="modal-generic-title">
   <div class="modal-sheet">
     <div class="modal-drag-handle"></div>
@@ -413,7 +413,7 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
         <div class="chatbot-title">
           <span class="chatbot-avatar">\u{1F916}</span>
           <div>
-            <h4>crust Assistant</h4>
+            <h4>AlltimePizza Assistant</h4>
             <span class="online-status">Online now</span>
           </div>
         </div>
@@ -422,7 +422,7 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
     </div>
     <div class="chatbot-messages">
       <div class="chat-message bot">
-        <div class="msg-content">Hello, welcome to crust! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
+        <div class="msg-content">Hello, welcome to AlltimePizza! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
       </div>
     </div>
     <div class="chatbot-suggestions">
@@ -515,7 +515,7 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
     
     <div class="adm-body" style="padding: 1.5rem; overflow-y: auto; flex-grow: 1;">
       <p style="margin-bottom: 1rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 1.05rem;">
-        A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>crust</strong>.
+        A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>AlltimePizza</strong>.
       </p>
       <p style="margin-bottom: 1.5rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 0.95rem;">
         The menu, orders, and data shown are sample data only. Your actual system will be fully rebuilt around your real branding, menu, branches, and workflows.
@@ -569,6 +569,6 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
         </div>
         <div class="toast-text" id="socialProofText">Someone just ordered the Tower Burger!</div>
-    </div>`);const e=["Awais just bought the Crispy Combo!","Izhar just got 20% off on the Mega Feast Combo.","Hurry! Only 2 'Ultimate Duo Combo' deals left in stock.","Someone just ordered the Tower Burger!","Ali just saved Rs 600 on the Family Feast Combo!","Hot deal! 3 people are viewing the Crown crust Pizza.","Ayesha just ordered a Double Beef Smash.","Usman just claimed the Crispy Combo deal!","Only 1 Mega Feast Combo remaining at this price!","Someone just bought the Chicken Fajita Pizza."],n=document.getElementById("socialProofToast"),r=document.getElementById("socialProofText");if(!n||!r)return;const i=()=>{const s=e[Math.floor(Math.random()*e.length)];r.textContent=s,n.classList.add("show"),setTimeout(()=>{n.classList.remove("show")},3e3)};setTimeout(()=>{i(),setInterval(i,8e3)},2e3)}document.addEventListener("DOMContentLoaded",()=>{const e=q(),n=()=>{if((e==="offers.html"||e==="menu.html")&&(ee(),e==="menu.html"&&window.innerWidth<=768)){const s=document.getElementById("socialProofToast");s&&s.classList.add("menu-mobile-toast")}};"requestIdleCallback"in window?requestIdleCallback(n,{timeout:3e3}):setTimeout(n,2e3);const r=()=>{const s=document.querySelector(".navbar");s&&document.documentElement.style.setProperty("--header-height",`${s.offsetHeight}px`)};window.addEventListener("resize",r,{passive:!0}),r(),setTimeout(r,300);const i=()=>{O("hero-carousel-track","hero-carousel-container","hero-indicators"),O("menu-carousel-track","menu-carousel-container","menu-indicators")};"requestIdleCallback"in window?requestIdleCallback(i,{timeout:500}):setTimeout(i,100)})})();
+    </div>`);const e=["Awais just bought the Crispy Combo!","Izhar just got 20% off on the Mega Feast Combo.","Hurry! Only 2 'Ultimate Duo Combo' deals left in stock.","Someone just ordered the Tower Burger!","Ali just saved Rs 600 on the Family Feast Combo!","Hot deal! 3 people are viewing the Crown AlltimePizza Pizza.","Ayesha just ordered a Double Beef Smash.","Usman just claimed the Crispy Combo deal!","Only 1 Mega Feast Combo remaining at this price!","Someone just bought the Chicken Fajita Pizza."],n=document.getElementById("socialProofToast"),r=document.getElementById("socialProofText");if(!n||!r)return;const i=()=>{const s=e[Math.floor(Math.random()*e.length)];r.textContent=s,n.classList.add("show"),setTimeout(()=>{n.classList.remove("show")},3e3)};setTimeout(()=>{i(),setInterval(i,8e3)},2e3)}document.addEventListener("DOMContentLoaded",()=>{const e=q(),n=()=>{if((e==="offers.html"||e==="menu.html")&&(ee(),e==="menu.html"&&window.innerWidth<=768)){const s=document.getElementById("socialProofToast");s&&s.classList.add("menu-mobile-toast")}};"requestIdleCallback"in window?requestIdleCallback(n,{timeout:3e3}):setTimeout(n,2e3);const r=()=>{const s=document.querySelector(".navbar");s&&document.documentElement.style.setProperty("--header-height",`${s.offsetHeight}px`)};window.addEventListener("resize",r,{passive:!0}),r(),setTimeout(r,300);const i=()=>{O("hero-carousel-track","hero-carousel-container","hero-indicators"),O("menu-carousel-track","menu-carousel-container","menu-indicators")};"requestIdleCallback"in window?requestIdleCallback(i,{timeout:500}):setTimeout(i,100)})})();
 
 

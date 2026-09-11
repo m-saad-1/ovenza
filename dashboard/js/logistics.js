@@ -126,7 +126,7 @@ function renderDelivery(state) {
         window.zoneChartInstance = new Chart(zoneChartCtx, {
             type: 'doughnut',
             data: {
-                labels: ['8A Commercial, Pak Arab, Lahore', 'Clifton Block 4', 'Hospital Road Central Park, Lahore', 'Bahria Town'],
+                labels: ['G-13/4, Islamabad, Pakistan 011', 'Clifton Block 4', 'G-13/4, Islamabad, Pakistan 011', 'Bahria Town'],
                 datasets: [{
                     data: [45, 25, 20, 10],
                     backgroundColor: ['#4f46e5', '#0ea5e9', '#8b5cf6', '#10b981'],
