@@ -33,7 +33,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                             <div class="addon-chip" data-size-price="${N}">${de}</div>
                         `}else m.style.display="none";p.querySelectorAll(".addon-chip").forEach(I=>{I.addEventListener("click",()=>{p.querySelectorAll(".addon-chip").forEach(N=>N.classList.remove("selected")),I.classList.add("selected"),j=parseFloat(I.getAttribute("data-size-price")),P()})})}if(a&&b){a.innerHTML="";let k=(q?q.name:T).toLowerCase();S&&q?q.name==="Pizzas"?(b.style.display="block",a.innerHTML='<div class="addon-chip" data-price="150">+ Extra Cheese (Rs 150)</div>'):q.name==="Burgers"||q.name==="Fries"||q.name==="Rolls"?(b.style.display="block",a.innerHTML='<div class="addon-chip" data-price="300">+ Make it a Meal (Rs 300)</div>'):b.style.display="none":k.includes("burger")||k.includes("sandwich")||k.includes("fries")||k.includes("rolls")?(b.style.display="block",a.innerHTML='<div class="addon-chip" data-price="300">+ Make it a Meal (Rs 300)</div>'):k.includes("pizza")?(b.style.display="block",a.innerHTML='<div class="addon-chip" data-price="150">+ Extra Cheese (Rs 150)</div>'):b.style.display="none",a.querySelectorAll(".addon-chip").forEach(I=>{I.addEventListener("click",()=>{I.classList.toggle("selected");let N=parseFloat(I.getAttribute("data-price"));A+=I.classList.contains("selected")?N:-N,P()})})}c&&(S&&S.status!=="Available"?(c.style.opacity="0.5",c.style.pointerEvents="none"):(c.style.opacity="1",c.style.pointerEvents="auto")),P(),_(r,"item-modal")},n&&e&&t&&(n.style.cursor="pointer",n.addEventListener("click",()=>{t.src=n.src,e.style.display="flex",requestAnimationFrame(()=>{e.classList.add("show")})})),u&&E&&(u.addEventListener("click",()=>{$>1&&($--,v.textContent=$,P())}),E.addEventListener("click",()=>{$<99&&($++,v.textContent=$,P())})),document.querySelectorAll(".product-card").forEach(f=>{f.addEventListener("click",g=>{g.preventDefault(),window.openItemModalWithData(f,null)})}),c&&c.addEventListener("click",()=>{if(!localStorage.getItem("tl_location_name")){let w=document.getElementById("location-modal");w&&(w.classList.add("active"),document.body.style.overflow="hidden");return}let f=c.innerHTML;c.innerHTML="Added! \u2713",c.style.background="#4CAF50";let g=s.textContent,x=null;if(m&&m.style.display==="block"&&p){let w=p.querySelector(".addon-chip.selected");w&&(x=w.textContent.replace(/\s*\(.*\)/,""))}let L=[];b&&b.style.display==="block"&&a&&a.querySelectorAll(".addon-chip.selected").forEach(w=>{L.push(w.textContent.split(" (")[0].replace("+ ",""))}),O.addItem({title:g,image:n.src,basePrice:B+j,size:x,extras:L,addonsTotal:A,qty:$}),setTimeout(()=>{c.innerHTML=f,c.style.background="",r.classList.remove("active")},800)});let C=r.querySelector(".modal-sheet");if(C){let f=0,g=0,x=!1;C.addEventListener("touchstart",L=>{(C.querySelector(".modal-body")||C).scrollTop<=0&&(f=L.touches[0].clientY,x=!0,C.style.transition="none")},{passive:!0}),C.addEventListener("touchmove",L=>{if(!x)return;if((C.querySelector(".modal-body")||C).scrollTop>0){x=!1;return}g=L.touches[0].clientY;let z=g-f;z>0&&(L.preventDefault(),C.style.transform=`translateY(${z}px)`)},{passive:!1}),C.addEventListener("touchend",L=>{x&&(x=!1,C.style.transition="",g-f>60&&R(r),C.style.transform="",f=0,g=0)})}let W=document.getElementById("offer-modal");if(W){document.querySelectorAll(".offer-image-trigger").forEach(x=>{x.addEventListener("click",L=>{L.preventDefault(),_(W,"offer-modal")})});let f=document.getElementById("offer-modal-add-to-cart");f&&f.addEventListener("click",()=>{if(!localStorage.getItem("tl_location_name")){let w=document.getElementById("location-modal");w&&(w.classList.add("active"),document.body.style.overflow="hidden");return}let x=f.innerHTML;f.innerHTML="Added! \u2713",f.style.background="#4CAF50";let L=window.location.pathname.includes("pages/")?"../assets/images/combo-2.avif":"./assets/images/combo-2.avif";O.addItem({title:"Combo 2",image:L,basePrice:1799,addonsTotal:0,qty:1}),setTimeout(()=>{f.innerHTML=x,f.style.background="",R(W)},800)});let g=W.querySelector(".modal-sheet");if(g){let x=0,L=0,w=!1;g.addEventListener("touchstart",z=>{(g.querySelector(".modal-body")||g).scrollTop<=0&&(x=z.touches[0].clientY,w=!0,g.style.transition="none")},{passive:!0}),g.addEventListener("touchmove",z=>{if(!w)return;if((g.querySelector(".modal-body")||g).scrollTop>0){w=!1;return}L=z.touches[0].clientY;let T=L-x;T>0&&(z.preventDefault(),g.style.transform=`translateY(${T}px)`)},{passive:!1}),g.addEventListener("touchend",z=>{w&&(w=!1,g.style.transition="",L-x>100&&R(W),g.style.transform="",L=0,x=0)})}}document.querySelectorAll(".modal-overlay").forEach(f=>{f.addEventListener("click",g=>{g.target===f&&R(f)})})}function ie(){let e=document.querySelector(".dynamic-orders-wrapper");if(!window.location.pathname.includes("orders.html")||!e)return;let t=JSON.parse(localStorage.getItem("hdm_orders"))||[];if(t.length===0)return;let o="";t.forEach(r=>{let n=r.items.map(d=>`<strong style="color:#333;">${d.qty}x</strong> ${d.title} ${d.size?`(${d.size})`:""} ${d.extras&&d.extras.length>0?`<span style="color:#888;font-size:0.85em;">(+ ${d.extras.join(", ")})</span>`:""}`).join("<br>");o+=`
         <div class="order-card active-order" style="background:white;border-radius:16px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 15px rgba(0,0,0,0.05);border:2px solid var(--clr-primary);">
-            <div class="order-header" style="display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding-bottom:1rem;margin-bottom:1rem;">
+            <div class="order-header" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--clr-border);padding-bottom:1rem;margin-bottom:1rem;">
                 <div>
                     <span class="order-status" style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:0.3rem 0.8rem;border-radius:50px;font-size:0.75rem;font-weight:700;margin-bottom:0.5rem;">${r.status}</span>
                     <h3 class="order-id" style="margin:0 0 0.2rem 0;font-size:1.2rem;color:var(--clr-text-primary);">Order #${r.id}</h3>
@@ -65,7 +65,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                     <span>Out for Delivery</span>
                 </div>
             </div>
-        </div>`}),e.innerHTML=o;let i=document.querySelector(".empty-orders-state");i&&(i.style.display="none")}document.addEventListener("DOMContentLoaded",()=>{console.log("Hotbox - Script Loaded"),window.CartManager=O,V(),G(),K(),ee(),O.init(),te();let e=Z(),t=document.getElementById("lightbox-img");re(),oe(),ne(),le(e,t),ie(),document.querySelectorAll(".category-btn").forEach(r=>{r.addEventListener("click",()=>{document.querySelectorAll(".category-btn").forEach(n=>n.classList.remove("active")),r.classList.add("active")})});let o=document.getElementById("reservationForm");o&&o.addEventListener("submit",r=>{r.preventDefault(),alert("Your reservation has been submitted! We will get in touch soon."),o.reset()}),window.addEventListener("resize",()=>O.updateUI());let i=document.getElementById("checkout-form");i&&i.addEventListener("submit",function(r){r.preventDefault(),window.isOrdering=!0;let n=document.getElementById("cust-name").value,d=document.getElementById("cust-phone").value,s=document.getElementById("cust-address").value,y=document.getElementById("cust-city").value,l=document.querySelector('input[name="payment_method"]:checked').value,v=window.CartManager.getSubtotal()+12;if(l==="Wallet"){if(!(localStorage.getItem("isLoggedIn")==="true")){alert("Please login to use your Wallet balance.");return}if(typeof window.userWalletBalance>"u"||v>window.userWalletBalance){alert("Insufficient Wallet balance to complete this order. Your total is Rs "+v+", but your balance is Rs "+(window.userWalletBalance||0)+".");return}}let u={id:Math.floor(1e5+Math.random()*9e5),date:new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString(),total:v,status:"Pending",paymentMethod:l,customer:{name:n,phone:d,address:s,city:y,notes:document.getElementById("cust-notes").value},items:window.CartManager.state.items},E=document.getElementById("order-confirm-modal");E&&E.remove();let b=`
+        </div>`}),e.innerHTML=o;let i=document.querySelector(".empty-orders-state");i&&(i.style.display="none")}document.addEventListener("DOMContentLoaded",()=>{console.log("Hotbox - Script Loaded"),window.CartManager=O,V(),G(),K(),ee(),O.init(),te();let e=Z(),t=document.getElementById("lightbox-img");re(),oe(),ne(),le(e,t),ie(),document.querySelectorAll(".category-btn").forEach(r=>{r.addEventListener("click",()=>{document.querySelectorAll(".category-btn").forEach(n=>n.classList.remove("active")),r.classList.add("active")})});let o=document.getElementById("reservationForm");o&&o.addEventListener("submit",r=>{r.preventDefault(),alert("Your reservation has been submitted! We will get in touch soon."),o.reset()}),window.addEventListener("resize",()=>O.updateUI());let i=document.getElementById("checkout-form");i&&i.addEventListener("submit",function(r){r.preventDefault(),window.isOrdering=!0;let n=document.getElementById("cust-name").value,d=document.getElementById("cust-phone").value,s=document.getElementById("cust-address").value,y=document.getElementById("cust-city").value,l=document.querySelector('input[name="payment_method"]:checked').value,cO=(localStorage.getItem("tl_location_type")==="outlet")?"Pickup":"Delivery",v=window.CartManager.getSubtotal()+(cO==="Delivery"?12:0);if(l==="Wallet"){if(!(localStorage.getItem("isLoggedIn")==="true")){alert("Please login to use your Wallet balance.");return}if(typeof window.userWalletBalance>"u"||v>window.userWalletBalance){alert("Insufficient Wallet balance to complete this order. Your total is Rs "+v+", but your balance is Rs "+(window.userWalletBalance||0)+".");return}}let u={id:Math.floor(1e5+Math.random()*9e5),date:new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString(),total:v,status:"Pending",paymentMethod:l,type:cO,customer:{name:n,phone:d,address:s,city:y,notes:document.getElementById("cust-notes").value},items:window.CartManager.state.items},E=document.getElementById("order-confirm-modal");E&&E.remove();let b=`
           <div class="modal-overlay active" id="order-confirm-modal" style="z-index:10002; display:flex; padding: 1rem; align-items:center; justify-content:center;">
             <div class="modal-sheet" style="max-width:850px; width:100%; max-height:90vh; padding:0; display:flex; flex-direction:column; background:var(--clr-surface, #fff); overflow:hidden; border-radius:24px;">
               
@@ -86,7 +86,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 
                 <!-- Right side: Summary -->
                 <div class="modal-right-pane" style="flex:1; padding: 2.5rem; background:var(--clr-background, #fafafa); color:var(--clr-text-primary); display:flex; flex-direction:column;">
-                  <h3 style="font-size:1.3rem; margin-bottom:1.5rem; color:var(--clr-text-primary); border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:1rem;">Order Summary</h3>
+                  <h3 style="font-size:1.3rem; margin-bottom:1.5rem; color:var(--clr-text-primary); border-bottom:1px solid var(--clr-border); padding-bottom:1rem;">Order Summary</h3>
                   <div style="flex:1; margin-bottom:1.5rem;">
                     ${window.CartManager.state.items.map(m=>`
                       <div style="display:flex; justify-content:space-between; margin-bottom:1rem; align-items:center;">
@@ -98,7 +98,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                       </div>
                     `).join("")}
                   </div>
-                  <div style="border-top:1px solid rgba(0,0,0,0.05); padding-top:1.5rem;">
+                  <div style="border-top:1px solid var(--clr-border); padding-top:1.5rem;">
                     <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:var(--clr-text-secondary, #555);">
                       <span>Payment Method</span>
                       <span style="font-weight:600; color:var(--clr-text-primary);">${l}</span>
@@ -117,7 +117,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
               </div>
 
               <!-- Sticky Mobile Buttons (hidden on desktop) -->
-              <div id="order-confirm-modal-buttons-mobile" style="display: flex; gap: 1rem; padding: 1rem; background: var(--clr-surface); border-top: 1px solid rgba(0,0,0,0.05); z-index: 10;">
+              <div id="order-confirm-modal-buttons-mobile" style="display: flex; gap: 1rem; padding: 1rem; background: var(--clr-surface); border-top: 1px solid var(--clr-border); z-index: 10;">
                 <button class="confirm-modal-back btn" style="flex:1; border-radius:50px; padding:0.8rem 0.5rem; font-weight:600; cursor:pointer; font-size: 0.95rem;">Back</button>
                 <button class="confirm-modal-submit btn btn-primary" style="flex:2; border-radius:50px; padding:0.8rem 0.5rem; font-weight:700; cursor:pointer; font-size: 0.95rem;">Confirm Order</button>
               </div>
@@ -151,32 +151,60 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
     const modalHTML = `
     <style>
         .cc-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 10005;
+            position: fixed; left: 0; width: 100%;
+            background: transparent; z-index: 9999;
             display: flex; justify-content: flex-end;
-            opacity: 0; visibility: hidden; transition: 0.3s;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+            pointer-events: none;
+            /* Desktop: sit exactly below the sticky header */
+            top: var(--header-height, 70px);
+            height: calc(100dvh - var(--header-height, 70px));
         }
-        .cc-modal-overlay.active { opacity: 1; visibility: visible; }
+        .cc-modal-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
+        .cc-modal-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
         .cc-modal-sheet {
-            width: 480px; max-width: 100%; height: 100%;
+            position: relative; z-index: 1;
+            width: 480px; max-width: 100%;
+            height: 100%;
             background: var(--clr-surface, #fff);
             transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex; flex-direction: column;
+            box-shadow: -8px 0 32px rgba(0,0,0,0.15);
         }
         .cc-modal-overlay.active .cc-modal-sheet { transform: translateX(0); }
+        @media (max-width: 768px) {
+            .cc-modal-overlay {
+                top: 0;
+                height: 100dvh;
+                justify-content: center; align-items: flex-end;
+            }
+            .cc-modal-sheet { 
+                height: 90dvh; width: 100%;
+                transform: translateY(100%); border-radius: 20px 20px 0 0; 
+                box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
+            }
+            .cc-modal-overlay.active .cc-modal-sheet { transform: translateY(0); }
+        }
         
         .cc-header {
-            padding: 1.5rem; border-bottom: 1px solid var(--clr-border, #eee);
+            padding: 1.5rem; border-bottom: 1px solid var(--clr-border);
             display: flex; justify-content: space-between; align-items: center;
         }
         .cc-title { font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--clr-text-primary); }
         .cc-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--clr-text-primary); }
         
-        .cc-body { flex: 1; overflow-y: auto; padding: 1.5rem; }
+        .cc-body { flex: 1; overflow-y: auto; padding: 1.5rem; scrollbar-width: none; -ms-overflow-style: none; }
+        .cc-body::-webkit-scrollbar { display: none; }
         
         /* Checkout Form Styling inside modal */
         .cc-input {
-            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--clr-border, #ddd); border-radius: 8px;
+            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--clr-border); border-radius: 8px;
             margin-bottom: 1rem; font-family: inherit; font-size: 1rem; background: var(--clr-background, #fff); color: var(--clr-text-primary);
         }
         .cc-input:focus {
@@ -187,38 +215,47 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         /* Method Selector Styling */
         .cc-method-label {
             flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; 
-            border: 1px solid var(--clr-border, #ddd); border-radius: 8px; cursor: pointer; text-align: center;
+            border: 1px solid var(--clr-border); border-radius: 8px; cursor: pointer; text-align: center;
             transition: all 0.3s; background: var(--clr-surface, #fff);
         }
         .cc-method-label:hover { border-color: var(--clr-primary); }
         .cc-method-label input[type="radio"] { accent-color: var(--clr-primary); transform: scale(1.2); margin: 0; }
-        .cc-method-label:has(input:checked) { border-color: var(--clr-primary); background: rgba(167,2,1,0.05); }
+        .cc-method-label:has(input:checked) { border-color: var(--clr-primary); background: var(--clr-primary); color: #fff; }
+        .cc-method-label:has(input:checked) span { color: #fff !important; }
 
-        /* Order Type Toggle */
-        .cc-type-label {
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem; 
-            border: 1px solid var(--clr-border, #ddd); border-radius: 8px; cursor: pointer; text-align: center;
-            transition: all 0.3s; background: var(--clr-surface, #fff); font-weight: 600; color: var(--clr-text-primary);
-        }
-        .cc-type-label input[type="radio"] { accent-color: var(--clr-primary); }
-        .cc-type-label:has(input:checked) { border-color: var(--clr-primary); background: rgba(167,2,1,0.05); color: var(--clr-primary); }
 
-        @media (max-width: 768px) {
-            .cc-modal-overlay { justify-content: center; align-items: flex-end; }
-            .cc-modal-sheet { height: 90vh; transform: translateY(100%); border-radius: 20px 20px 0 0; }
-            .cc-modal-overlay.active .cc-modal-sheet { transform: translateY(0); }
-        }
         
+        html.dark-mode .cc-header { border-bottom-color: var(--clr-border) !important; }
+        html.dark-mode #cc-cart-summary { border-top-color: var(--clr-border) !important; }
         html.dark-mode .cc-input {
             border-color: var(--clr-border);
             background: var(--clr-surface);
         }
-        html.dark-mode .cc-method-label, html.dark-mode .cc-type-label {
-            background: var(--clr-surface);
+        
+        .cc-cart-item {
+            display: flex; align-items: center; gap: 1rem; padding: 1rem;
+            border: 1px solid var(--clr-border); border-radius: 12px; margin-bottom: 1rem;
+            background: var(--clr-surface); box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
         }
-        html.dark-mode .cc-method-label:has(input:checked), html.dark-mode .cc-type-label:has(input:checked) {
-            background: rgba(167,2,1,0.15);
+        .cc-cart-item:hover {
+            border-color: var(--clr-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); transform: translateY(-2px);
         }
+        html.dark-mode .cc-cart-item {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        html.dark-mode .cc-cart-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        
+        .cc-qty-btn {
+            width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--clr-border);
+            background: var(--clr-surface); color: var(--clr-text-primary); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        .cc-qty-btn:hover { background: var(--clr-primary); color: #fff; border-color: var(--clr-primary); }
+
     </style>
     <div class="cc-modal-overlay" id="custom-cart-modal">
         <div class="cc-modal-sheet">
@@ -236,7 +273,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                         <p style="color: var(--clr-text-secondary); margin-bottom: 2rem;">It looks like you haven't added any delicious items to your order yet.</p>
                         <button class="btn btn-primary" onclick="document.getElementById('cc-modal-close').click()" style="padding: 0.8rem 2rem; border-radius: 50px;">Explore Menu</button>
                     </div>
-                    <div id="cc-cart-summary" style="margin-top: 1.5rem; border-top: 1px solid var(--clr-border, #eee); padding-top: 1.5rem;">
+                    <div id="cc-cart-summary" style="margin-top: 1.5rem; border-top: 1px solid var(--clr-border); padding-top: 1.5rem;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color: var(--clr-text-primary);">
                             <span>Subtotal</span><span id="cc-subtotal">Rs 0</span>
                         </div>
@@ -254,16 +291,6 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 <div id="cc-checkout-view" style="display:none;">
                     <form id="cc-checkout-form">
                         
-                        <label class="cc-label" style="margin-bottom:0.8rem;">Order Type</label>
-                        <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
-                            <label class="cc-type-label">
-                                <input type="radio" name="cc_order_type" value="Delivery" checked> Delivery
-                            </label>
-                            <label class="cc-type-label">
-                                <input type="radio" name="cc_order_type" value="Pickup"> Pickup
-                            </label>
-                        </div>
-                        
                         <label class="cc-label">Phone Number *</label>
                         <input type="tel" id="cc-phone" class="cc-input" required placeholder="0300 1234567">
                         
@@ -279,7 +306,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                                 <label class="cc-label" id="cc-location-label">Delivery Area/City *</label>
                                 <a href="#" id="cc-edit-location" style="font-size:0.85rem; color:var(--clr-primary); text-decoration:none;">Edit</a>
                             </div>
-                            <input type="text" id="cc-city" class="cc-input" required readonly style="background:var(--clr-background, #f5f5f5); cursor:not-allowed; border-color:var(--clr-border, #ddd);">
+                            <input type="text" id="cc-city" class="cc-input" required readonly style="background:var(--clr-background); cursor:not-allowed; border-color:var(--clr-border);">
                         </div>
                         
                         <!-- Delivery Address Field -->
@@ -300,9 +327,9 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                             </label>
                         </div>
                         
-                        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                            <button type="button" class="btn btn-outline" style="flex:1; padding:1rem; border-radius:50px; font-weight:600;" id="cc-back-cart">Back to Cart</button>
-                            <button type="submit" class="btn btn-primary" style="flex:1; padding:1rem; border-radius:50px; font-weight:700;" id="cc-place-order">Place Order</button>
+                        <div style="display:flex; flex-wrap:nowrap; gap:1rem; margin-top:1.5rem; justify-content:center;">
+                            <button type="button" class="btn btn-outline" style="flex:1; padding:0.8rem 0.5rem; border-radius:50px; font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="cc-back-cart">Back to Cart</button>
+                            <button type="submit" class="btn btn-primary" style="flex:1; padding:0.8rem 0.5rem; border-radius:50px; font-weight:700; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="cc-place-order">Place Order</button>
                         </div>
                     </form>
                 </div>
@@ -319,38 +346,54 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
     const checkoutView = document.getElementById('cc-checkout-view');
     const modalTitle = document.getElementById('cc-modal-title');
     
-    // Order Type Toggle Logic
-    const orderTypeRadios = document.querySelectorAll('input[name="cc_order_type"]');
-    const deliveryAreaGroup = document.getElementById('cc-delivery-area-group');
-    const deliveryAddressGroup = document.getElementById('cc-delivery-address-group');
-    const locationLabel = document.getElementById('cc-location-label');
-    const cityInput = document.getElementById('cc-city');
-    const addressInput = document.getElementById('cc-address');
-    
     let originalCityValue = '';
-    
-    orderTypeRadios.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            if(e.target.value === 'Pickup') {
-                locationLabel.textContent = 'Pickup Outlet';
-                originalCityValue = cityInput.value;
-                cityInput.value = 'Main Branch (Default)';
-                deliveryAddressGroup.style.display = 'none';
-                addressInput.removeAttribute('required');
-                document.getElementById('cc-edit-location').style.display = 'none';
-            } else {
-                locationLabel.textContent = 'Delivery Area/City *';
-                cityInput.value = originalCityValue || localStorage.getItem('tl_location_name') || '';
-                deliveryAddressGroup.style.display = 'block';
-                addressInput.setAttribute('required', 'true');
-                document.getElementById('cc-edit-location').style.display = 'block';
-            }
-        });
-    });
+
+    // Helper: apply correct form state based on location type from localStorage
+    function applyLocationTypeToForm() {
+        const locName = localStorage.getItem('tl_location_name');
+        const locArea = localStorage.getItem('tl_location_area');
+        let cityStr = locName || '';
+        if(locArea) cityStr += ` (${locArea})`;
+        originalCityValue = cityStr;
+
+        const locType = localStorage.getItem('tl_location_type') || 'delivery';
+        const isPickup = locType === 'outlet';
+
+        const locLabel   = document.getElementById('cc-location-label');
+        const addrGroup  = document.getElementById('cc-delivery-address-group');
+        const cityInput  = document.getElementById('cc-city');
+        const editBtn    = document.getElementById('cc-edit-location');
+        const feeRow     = document.getElementById('cc-delivery-fee-row');
+        const addrInput  = document.getElementById('cc-address');
+
+        if(isPickup) {
+            if(locLabel)  locLabel.textContent = 'Pickup Outlet';
+            if(cityInput) cityInput.value = 'Main Branch (Default)';
+            if(addrGroup) addrGroup.style.display = 'none';
+            if(editBtn)   editBtn.style.display = 'none';
+            if(feeRow)    feeRow.style.display = 'none';
+            if(addrInput) addrInput.removeAttribute('required');
+        } else {
+            if(locLabel)  locLabel.textContent = 'Delivery Area/City *';
+            if(cityInput) cityInput.value = cityStr;
+            if(addrGroup) addrGroup.style.display = 'block';
+            if(editBtn)   editBtn.style.display = 'block';
+            if(feeRow)    feeRow.style.display = 'flex';
+            if(addrInput) addrInput.setAttribute('required', 'true');
+        }
+    }
     
     function openModal() {
+        // Measure actual navbar height
+        const navbar = document.querySelector('.navbar');
+        const navH = navbar ? navbar.offsetHeight : 70;
+        document.documentElement.style.setProperty('--header-height', navH + 'px');
+
         modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        // Only lock body scroll on mobile
+        if (window.innerWidth <= 768) {
+            document.body.style.overflow = 'hidden';
+        }
         renderCart();
         showCartView();
     }
@@ -361,8 +404,19 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
     }
     
     closeBtn.addEventListener('click', closeModal);
+    
+    // Close on outside click for cart modal
     modal.addEventListener('click', (e) => {
-        if(e.target === modal) closeModal();
+        if(e.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.cart-icon-link, .floating-cart-bar').forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
     });
 
     // Delegate cart clicks
@@ -424,27 +478,33 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             }
             
             html += `
-            <div style="display:flex; align-items:center; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--clr-border, #eee);">
-                <img src="${imagePath}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;">
+            <div class="cc-cart-item">
+                <img src="${imagePath}" style="width:70px; height:70px; border-radius:8px; object-fit:cover; border:1px solid var(--clr-border);">
                 <div style="flex:1;">
                     <h4 style="margin:0; font-size:1rem; color:var(--clr-text-primary);">${item.title}</h4>
                     ${item.size ? `<p style="margin:0; font-size:0.8rem; color:var(--clr-text-secondary);">${item.size}</p>` : ''}
                     <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
-                        <button onclick="window.CartManager.updateItemQty(${index}, ${item.qty-1}); setTimeout(()=>window._renderCC(), 50)" style="width:24px; height:24px; border-radius:50%; border:1px solid var(--clr-border, #ddd); background:var(--clr-surface); color:var(--clr-text-primary); cursor:pointer;">-</button>
-                        <span style="color:var(--clr-text-primary);">${item.qty}</span>
-                        <button onclick="window.CartManager.updateItemQty(${index}, ${item.qty+1}); setTimeout(()=>window._renderCC(), 50)" style="width:24px; height:24px; border-radius:50%; border:1px solid var(--clr-border, #ddd); background:var(--clr-surface); color:var(--clr-text-primary); cursor:pointer;">+</button>
+                        <button class="cc-qty-btn" onclick="window.CartManager.updateItemQty(${index}, ${item.qty-1}); setTimeout(()=>window._renderCC(), 50)">-</button>
+                        <span style="color:var(--clr-text-primary); font-weight:600; min-width:16px; text-align:center;">${item.qty}</span>
+                        <button class="cc-qty-btn" onclick="window.CartManager.updateItemQty(${index}, ${item.qty+1}); setTimeout(()=>window._renderCC(), 50)">+</button>
                     </div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-weight:600; color:var(--clr-text-primary);">Rs ${H(itemTotal)}</div>
-                    <button onclick="window.CartManager.removeItem(${index}); setTimeout(()=>window._renderCC(), 50)" style="margin-top:0.5rem; background:none; border:none; color:var(--clr-danger); cursor:pointer; font-size:0.85rem;">Remove</button>
+                    <div style="font-weight:700; color:var(--clr-primary); font-size: 1.1rem;">Rs ${H(itemTotal)}</div>
+                    <button onclick="window.CartManager.removeItem(${index}); setTimeout(()=>window._renderCC(), 50)" style="margin-top:0.5rem; background:none; border:none; color:#e74c3c; cursor:pointer; font-size:0.85rem; font-weight:600; padding:4px;">Remove</button>
                 </div>
             </div>`;
         });
         
         itemsContainer.innerHTML = html;
+        const locType = localStorage.getItem('tl_location_type') || 'delivery';
+        const selectedType = locType === 'outlet' ? 'Pickup' : 'Delivery';
+        const fee = selectedType === 'Delivery' ? 12 : 0;
+        const feeRow = document.getElementById('cc-delivery-fee-row');
+        if (feeRow) feeRow.style.display = selectedType === 'Pickup' ? 'none' : 'flex';
+        
         document.getElementById('cc-subtotal').textContent = `Rs ${H(subtotal)}`;
-        document.getElementById('cc-total').textContent = `Rs ${H(subtotal + 12)}`;
+        document.getElementById('cc-total').textContent = `Rs ${H(subtotal + fee)}`;
     }
     
     window._renderCC = renderCart;
@@ -461,26 +521,32 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         checkoutView.style.display = 'block';
         modalTitle.textContent = 'Checkout';
         
-        // Auto-fill logged in user
+        // Auto-fill logged in user data from profile
         if(localStorage.getItem('isLoggedIn') === 'true') {
-            document.getElementById('cc-phone').value = localStorage.getItem('userPhone') || localStorage.getItem('customerPhone') || '';
-            document.getElementById('cc-name').value = localStorage.getItem('userName') || localStorage.getItem('customerName') || 'John Doe';
-            document.getElementById('cc-email').value = localStorage.getItem('userEmail') || localStorage.getItem('customerEmail') || 'john@example.com';
+            const fillName  = localStorage.getItem('profileName') || '';
+            const fillEmail = localStorage.getItem('profileEmail') || '';
+            const fillPhone = localStorage.getItem('profilePhone') || '';
+            const nameEl  = document.getElementById('cc-name');
+            const emailEl = document.getElementById('cc-email');
+            const phoneEl = document.getElementById('cc-phone');
+            if(nameEl && fillName)   nameEl.value  = fillName;
+            if(emailEl && fillEmail) emailEl.value = fillEmail;
+            if(phoneEl && fillPhone) phoneEl.value = fillPhone;
         }
 
-        // Populate City automatically
-        const locName = localStorage.getItem('tl_location_name');
-        const locArea = localStorage.getItem('tl_location_area');
-        let cityStr = locName || '';
-        if(locArea) cityStr += ` (${locArea})`;
-        originalCityValue = cityStr;
-        
-        // Only override if it's Delivery
-        if(document.querySelector('input[name="cc_order_type"]:checked').value === 'Delivery') {
-            document.getElementById('cc-city').value = cityStr;
-        }
+        // Apply location type (Pickup vs Delivery) from header selection
+        applyLocationTypeToForm();
     }
     
+    // When user changes location/type from the header, update cart & checkout instantly
+    window.addEventListener('tl_location_changed', () => {
+        renderCart();
+        // If checkout view is currently visible, re-apply form state
+        if(checkoutView && checkoutView.style.display !== 'none') {
+            applyLocationTypeToForm();
+        }
+    });
+
     document.getElementById('cc-go-checkout').addEventListener('click', showCheckoutView);
     document.getElementById('cc-back-cart').addEventListener('click', showCartView);
     
@@ -497,7 +563,8 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 let cityStr = locName || '';
                 if(locArea) cityStr += ` (${locArea})`;
                 originalCityValue = cityStr;
-                if(document.querySelector('input[name="cc_order_type"]:checked').value === 'Delivery') {
+                const currentLocType = localStorage.getItem('tl_location_type') || 'delivery';
+                if(currentLocType !== 'outlet') {
                     document.getElementById('cc-city').value = cityStr;
                 }
             });
@@ -515,7 +582,8 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         const city = document.getElementById('cc-city').value;
         const address = document.getElementById('cc-address').value;
         const payment = document.querySelector('input[name="cc_payment"]:checked').value;
-        const orderType = document.querySelector('input[name="cc_order_type"]:checked').value;
+        const locType = localStorage.getItem('tl_location_type') || 'delivery';
+        const orderType = locType === 'outlet' ? 'Pickup' : 'Delivery';
         const total = window.CartManager.getSubtotal() + (orderType === 'Delivery' ? 12 : 0);
         
         if(orderType === 'Delivery' && !city) {
@@ -543,12 +611,8 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             items: window.CartManager.state.items
         };
         
-        let orders = JSON.parse(localStorage.getItem("hdm_orders")) || [];
-        orders.unshift(newOrder);
-        localStorage.setItem("hdm_orders", JSON.stringify(orders));
-        
         // Show the huge confirmation modal "like the previous one"
-        const confirmHtml = \`
+        const confirmHtml = `
             <div class="modal-overlay active" id="order-confirm-modal" style="z-index:10015; display:flex; padding: 1rem; align-items:center; justify-content:center;">
               <div class="modal-sheet" style="max-width:850px; width:100%; max-height:90vh; padding:0; display:flex; flex-direction:column; background:var(--clr-surface, #fff); overflow:hidden; border-radius:24px;">
                 
@@ -557,30 +621,31 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                   <div class="modal-left-pane" style="flex:1; background:var(--clr-primary); color:white; padding: 3rem 2.5rem; display:flex; flex-direction:column; justify-content:center;">
                     <div style="margin-bottom: 2rem;">
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.9;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                      <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff;">Order Confirmed!</h2>
-                      <p style="opacity: 0.9; font-size: 1.05rem; line-height: 1.5; margin: 0;">Thank you for your order, \${name || 'Guest'}!</p>
+                      <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff;">Review Your Order</h2>
+                      <p style="opacity: 0.9; font-size: 1.05rem; line-height: 1.5; margin: 0;">Please review your details, ${name || 'Guest'}.</p>
                     </div>
                     
                     <div style="background: rgba(0,0,0,0.15); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
-                      <h4 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 1rem; color: #fff;">\${orderType === 'Pickup' ? 'Pickup Details' : 'Delivery Details'}</h4>
+                      <h4 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 1rem; color: #fff;">${orderType === 'Pickup' ? 'Pickup Details' : 'Delivery Details'}</h4>
                       
                       <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.8; flex-shrink:0; margin-top:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         <div>
-                          <p style="margin:0; font-weight:600; font-size:1rem; color:#fff;">\${orderType === 'Pickup' ? 'Pickup Outlet' : city}</p>
-                          \${orderType === 'Delivery' ? \`<p style="margin:0.2rem 0 0; opacity:0.8; font-size:0.9rem; line-height:1.4;">\${address}</p>\` : ''}
+                          <p style="margin:0; font-weight:600; font-size:1rem; color:#fff;">${orderType === 'Pickup' ? 'Pickup Outlet' : city}</p>
+                          ${orderType === 'Delivery' ? `<p style="margin:0.2rem 0 0; opacity:0.8; font-size:0.9rem; line-height:1.4;">${address}</p>` : ''}
                         </div>
                       </div>
                       
                       <div style="display: flex; align-items: center; gap: 1rem;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.8; flex-shrink:0;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                        <p style="margin:0; font-weight:500; font-size:1rem; color:#fff;">\${phone}</p>
+                        <p style="margin:0; font-weight:500; font-size:1rem; color:#fff;">${phone}</p>
                       </div>
                     </div>
                     
-                    <!-- Desktop buttons (hidden on mobile) -->
-                    <div id="order-confirm-modal-buttons-desktop" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                      <button class="confirm-modal-submit btn btn-primary" style="flex:1; border-radius:50px; padding:0.8rem 1rem; font-weight:700; cursor:pointer; background:#fff; color:var(--clr-primary);" onclick="window.location.href='\${window.location.pathname.includes('/pages/') ? 'orders.html' : 'pages/orders.html'}'">View Orders</button>
+                    <!-- Action Buttons -->
+                    <div id="order-confirm-modal-buttons" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                      <button type="button" class="confirm-modal-back btn" id="modal-btn-back">Back</button>
+                      <button type="button" class="confirm-modal-submit btn" id="modal-btn-confirm">Confirm Order</button>
                     </div>
                   </div>
                   
@@ -588,78 +653,133 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                   <div class="modal-right-pane" style="flex:1; padding: 3rem 2.5rem; display:flex; flex-direction:column; background:var(--clr-surface, #fff);">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
                       <h3 style="font-size: 1.3rem; font-weight: 700; margin:0; color:var(--clr-text-primary);">Order Summary</h3>
-                      <span style="background: rgba(167, 2, 1, 0.1); color: var(--clr-primary); font-size: 0.85rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 50px;">ORD-\${orderId}</span>
+                      <span style="background: rgba(167, 2, 1, 0.1); color: var(--clr-primary); font-size: 0.85rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 50px;">ORD-${orderId}</span>
                     </div>
                     
-                    <div style="flex:1; overflow-y:auto; padding-right:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--clr-border, #eee);">
-                      \${window.CartManager.state.items.map(m=>{
+                    <div style="flex:1; overflow-y:auto; padding-right:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--clr-border);">
+                      ${window.CartManager.state.items.map(m=>{
                           let imgPath = m.image;
                           if(!window.location.pathname.includes('/pages/')) imgPath = imgPath.replace('../', './');
-                          return \`
+                          return `
                         <div style="display:flex; justify-content:space-between; margin-bottom:1rem; align-items:center;">
                           <div style="display:flex; gap:1rem; align-items:center;">
-                            <img src="\${imgPath}" style="width:48px; height:48px; border-radius:8px; object-fit:cover;">
+                            <img src="${imgPath}" style="width:48px; height:48px; border-radius:8px; object-fit:cover;">
                             <div>
-                              <p style="margin:0; font-weight:600; font-size:0.95rem; color:var(--clr-text-primary);">\${m.qty}x \${m.title}</p>
-                              \${m.size ? \`<p style="margin:0; font-size:0.8rem; color:var(--clr-text-secondary);">\${m.size}</p>\`:''}
+                              <p style="margin:0; font-weight:600; font-size:0.95rem; color:var(--clr-text-primary);">${m.qty}x ${m.title}</p>
+                              ${m.size ? `<p style="margin:0; font-size:0.8rem; color:var(--clr-text-secondary);">${m.size}</p>`:''}
                             </div>
                           </div>
-                          <span style="font-weight:600; font-size:0.95rem; color:var(--clr-text-primary);">Rs \${(m.basePrice + (m.addonsTotal||0)) * m.qty}</span>
+                          <span style="font-weight:600; font-size:0.95rem; color:var(--clr-text-primary);">Rs ${(m.basePrice + (m.addonsTotal||0)) * m.qty}</span>
                         </div>
-                      \`}).join('')}
+                      `}).join('')}
                     </div>
                     
                     <div>
                       <div style="display:flex; justify-content:space-between; margin-bottom:0.8rem; color:var(--clr-text-secondary); font-size:0.95rem;">
                         <span>Subtotal</span>
-                        <span style="font-weight:500;">Rs \${total - (orderType === 'Delivery' ? 12 : 0)}</span>
+                        <span style="font-weight:500;">Rs ${total - (orderType === 'Delivery' ? 12 : 0)}</span>
                       </div>
-                      \${orderType === 'Delivery' ? \`
+                      ${orderType === 'Delivery' ? `
                       <div style="display:flex; justify-content:space-between; margin-bottom:1.2rem; color:var(--clr-text-secondary); font-size:0.95rem;">
                         <span>Delivery Fee</span>
                         <span style="font-weight:500;">Rs 12</span>
-                      </div>\` : ''}
-                      <div style="display:flex; justify-content:space-between; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--clr-border, #eee); font-size:1.2rem; font-weight:700; color:var(--clr-text-primary);">
+                      </div>` : ''}
+                      <div style="display:flex; justify-content:space-between; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--clr-border); font-size:1.2rem; font-weight:700; color:var(--clr-text-primary);">
                         <span>Total</span>
-                        <span>Rs \${total}</span>
+                        <span>Rs ${total}</span>
                       </div>
                       <div style="margin-top:1rem; text-align:right; color:var(--clr-text-secondary); font-size:0.85rem;">
-                        Payment Method: <strong>\${payment}</strong>
+                        Payment Method: <strong>${payment}</strong>
                       </div>
                     </div>
                   </div>
                 </div>
   
-                <!-- Sticky Mobile Buttons (hidden on desktop) -->
-                <div id="order-confirm-modal-buttons-mobile" style="display: flex; gap: 1rem; padding: 1rem; background: var(--clr-surface); border-top: 1px solid var(--clr-border, rgba(0,0,0,0.05)); z-index: 10;">
-                  <button class="confirm-modal-submit btn btn-primary" style="flex:1; border-radius:50px; padding:0.8rem 0.5rem; font-weight:700; cursor:pointer; font-size: 0.95rem;" onclick="window.location.href='\${window.location.pathname.includes('/pages/') ? 'orders.html' : 'pages/orders.html'}'">View Orders</button>
-                </div>
-  
               </div>
             </div>
             <style>
-              #order-confirm-modal-buttons-mobile { display: none !important; }
-              html.dark-mode #order-confirm-modal .modal-right-pane { background: var(--clr-surface) !important; }
-              html.dark-mode #order-confirm-modal-buttons-mobile { border-top-color: var(--clr-border, rgba(255,255,255,0.05)) !important; }
-              html.dark-mode #order-confirm-modal .modal-right-pane h3 { border-bottom-color: var(--clr-border, rgba(255,255,255,0.05)) !important; }
-              html.dark-mode #order-confirm-modal .modal-right-pane > div:nth-child(3) { border-top-color: var(--clr-border, rgba(255,255,255,0.05)) !important; }
+              #modal-btn-back {
+                flex: 1;
+                background: rgba(255,255,255,0.15);
+                color: #ffffff;
+                border: 2px solid #ffffff;
+                border-radius: 50px;
+                padding: 0.8rem 1rem;
+                font-weight: 600;
+                transition: all 0.3s ease;
+              }
+              #modal-btn-back:hover {
+                background: rgba(255,255,255,0.25);
+                color: #ffffff;
+              }
+              #modal-btn-back:active {
+                background: rgba(255,255,255,0.35);
+              }
+              #modal-btn-confirm {
+                flex: 2;
+                background: #ffffff;
+                color: var(--clr-primary, #FB6815);
+                border: 2px solid #ffffff;
+                border-radius: 50px;
+                padding: 0.8rem 1rem;
+                font-weight: 700;
+                transition: all 0.3s ease;
+              }
+              #modal-btn-confirm:hover {
+                background: #f8f8f8;
+                color: var(--clr-primary, #FB6815);
+                transform: translateY(-2px);
+              }
+              #modal-btn-confirm:active {
+                transform: translateY(0);
+                background: #f0f0f0;
+              }
+
               @media (max-width: 768px) {
-                #order-confirm-modal-buttons-desktop { display: none !important; }
-                #order-confirm-modal-buttons-mobile { display: flex !important; }
                 #order-confirm-modal .scrollable-content { flex-direction: column !important; }
                 #order-confirm-modal .modal-left-pane { padding: 1.5rem !important; justify-content: flex-start !important; flex: none !important; }
                 #order-confirm-modal .modal-left-pane h2 { font-size: 1.5rem !important; margin-bottom: 0.2rem !important; }
                 #order-confirm-modal .modal-left-pane p { margin-bottom: 1rem !important; font-size: 0.95rem !important; }
                 #order-confirm-modal .modal-right-pane { padding: 1.5rem !important; flex: none !important; }
               }
+              html.dark-mode #order-confirm-modal .modal-right-pane { background: var(--clr-surface) !important; }
+              html.dark-mode #order-confirm-modal .modal-right-pane h3 { border-bottom-color: rgba(255,255,255,0.08) !important; }
+              html.dark-mode #order-confirm-modal .modal-right-pane > div:nth-child(3) { border-top-color: rgba(255,255,255,0.08) !important; }
             </style>
-        \`;
+        `;
         
         document.body.insertAdjacentHTML('beforeend', confirmHtml);
         
-        window.CartManager.state.items = [];
-        window.CartManager.save();
-        closeModal();
+        const confirmModal = document.getElementById('order-confirm-modal');
+        
+        // Close on outside click for confirm modal
+        confirmModal.addEventListener('click', (e) => {
+            if(e.target === confirmModal) {
+                confirmModal.remove();
+            }
+        });
+        
+        // Handle Back / Cancel
+        confirmModal.querySelectorAll('.confirm-modal-back').forEach(btn => {
+            btn.addEventListener('click', () => {
+                confirmModal.remove();
+            });
+        });
+        
+        // Handle Confirm Order
+        confirmModal.querySelectorAll('.confirm-modal-submit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                let orders = JSON.parse(localStorage.getItem("hdm_orders")) || [];
+                orders.unshift(newOrder);
+                localStorage.setItem("hdm_orders", JSON.stringify(orders));
+                
+                window.CartManager.state.items = [];
+                window.CartManager.save();
+                confirmModal.remove();
+                closeModal();
+                window.location.href = window.location.pathname.includes('/pages/') ? 'orders.html' : 'pages/orders.html';
+            });
+        });
     });
 })();
 
@@ -777,7 +897,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                     const sizeText = item.size ? `<span style="font-size:0.8rem;color:var(--clr-text-secondary);">Size: ${item.size}</span>` : '';
                     const extrasText = item.extras && item.extras.length > 0 ? `<span style="font-size:0.8rem;color:var(--clr-text-secondary);">+ ${item.extras.join(', ')}</span>` : '';
                     return `
-                        <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem 0;border-bottom:1px solid rgba(0,0,0,0.05);">
+                        <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem 0;border-bottom:1px solid var(--clr-border);">
                             ${imgPath ? `<img loading="lazy" src="${imgPath}" alt="${item.title}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : `<div style="width:52px;height:52px;border-radius:8px;background:var(--clr-primary);opacity:0.2;flex-shrink:0;"></div>`}
                             <div style="flex:1;min-width:0;">
                                 <p style="font-weight:600;font-size:0.9rem;margin:0 0 0.2rem;color:var(--clr-text-primary);">${item.title} <span style="color:var(--clr-text-secondary);">x${item.qty}</span></p>
@@ -812,7 +932,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             const statusTextColor = isDelivered ? '#2e7d32' : 'var(--clr-primary)';
             
             html += `
-            <div class="order-card" style="background:var(--clr-surface,#fff);border-radius:16px;padding:1.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.05);margin-bottom:1.5rem;border:1px solid rgba(0,0,0,0.05);">
+            <div class="order-card" style="background:var(--clr-surface,#fff);border-radius:16px;padding:1.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.05);margin-bottom:1.5rem;border:1px solid var(--clr-border);">
                 <!-- Header row -->
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
                     <div>
@@ -840,12 +960,12 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 ${custHtml}
                 
                 <!-- Order Items -->
-                <div style="border-top:1px solid rgba(0,0,0,0.05);padding-top:0.75rem;margin-bottom:0.75rem;">
+                <div style="border-top:1px solid var(--clr-border);padding-top:0.75rem;margin-bottom:0.75rem;">
                     ${itemsHtml}
                 </div>
                 
                 <!-- Totals -->
-                <div style="border-top:1px solid rgba(0,0,0,0.05);padding-top:0.75rem;">
+                <div style="border-top:1px solid var(--clr-border);padding-top:0.75rem;">
                     ${subtotal !== grandTotal ? `
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;font-size:0.88rem;color:var(--clr-text-secondary);">
                         <span>Subtotal</span><span>Rs ${subtotal}</span>
@@ -928,7 +1048,9 @@ document.body.addEventListener('click', function(e) {
         const cartModal = document.getElementById('custom-cart-modal');
         if (cartModal) {
             cartModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            if (window.innerWidth <= 768) {
+                document.body.style.overflow = 'hidden';
+            }
             if (typeof window._renderCC === 'function') {
                 window._renderCC();
                 document.getElementById('cc-cart-view').style.display = 'block';

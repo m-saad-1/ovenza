@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="dark-mode">
 <head>
     <meta charset="UTF-8">
@@ -75,7 +75,7 @@
                     }
                     .checkout-details-box {
                         background: #fff;
-                        border: 1px solid #eee;
+                        border: 1px solid var(--clr-border);
                         border-radius: var(--border-radius-lg);
                         padding: 2.5rem;
                         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
@@ -114,7 +114,7 @@
 
                         <!-- Customer Details -->
                         <div class="checkout-details-box">
-                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 0.8rem; text-align: left;">Customer Details</h3>
+                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid var(--clr-border); padding-bottom: 0.8rem; text-align: left;">Customer Details</h3>
                             <div class="checkout-grid">
                                 <div style="grid-column: 1 / -1;">
                                     <label for="cust-name" class="field-label">Full Name</label>
@@ -145,23 +145,15 @@
 
                         <!-- Payment Details -->
                         <div class="checkout-details-box">
-                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 0.8rem;">Payment Details</h3>
-                            <div class="checkout-grid" id="payment-methods-container">
-                                <label class="payment-label">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid var(--clr-border); padding-bottom: 0.8rem;">Payment Details</h3>
+                            <div id="payment-methods-container" style="display:flex; gap:1rem; flex-wrap:nowrap;">
+                                <label class="payment-label" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-align:center;">
                                     <input type="radio" name="payment_method" value="Cash on Delivery" checked>
                                     <span style="font-weight: 600;">Cash on Delivery</span>
                                 </label>
-                                <label class="payment-label">
-                                    <input type="radio" name="payment_method" value="Easypaisa">
-                                    <span style="font-weight: 600;">Easypaisa</span>
-                                </label>
-                                <label class="payment-label">
-                                    <input type="radio" name="payment_method" value="JazzCash">
-                                    <span style="font-weight: 600;">JazzCash</span>
-                                </label>
-                                <label class="payment-label">
+                                <label class="payment-label" style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-align:center;">
                                     <input type="radio" name="payment_method" value="Wallet">
-                                    <span style="font-weight: 600; display:flex; align-items:center; gap:0.5rem;">
+                                    <span style="font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:0.2rem;">
                                         Wallet
                                         <span id="wallet-balance-display" style="font-size:0.8rem; background:rgba(167,2,1,0.1); color:var(--clr-primary); padding:0.1rem 0.4rem; border-radius:4px; display:none;"></span>
                                     </span>
@@ -175,7 +167,7 @@
 
                     <!-- Order Summary -->
                     <div class="checkout-summary-box" style="padding: 2.5rem; border-radius: 20px; position: sticky; top: 100px; width: 100%; display: flex; flex-direction: column;">
-                        <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 0.8rem;">Order Summary</h3>
+                        <h3 style="margin-bottom: 1.5rem; color: var(--clr-text-primary); font-size: 1.5rem; font-weight: 700; border-bottom: 1px solid var(--clr-border); padding-bottom: 0.8rem;">Order Summary</h3>
                         
                         <div style="display: flex; justify-content: space-between; margin-bottom: 1.2rem; color: var(--clr-text-secondary, #555); font-size: 1.1rem;">
                             <span>Subtotal</span>
@@ -191,8 +183,10 @@
                             <span class="total-val" style="color: var(--clr-primary);">Rs 0</span>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 50px; padding: 1.2rem; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(167, 2, 1, 0.3);">Place Order</button>
-                        <a href="cart.html" style="display: block; text-align: center; margin-top: 1.5rem; color: #777; font-weight: 600; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='var(--clr-primary)';" onmouseout="this.style.color='#777';">&larr; Back to Cart</a>
+                        <div style="display:flex; gap:1rem; margin-top:1.5rem; justify-content:center;">
+                            <a href="cart.html" class="btn" style="flex:1; text-align: center; border-radius: 50px; padding: 1.2rem; font-size: 1.15rem; font-weight: 600; color: #777; border: 1px solid var(--clr-border); text-decoration: none;">Back to Cart</a>
+                            <button type="submit" class="btn btn-primary" style="flex:1; border-radius: 50px; padding: 1.2rem; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(167, 2, 1, 0.3);">Place Order</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -209,16 +203,15 @@
                 const authBanner = document.getElementById('checkout-auth-banner');
                 if(authBanner) authBanner.style.display = 'none';
 
-                const pName = localStorage.getItem('profileName');
-                const pEmail = localStorage.getItem('profileEmail');
+                const pName    = localStorage.getItem('profileName')  || '';
+                const pEmail   = localStorage.getItem('profileEmail') || '';
+                const pPhone   = localStorage.getItem('profilePhone') || '';
+                const pAddress = localStorage.getItem('profileAddress') || '';
                 
-                if(pName) document.getElementById('cust-name').value = pName;
-                if(pEmail) document.getElementById('cust-email').value = pEmail;
-                
-                // Mock default address fetch for logged in user
-                document.getElementById('cust-phone').value = "+92 03001013556";
-                document.getElementById('cust-address').value = "House 45, Street 1, DC Colony";
-                document.getElementById('cust-city').value = "Gujranwala";
+                if(pName)    document.getElementById('cust-name').value    = pName;
+                if(pEmail)   document.getElementById('cust-email').value   = pEmail;
+                if(pPhone)   document.getElementById('cust-phone').value   = pPhone;
+                if(pAddress) document.getElementById('cust-address').value = pAddress;
             }
 
             // Wallet Balance Display Logic
@@ -229,6 +222,33 @@
             if (isLoggedIn) {
                 walletDisplay.textContent = 'Rs ' + walletBalance.toLocaleString();
                 walletDisplay.style.display = 'inline-block';
+            }
+
+            // Delivery vs Pickup Logic based on header
+            const locType = localStorage.getItem('tl_location_type') || 'delivery';
+            const locName = localStorage.getItem('tl_location_name') || 'Select Location';
+            
+            if (locType === 'outlet') {
+                // Hide address field, set city to outlet name
+                document.getElementById('cust-address').parentElement.style.display = 'none';
+                document.getElementById('cust-address').required = false;
+                
+                const cityField = document.getElementById('cust-city');
+                cityField.value = locName;
+                cityField.readOnly = true;
+                cityField.parentElement.querySelector('label').textContent = 'Pickup Outlet';
+                
+                // Hide delivery fee row
+                const feeRow = document.querySelector('.checkout-summary-box > div:nth-of-type(2)');
+                if (feeRow && feeRow.textContent.includes('Delivery Fee')) {
+                    feeRow.style.display = 'none';
+                }
+            } else {
+                // Pre-fill city with location string
+                let cityStr = locName;
+                const locArea = localStorage.getItem('tl_location_area');
+                if(locArea) cityStr += ` (${locArea})`;
+                document.getElementById('cust-city').value = cityStr;
             }
 
         });

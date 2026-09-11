@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="dark-mode">
 <head>
     <meta charset="UTF-8">
@@ -296,7 +296,7 @@
                                 <p style="opacity: 0.8; font-size: 0.9rem;">Update your personal details.</p>
                             </div>
                         </div>
-                        <form onsubmit="event.preventDefault(); alert('Profile updated successfully!');">
+                        <form onsubmit="handleSaveProfile(event)">
                             <div style="margin-bottom: 1.5rem;">
                                 <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Full Name</label>
                                 <input type="text" id="pd-name" class="profile-input" value="Maria Silva" required>
@@ -304,7 +304,7 @@
                             <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                                 <div>
                                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Phone Number</label>
-                                    <input type="tel" class="profile-input" value="+92 03001013556" required>
+                                    <input type="tel" id="pd-phone" class="profile-input" value="+92 03001013556" required>
                                 </div>
                                 <div>
                                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email</label>
@@ -408,6 +408,7 @@
 
         const pName = localStorage.getItem('profileName') || 'Maria Silva';
         const pEmail = localStorage.getItem('profileEmail') || 'maria.silva@email.com';
+        const pPhone = localStorage.getItem('profilePhone') || '+92 03001013556';
         
         document.getElementById('profile-name').textContent = pName;
         document.getElementById('profile-email').textContent = pEmail;
@@ -417,6 +418,8 @@
         if(pdName) pdName.value = pName;
         const pdEmail = document.getElementById('pd-email');
         if(pdEmail) pdEmail.value = pEmail;
+        const pdPhone = document.getElementById('pd-phone');
+        if(pdPhone) pdPhone.value = pPhone;
     } else {
         authView.style.display = 'block';
         profileView.style.display = 'none';
@@ -473,6 +476,18 @@
         localStorage.setItem('profileEmail', email);
         localStorage.setItem('isLoggedIn', 'true');
         location.reload();
+    }
+
+    function handleSaveProfile(e) {
+        e.preventDefault();
+        const name = document.getElementById('pd-name').value.trim();
+        const phone = document.getElementById('pd-phone').value.trim();
+        if(name) localStorage.setItem('profileName', name);
+        if(phone) localStorage.setItem('profilePhone', phone);
+        // Update displayed name
+        document.getElementById('profile-name').textContent = name;
+        document.getElementById('profile-initial').textContent = name.charAt(0).toUpperCase();
+        alert('Profile updated successfully!');
     }
 
     function handleLogout(e) {
