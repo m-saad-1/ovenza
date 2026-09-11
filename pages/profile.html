@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - AlltimePizza</title>
+    <title>My Profile - crust</title>
     <link rel="icon" type="image/avif" href="../assets/images/logo.avif">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,7 +131,7 @@
 </head>
 <body>
 <div id="page-loader" class="page-loader">
-  <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="AlltimePizza" width="80" height="80" fetchpriority="high" decoding="sync"/>
+  <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="crust" width="80" height="80" fetchpriority="high" decoding="sync"/>
   <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
   <div class="loader-spinner"></div>
 </div>
@@ -304,7 +304,7 @@
                             <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                                 <div>
                                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Phone Number</label>
-                                    <input type="tel" id="pd-phone" class="profile-input" value="+92 335 4477774" required>
+                                    <input type="tel" id="pd-phone" class="profile-input" value="+92 03001013556" required>
                                 </div>
                                 <div>
                                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email</label>
@@ -408,7 +408,7 @@
 
         const pName = localStorage.getItem('profileName') || 'Maria Silva';
         const pEmail = localStorage.getItem('profileEmail') || 'maria.silva@email.com';
-        const pPhone = localStorage.getItem('profilePhone') || '+92 335 4477774';
+        const pPhone = localStorage.getItem('profilePhone') || '+92 03001013556';
         
         document.getElementById('profile-name').textContent = pName;
         document.getElementById('profile-email').textContent = pEmail;
@@ -428,7 +428,7 @@
         const logEmail = document.getElementById('log-email');
         const logPwd = document.querySelector('#login-form input[type="password"]');
         if (logEmail && !logEmail.value) {
-            logEmail.value = 'demo@AlltimePizza.com';
+            logEmail.value = 'demo@crust.com';
             if (logPwd) logPwd.value = 'demo1234';
             
             // Add a subtle hint message

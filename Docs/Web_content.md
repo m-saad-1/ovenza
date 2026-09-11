@@ -2,7 +2,7 @@
 
 ### Read the instruction in @Agent.md first.
 
-We are working on the **alltimepizza** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
+We are working on the **crust** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
 
 ### 1. Assets & Menu — CRITICAL
 
@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #FB6815 to #D90000. 
+Change the complete website color from #FB6815 to #FB6815. 
 
 Apply it consistently while maintaining proper contrast and readability.
 
@@ -81,9 +81,11 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📍+92 335 4477774
+📍+92 03001013556
 
-📍G-13/4, Islamabad, Pakistan 011
+📍Hospital Road Central Park, Lahore
+ 
+📍8A Commercial, Pak Arab, Lahore
 
 
 * When there is just one location, dont show the branch selection bar in the Dashboard.
@@ -198,5 +200,5 @@ Finally, verify the complete website on **desktop and mobile** and ensure there 
 
 After complete implementation and validation,First create a PRIVATE repo and then push the changes to the `main` branch of the git repository.
 
-Repo Should be: `https://github.com/m-saad-1/alltimepizza`
+Repo Should be: `https://github.com/m-saad-1/crust`
 

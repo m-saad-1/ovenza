@@ -1,5 +1,5 @@
 /* ==========================================================================
-   AlltimePizza - Static Menu Data
+   crust - Static Menu Data
    Used by search.js on pages that don't have product cards in the DOM.
    ========================================================================== */
 
@@ -19,11 +19,11 @@ window.CRUST_MENU = [
   { name: 'Tower Burger',              desc: 'Triple-stacked patties with all the toppings.',              price: 'Rs 950',  img: 'assets/images/burger-7.avif',    category: 'Burgers' },
   // Pizzas
   { name: 'Chicken Pizza',         desc: 'Grilled chicken with golden cheese topping.',          price: 'Rs 1400', img: 'assets/images/chicken-pizza.avif',       category: 'Pizzas' },
-  { name: 'Crown AlltimePizza Pizza',     desc: 'Signature crown AlltimePizza loaded with cheese.',            price: 'Rs 1600', img: 'assets/images/crown-crust-pizza.avif',   category: 'Pizzas' },
+  { name: 'Crown crust Pizza',     desc: 'Signature crown crust loaded with cheese.',            price: 'Rs 1600', img: 'assets/images/crown-crust-pizza.avif',   category: 'Pizzas' },
   { name: 'Mughlai Pizza',         desc: 'Rich Mughlai spices with tender chicken.',             price: 'Rs 1500', img: 'assets/images/mughali-pizza.avif',       category: 'Pizzas' },
   { name: 'Special Pizza',         desc: "Our chef's special with premium toppings.",            price: 'Rs 1700', img: 'assets/images/special-pizza.avif',       category: 'Pizzas' },
   { name: 'Tandoori Pizza',        desc: 'Classic tandoori flavours on a crispy base.',          price: 'Rs 1450', img: 'assets/images/tandoori-pizza.avif',      category: 'Pizzas' },
-  { name: 'Thin AlltimePizza Pizza',      desc: 'Ultra-thin, crispy base with fresh toppings.',         price: 'Rs 1300', img: 'assets/images/thin-crust-pizza.avif',    category: 'Pizzas' },
+  { name: 'Thin crust Pizza',      desc: 'Ultra-thin, crispy base with fresh toppings.',         price: 'Rs 1300', img: 'assets/images/thin-crust-pizza.avif',    category: 'Pizzas' },
   // Rolls
   { name: 'Chicken Roll',   desc: 'Crispy chicken wrapped in a soft roll.',              price: 'Rs 350', img: 'assets/images/roll-1.avif', category: 'Rolls' },
   { name: 'Special Roll',   desc: 'Loaded special roll with sauce & veggies.',           price: 'Rs 450', img: 'assets/images/roll-2.avif', category: 'Rolls' },

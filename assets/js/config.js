@@ -1,5 +1,5 @@
 /* ==========================================================================
-   AlltimePizza - Centralized Site Configuration
+   crust - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,14 +7,14 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'AlltimePizza',
+    name: 'crust',
     tagline: 'Premium Burgers & Fast Food',
-    instagram: 'https://www.instagram.com/alltimepizza/',
-    phone: '+92 335 4477774',
-    phonePretty: '+92 335 4477774',
+    instagram: 'https://www.instagram.com/crust/',
+    phone: '+92 03001013556',
+    phonePretty: '+92 03001013556',
     whatsapp: 'https://wa.me/923001013556',
-    email: 'info@alltimepizza.com',
-    copyright: '© 2026 AlltimePizza. All rights reserved.',
+    email: 'info@crust.com',
+    copyright: '© 2026 crust. All rights reserved.',
   },
 
 

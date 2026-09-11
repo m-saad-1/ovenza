@@ -3,7 +3,7 @@
    ========================================================================== */
 :root {
   /* Colors */
-  --clr-primary: #D90000;
+  --clr-primary: #FB6815;
   --clr-primary-hover: #c41e0a;
   --clr-accent: #111111;
 
@@ -2071,14 +2071,14 @@ html.dark-mode img:not(.is-loaded) {
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
-  box-shadow: 0 6px 24px rgba(217, 0, 0, 0.45);
+  box-shadow: 0 6px 24px rgba(251, 104, 21, 0.45);
   transition: transform 0.2s, box-shadow 0.2s;
   animation: float-ud 2.2s ease-in-out infinite;
   font-family: inherit;
 }
 .about-panel-btn:hover {
   transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 10px 30px rgba(217, 0, 0, 0.55);
+  box-shadow: 0 10px 30px rgba(251, 104, 21, 0.55);
   animation-play-state: paused;
 }
 .about-panel-btn svg { flex-shrink: 0; }
@@ -2192,7 +2192,7 @@ html.dark-mode img:not(.is-loaded) {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background: rgba(217, 0, 0,0.12);
+  background: rgba(251,104,21,0.12);
   color: var(--clr-primary);
   display: flex;
   align-items: center;
@@ -2202,8 +2202,8 @@ html.dark-mode img:not(.is-loaded) {
 .adm-feature-name { font-size: 0.8rem; font-weight: 700; color: var(--clr-text-primary); }
 .adm-feature-desc { font-size: 0.72rem; color: var(--clr-text-secondary); line-height: 1.45; }
 .adm-custom-card {
-  background: linear-gradient(135deg, rgba(217, 0, 0,0.08) 0%, rgba(217, 0, 0,0.03) 100%);
-  border: 1px solid rgba(217, 0, 0,0.25);
+  background: linear-gradient(135deg, rgba(251,104,21,0.08) 0%, rgba(251,104,21,0.03) 100%);
+  border: 1px solid rgba(251,104,21,0.25);
   border-radius: var(--border-radius);
   padding: 1.25rem 1.5rem;
   margin-bottom: 1.5rem;
@@ -2213,7 +2213,7 @@ html.dark-mode img:not(.is-loaded) {
 .adm-custom-card strong { color: var(--clr-text-primary); }
 .adm-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
 .adm-tag {
-  background: rgba(217, 0, 0,0.12);
+  background: rgba(251,104,21,0.12);
   color: var(--clr-primary);
   border-radius: 20px;
   padding: 0.25rem 0.75rem;
@@ -2271,8 +2271,8 @@ html.dark-mode img:not(.is-loaded) {
   align-items: center;
   gap: 0.75rem;
   padding: 0.85rem 1.1rem;
-  background: rgba(217, 0, 0,0.08);
-  border: 1px solid rgba(217, 0, 0,0.2);
+  background: rgba(251,104,21,0.08);
+  border: 1px solid rgba(251,104,21,0.2);
   border-radius: 10px;
   margin-bottom: 1.25rem;
   flex-wrap: wrap;

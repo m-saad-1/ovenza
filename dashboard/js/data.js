@@ -1,4 +1,4 @@
-// Centralized Demo Data State for AlltimePizza Dashboard
+// Centralized Demo Data State for crust Dashboard
 // Simulating a realistic restaurant: "Urban Flame Kitchen"
 
 const Store = {
@@ -9,8 +9,8 @@ const Store = {
             taxRate: 0.16, // 16% GST
         },
         branches: [
-            { id: "b1", name: "G-13/4, Islamabad, Pakistan 011", status: "Open", todayRevenue: 124500 },
-            { id: "b2", name: "G-13/4, Islamabad, Pakistan 011", status: "Open", todayRevenue: 98400 }
+            { id: "b1", name: "Hospital Road Central Park", status: "Open", todayRevenue: 124500 },
+            { id: "b2", name: "8A Commercial, Pak Arab, Lahore", status: "Open", todayRevenue: 98400 }
         ],
         categories: [
             { id: "c1", name: "Combos" },
@@ -42,11 +42,11 @@ const Store = {
             { id: "p13", name: "Tower Burger", desc: "Triple-stacked patties with all the toppings.", price: 950, categoryId: "c2", status: "Available", image: "../assets/images/burger-7.avif" },
             // Pizzas
             { id: "p14", name: "Chicken Pizza", desc: "Grilled chicken with golden cheese topping.", price: 1400, categoryId: "c3", status: "Available", image: "../assets/images/chicken-pizza.avif" },
-            { id: "p15", name: "Crown AlltimePizza Pizza", desc: "Signature crown AlltimePizza loaded with cheese.", price: 1600, categoryId: "c3", status: "Available", image: "../assets/images/crown-AlltimePizza-pizza.avif" },
+            { id: "p15", name: "Crown crust Pizza", desc: "Signature crown crust loaded with cheese.", price: 1600, categoryId: "c3", status: "Available", image: "../assets/images/crown-crust-pizza.avif" },
             { id: "p16", name: "Mughlai Pizza", desc: "Rich Mughlai spices with tender chicken.", price: 1500, categoryId: "c3", status: "Available", image: "../assets/images/mughali-pizza.avif" },
             { id: "p17", name: "Special Pizza", desc: "Our chef's special with premium toppings.", price: 1700, categoryId: "c3", status: "Available", image: "../assets/images/special-pizza.avif" },
             { id: "p18", name: "Tandoori Pizza", desc: "Classic tandoori flavours on a crispy base.", price: 1450, categoryId: "c3", status: "Available", image: "../assets/images/tandoori-pizza.avif" },
-            { id: "p19", name: "Thin AlltimePizza Pizza", desc: "Ultra-thin, crispy base with fresh toppings.", price: 1300, categoryId: "c3", status: "Available", image: "../assets/images/thin-AlltimePizza-pizza.avif" },
+            { id: "p19", name: "Thin crust Pizza", desc: "Ultra-thin, crispy base with fresh toppings.", price: 1300, categoryId: "c3", status: "Available", image: "../assets/images/thin-crust-pizza.avif" },
             { id: "p20", name: "Chicken Fajita Pizza", desc: "Spiced fajita chicken with fresh veggies.", price: 1350, categoryId: "c3", status: "Available", image: "../assets/images/pizza-1.avif" },
             { id: "p21", name: "Tikka Sensation Pizza", desc: "Spicy chicken tikka chunks on a rich base.", price: 1450, categoryId: "c3", status: "Available", image: "../assets/images/pizza-2.avif" },
             { id: "p22", name: "Pepperoni Classic Pizza", desc: "Loaded with premium pepperoni slices.", price: 1600, categoryId: "c3", status: "Available", image: "../assets/images/pizza-3.avif" },
@@ -86,15 +86,15 @@ const Store = {
                 ]},
                 { id: "10484", customer: "Table T3", type: "Dine-in", source: "POS", branchId: "b1", total: 3450, payment: "Paid", status: "Ready", kitchenStatus: "Ready", time: getTimeAgo(8), notes: "Serve drinks first", items: [
                     { id: "p3", name: "Combo 3", qty: 1, variant: "Spicy" },
-                    { id: "p14", name: "Chicken Pizza", qty: 1, variant: "Large, Thick AlltimePizza" }
+                    { id: "p14", name: "Chicken Pizza", qty: 1, variant: "Large, Thick Crust" }
                 ]},
                 { id: "10485", customer: "Usman Tariq", type: "Delivery", source: "WhatsApp", branchId: "b1", total: 1400, payment: "Unpaid", status: "New", kitchenStatus: "New", time: getTimeAgo(3), notes: "Call upon arrival", items: [
-                    { id: "p15", name: "Crown AlltimePizza Pizza", qty: 1, variant: "Medium, Extra Cheese" }
+                    { id: "p15", name: "Crown crust Pizza", qty: 1, variant: "Medium, Extra Cheese" }
                 ]}
             ];
         })(),
         customers: [
-            { id: "u1", name: "Ahmed Khan", phone: "+92 335 4477774", orders: 24, lifetimeSpend: 48500, lastOrder: "2 days ago" },
+            { id: "u1", name: "Ahmed Khan", phone: "+92 03001013556", orders: 24, lifetimeSpend: 48500, lastOrder: "2 days ago" },
             { id: "u2", name: "Sara Ali", phone: "0333-9876543", orders: 3, lifetimeSpend: 4200, lastOrder: "Today" }
         ],
         riders: [
@@ -115,7 +115,7 @@ const Store = {
             { productId: "p30", name: "Mountain Dew", ingredients: ["1x 330ml Can"], cost: 65.00, price: 150 }
         ],
         suppliers: [
-            { id: "s1", name: "National Poultry Farms", contact: "+92 335 4477774", categories: "Meat, Chicken", balance: 45000, lastDelivery: "Yesterday", recentPOs: "#PO-1042", status: "Active" },
+            { id: "s1", name: "National Poultry Farms", contact: "+92 03001013556", categories: "Meat, Chicken", balance: 45000, lastDelivery: "Yesterday", recentPOs: "#PO-1042", status: "Active" },
             { id: "s2", name: "Dawn Bread Co.", contact: "0333-4445556", categories: "Bakery", balance: 0, lastDelivery: "Today", recentPOs: "#PO-1043", status: "Active" },
             { id: "s3", name: "Metro Cash & Carry", contact: "0321-7778889", categories: "Dairy, Oil, Groceries", balance: 12500, lastDelivery: "3 days ago", recentPOs: "#PO-1039", status: "Active" },
             { id: "s4", name: "Fresh Veggies Ltd.", contact: "0345-1234567", categories: "Produce, Vegetables", balance: 5000, lastDelivery: "Today", recentPOs: "#PO-1044", status: "Active" }
@@ -139,7 +139,7 @@ const Store = {
             { id: "T6", status: "Occupied", capacity: 8, customer: "Ahmed Khan", amount: "Rs. 5600" }
         ],
         crm: [
-            { id: "c1", name: "Ahmed Khan", phone: "+92 335 4477774", orders: 45, lifetimeSpend: 62500, segment: "VIP", lastOrder: "2 days ago", tier: "Gold", points: 2450 },
+            { id: "c1", name: "Ahmed Khan", phone: "+92 03001013556", orders: 45, lifetimeSpend: 62500, segment: "VIP", lastOrder: "2 days ago", tier: "Gold", points: 2450 },
             { id: "c2", name: "Sarah Ali", phone: "0321-9876543", orders: 2, lifetimeSpend: 2100, segment: "New", lastOrder: "Today", tier: "Bronze", points: 120 },
             { id: "c3", name: "Usman Tariq", phone: "0333-5556667", orders: 18, lifetimeSpend: 15400, segment: "At-Risk", lastOrder: "45 days ago", tier: "Silver", points: 800 }
         ],
@@ -173,7 +173,7 @@ const Store = {
             { category: "Taxes & Fees", amount: -350000, percent: -7.7 },
             { category: "Net Profit", amount: 850000, percent: 18.8 }
         ],
-        currentBranch: "G-13/4, Islamabad, Pakistan 011",
+        currentBranch: "Hospital Road Central Park",
         dateRange: "Today"
     },
 

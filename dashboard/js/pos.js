@@ -315,7 +315,7 @@ window.renderPOSDynamicForm = function() {
                 <input type="text" id="pos-field-phone" class="pos-input" placeholder="Phone" style="width:120px;">
             </div>
             <input type="text" id="pos-field-address" class="pos-input" placeholder="Delivery Address" style="margin-bottom: 0.5rem;">
-            <input type="text" id="pos-area" class="pos-input" placeholder="Area/Zone (e.g. G-13/4, Islamabad, Pakistan 011)" style="width:100%; margin-bottom: 0.5rem;">
+            <input type="text" id="pos-area" class="pos-input" placeholder="Area/Zone (e.g. 8A Commercial, Pak Arab, Lahore)" style="width:100%; margin-bottom: 0.5rem;">
             <div style="display:flex; gap:0.5rem;">
                 <input type="text" id="pos-delivery-fee" class="pos-input" placeholder="Delivery Fee (Rs.)" style="flex:1;">
                 <input type="text" id="pos-instructions" class="pos-input" placeholder="Delivery Instructions" style="flex:1;">
