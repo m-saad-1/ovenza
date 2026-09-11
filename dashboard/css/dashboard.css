@@ -2297,3 +2297,186 @@ html.dark-mode img:not(.is-loaded) {
 .toast-notification.success { border-left-color: var(--clr-success); } .toast-notification.success .toast-icon { color: var(--clr-success); }
 .toast-notification.warning { border-left-color: var(--clr-warning); } .toast-notification.warning .toast-icon { color: var(--clr-warning); }
 .toast-notification.error { border-left-color: var(--clr-danger); } .toast-notification.error .toast-icon { color: var(--clr-danger); }
+
+/* ==========================================================================
+   DARK MODE OVERRIDES
+   ========================================================================== */
+html.dark-mode {
+  --clr-bg-app: #121212;
+  --clr-surface: #1e1e1e;
+  --clr-surface-elevated: #282828;
+
+  --clr-text-primary: #e5e7eb;
+  --clr-text-secondary: #9ca3af;
+  --clr-text-muted: #6b7280;
+
+  --clr-border: #333333;
+
+  --clr-success-bg: rgba(16, 185, 129, 0.15);
+  --clr-warning-bg: rgba(245, 158, 11, 0.15);
+  --clr-danger-bg: rgba(239, 68, 68, 0.15);
+  --clr-info-bg: rgba(59, 130, 246, 0.15);
+  
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  
+  --osc-accent: var(--clr-border); 
+}
+
+/* Base surface elements */
+html.dark-mode .card,
+html.dark-mode .drawer-panel,
+html.dark-mode .kitchen-modal-sheet,
+html.dark-mode .adm-about-modal,
+html.dark-mode .branch-switch-modal,
+html.dark-mode .app-header,
+html.dark-mode .app-sidebar,
+html.dark-mode .toast,
+html.dark-mode .toast-notification,
+html.dark-mode .pos-img-wrap,
+html.dark-mode .km-item-row,
+html.dark-mode .order-stat-card,
+html.dark-mode .dropdown-menu {
+  background-color: var(--clr-surface);
+  border-color: var(--clr-border);
+}
+
+/* Inputs and interactive elements */
+html.dark-mode input,
+html.dark-mode select,
+html.dark-mode textarea {
+  background-color: var(--clr-bg-app);
+  color: var(--clr-text-primary);
+  border-color: var(--clr-border);
+}
+
+html.dark-mode input:focus,
+html.dark-mode select:focus,
+html.dark-mode textarea:focus,
+html.dark-mode .header-search input:focus,
+html.dark-mode .content-form-group input:focus,
+html.dark-mode .content-form-group textarea:focus,
+html.dark-mode .content-form-group select:focus,
+html.dark-mode .branch-selector:focus,
+html.dark-mode .branch-selector:hover {
+  background-color: var(--clr-surface-elevated) !important;
+  border-color: var(--clr-primary);
+}
+
+html.dark-mode .header-search input {
+  background-color: var(--clr-bg-app);
+}
+html.dark-mode .branch-selector {
+  background-color: var(--clr-bg-app);
+}
+
+/* Tables */
+html.dark-mode .data-table th {
+  background-color: var(--clr-bg-app);
+  color: var(--clr-text-secondary);
+  border-bottom: 1px solid var(--clr-border);
+}
+html.dark-mode .data-table td {
+  border-bottom: 1px solid var(--clr-border);
+}
+html.dark-mode .data-table tr:hover td {
+  background-color: var(--clr-surface-elevated);
+}
+
+/* Fix specific hover states with white backgrounds */
+html.dark-mode .snapshot-item:hover,
+html.dark-mode .order-stat-card:hover,
+html.dark-mode .pos-product-card:hover,
+html.dark-mode .dropdown-item:hover,
+html.dark-mode .inventory-stat:hover {
+  background-color: var(--clr-surface-elevated) !important;
+}
+html.dark-mode .nav-item:hover {
+  background-color: rgba(255,255,255,0.05);
+}
+
+/* Modals & Popups */
+html.dark-mode .modal-header,
+html.dark-mode .drawer-header,
+html.dark-mode .kitchen-modal-header {
+  border-bottom-color: var(--clr-border);
+}
+html.dark-mode .modal-footer,
+html.dark-mode .drawer-footer,
+html.dark-mode .kitchen-modal-footer {
+  border-top-color: var(--clr-border);
+  background-color: var(--clr-surface);
+}
+html.dark-mode .modal-close svg,
+html.dark-mode .drawer-close svg,
+html.dark-mode .km-close svg {
+  color: var(--clr-text-secondary);
+}
+html.dark-mode .modal-close:hover svg,
+html.dark-mode .drawer-close:hover svg,
+html.dark-mode .km-close:hover svg {
+  color: var(--clr-text-primary);
+}
+
+/* AI Insight */
+html.dark-mode .ai-insight {
+  background: linear-gradient(145deg, #2a1a10 0%, #1e1e1e 100%);
+  border-color: #4a2a18;
+}
+
+/* Buttons */
+html.dark-mode .btn-outline {
+  border-color: var(--clr-border);
+  color: var(--clr-text-primary);
+}
+html.dark-mode .btn-outline:hover {
+  background-color: var(--clr-surface-elevated);
+}
+
+/* Checkboxes and Radios */
+html.dark-mode input[type="checkbox"],
+html.dark-mode input[type="radio"] {
+  accent-color: var(--clr-primary);
+  background-color: var(--clr-bg-app);
+}
+
+/* Fix specific items with hardcoded #fff */
+html.dark-mode .km-item-row {
+  background-color: var(--clr-bg-app) !important;
+}
+html.dark-mode .pos-img-wrap {
+  background-color: var(--clr-bg-app) !important;
+}
+html.dark-mode .snapshot-item {
+  background-color: var(--clr-bg-app);
+}
+html.dark-mode .kpi-icon {
+  background-color: var(--clr-bg-app);
+}
+html.dark-mode .order-progress-box {
+  background-color: var(--clr-bg-app);
+}
+html.dark-mode .ct-branch-banner {
+  background: rgba(251,104,21,0.15);
+  border-color: rgba(251,104,21,0.3);
+}
+
+/* Charts: Optional invert for dark mode if they are hardcoded bright */
+html.dark-mode canvas {
+  opacity: 0.9;
+}
+
+/* Disabled States */
+html.dark-mode input:disabled,
+html.dark-mode select:disabled,
+html.dark-mode textarea:disabled,
+html.dark-mode button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Ensure empty state messages are visible */
+html.dark-mode .empty-state,
+html.dark-mode .no-data {
+  color: var(--clr-text-muted);
+}
