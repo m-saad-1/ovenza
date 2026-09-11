@@ -886,3 +886,58 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
     }
 })();
 
+// 3. MASTER INTERCEPTOR FOR MODALS
+// Catch all clicks globally so it doesn't matter when DOM elements are injected
+document.body.addEventListener('click', function(e) {
+    // 1. Contact buttons (phone icon in header AND hamburger menu contact link)
+    const isContactBtn = e.target.closest('.contact-header-btn') || e.target.closest('#contact-header-btn');
+    const isContactLink = e.target.closest('a') && (e.target.closest('a').getAttribute('href')||'').includes('contact.html');
+    
+    if (isContactBtn || (isContactLink && !e.target.closest('.footer'))) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Close mobile menu if open
+        const navCenter = document.querySelector('.nav-center');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        if (navCenter) navCenter.classList.remove('active');
+        if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
+        
+        // Open Contact Modal
+        const cm = document.getElementById('contact-modal');
+        if (cm) {
+            if (typeof window._tl_openModal === 'function') {
+                window._tl_openModal(cm, 'contact-modal');
+            } else {
+                cm.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        return;
+    }
+    
+    // 2. Cart buttons (Header cart icon AND floating bottom bar)
+    const isCartLink = e.target.closest('.cart-icon-link') || (e.target.closest('a') && ((e.target.closest('a').getAttribute('href')||'').includes('cart.html') || (e.target.closest('a').getAttribute('href')||'').includes('checkout.html')));
+    const isFloatingCart = e.target.closest('.floating-cart-bar');
+    
+    if (isCartLink || isFloatingCart) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Open Cart Modal
+        const cartModal = document.getElementById('custom-cart-modal');
+        if (cartModal) {
+            cartModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (typeof window._renderCC === 'function') {
+                window._renderCC();
+                document.getElementById('cc-cart-view').style.display = 'block';
+                document.getElementById('cc-checkout-view').style.display = 'none';
+                document.getElementById('cc-modal-title').textContent = 'Your Cart';
+            }
+        }
+        return;
+    }
+}, true); // Use capture phase to guarantee we beat other inline or attached listeners
+
+
