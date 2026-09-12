@@ -721,22 +721,22 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
               }
               #modal-btn-confirm {
                 flex: 2;
-                background: #ffffff;
-                color: var(--clr-primary, #FB6815);
-                border: 2px solid #ffffff;
+                background: #ffffff !important;
+                color: var(--clr-primary, #FB6815) !important;
+                border: 2px solid #ffffff !important;
                 border-radius: 50px;
                 padding: 0.8rem 1rem;
                 font-weight: 700;
                 transition: all 0.3s ease;
               }
               #modal-btn-confirm:hover {
-                background: #f8f8f8;
-                color: var(--clr-primary, #FB6815);
+                background: #f8f8f8 !important;
+                color: var(--clr-primary, #FB6815) !important;
                 transform: translateY(-2px);
               }
               #modal-btn-confirm:active {
                 transform: translateY(0);
-                background: #f0f0f0;
+                background: #f0f0f0 !important;
               }
 
               @media (max-width: 768px) {
