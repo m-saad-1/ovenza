@@ -479,7 +479,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             }
             
             html += `
-            <div class="cc-cart-item">
+            <div class="cc-cart-item" style="cursor:pointer;" onclick="if(!event.target.closest('button')) { window.openItemModalWithData(null, {name: \`${item.title}\`, price: ${item.basePrice}, img: \`${imagePath}\`}); }">
                 <img src="${imagePath}" style="width:70px; height:70px; border-radius:8px; object-fit:cover; border:1px solid var(--clr-border);">
                 <div style="flex:1;">
                     <h4 style="margin:0; font-size:1rem; color:var(--clr-text-primary);">${item.title}</h4>
