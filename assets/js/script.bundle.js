@@ -231,6 +231,11 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             border-color: var(--clr-border);
             background: var(--clr-surface);
         }
+        /* Fix Back to Cart button hover in light mode */
+        .cc-modal-overlay #cc-back-cart:hover {
+            background: var(--clr-border, #e0e0e0) !important;
+            color: var(--clr-text-primary) !important;
+        }
         
         .cc-cart-item {
             display: flex; align-items: center; gap: 1rem; padding: 1rem;
@@ -390,10 +395,6 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         document.documentElement.style.setProperty('--header-height', navH + 'px');
 
         modal.classList.add('active');
-        // Only lock body scroll on mobile
-        if (window.innerWidth <= 768) {
-            document.body.style.overflow = 'hidden';
-        }
         renderCart();
         showCartView();
     }
@@ -491,7 +492,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 </div>
                 <div style="text-align:right;">
                     <div style="font-weight:700; color:var(--clr-primary); font-size: 1.1rem;">Rs ${H(itemTotal)}</div>
-                    <button onclick="window.CartManager.removeItem(${index}); setTimeout(()=>window._renderCC(), 50)" style="margin-top:0.5rem; background:none; border:none; color:#e74c3c; cursor:pointer; font-size:0.85rem; font-weight:600; padding:4px;">Remove</button>
+                    <button onclick="window.CartManager.removeItem(${index}); setTimeout(()=>window._renderCC(), 50)" aria-label="Remove item" style="margin-top:0.5rem; background:none; border:none; color:#e74c3c; cursor:pointer; padding:4px; display:flex; align-items:center; justify-content:flex-end; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg></button>
                 </div>
             </div>`;
         });
@@ -520,6 +521,9 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         cartView.style.display = 'none';
         checkoutView.style.display = 'block';
         modalTitle.textContent = 'Checkout';
+        // Scroll modal body to top
+        const body = document.getElementById('cc-modal-body');
+        if (body) body.scrollTop = 0;
         
         // Auto-fill logged in user data from profile
         if(localStorage.getItem('isLoggedIn') === 'true') {
@@ -656,7 +660,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                       <span style="background: rgba(167, 2, 1, 0.1); color: var(--clr-primary); font-size: 0.85rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 50px;">ORD-${orderId}</span>
                     </div>
                     
-                    <div style="flex:1; overflow-y:auto; padding-right:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--clr-border);">
+                    <div style="flex:1; overflow-y:auto; max-height:220px; padding-right:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--clr-border);">
                       ${window.CartManager.state.items.map(m=>{
                           let imgPath = m.image;
                           if(!window.location.pathname.includes('/pages/')) imgPath = imgPath.replace('../', './');
@@ -745,6 +749,15 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
               html.dark-mode #order-confirm-modal .modal-right-pane { background: var(--clr-surface) !important; }
               html.dark-mode #order-confirm-modal .modal-right-pane h3 { border-bottom-color: rgba(255,255,255,0.08) !important; }
               html.dark-mode #order-confirm-modal .modal-right-pane > div:nth-child(3) { border-top-color: rgba(255,255,255,0.08) !important; }
+              html.dark-mode #modal-btn-confirm {
+                background: #ffffff !important;
+                color: var(--clr-primary, #FB6815) !important;
+                border-color: #ffffff !important;
+              }
+              html.dark-mode #modal-btn-confirm:hover {
+                background: #f0f0f0 !important;
+                color: var(--clr-primary, #FB6815) !important;
+              }
             </style>
         `;
         
