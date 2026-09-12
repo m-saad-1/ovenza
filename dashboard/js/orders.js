@@ -327,7 +327,7 @@ window.openOrderDetailModal = function(orderId) {
             <div class="card" style="padding:1rem;">
                 <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Fulfillment</div>
                 <div style="font-weight:600;">${order.type}</div>
-                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">${order.type === 'Dine-in' ? ('Table ' + (order.table || order.tableId || 'T-01')) : order.type === 'Delivery' ? (order.address || '8A Commercial, Pak Arab, Lahore') : 'Ready for pickup'}</div>
+                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">${order.type === 'Dine-in' ? ('Table ' + (order.table || order.tableId || 'T-01')) : order.type === 'Delivery' ? (order.address || '') : 'Ready for pickup'}</div>
             </div>
         </div>
         <div style="margin-bottom:1.5rem;">

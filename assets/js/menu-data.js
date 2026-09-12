@@ -24,6 +24,10 @@ window.CRUST_MENU = [
   { name: 'Special Pizza',         desc: "Our chef's special with premium toppings.",            price: 'Rs 1700', img: 'assets/images/special-pizza.avif',       category: 'Pizzas' },
   { name: 'Tandoori Pizza',        desc: 'Classic tandoori flavours on a crispy base.',          price: 'Rs 1450', img: 'assets/images/tandoori-pizza.avif',      category: 'Pizzas' },
   { name: 'Thin crust Pizza',      desc: 'Ultra-thin, crispy base with fresh toppings.',         price: 'Rs 1300', img: 'assets/images/thin-crust-pizza.avif',    category: 'Pizzas' },
+  { name: 'Chicken Fajita Pizza',  desc: 'Spiced fajita chicken with fresh veggies.',            price: 'Rs 1350', img: 'assets/images/pizza-1.avif',             category: 'Pizzas' },
+  { name: 'Tikka Sensation Pizza', desc: 'Spicy chicken tikka chunks on a rich base.',           price: 'Rs 1450', img: 'assets/images/pizza-2.avif',             category: 'Pizzas' },
+  { name: 'Pepperoni Classic Pizza', desc: 'Loaded with premium pepperoni slices.',              price: 'Rs 1600', img: 'assets/images/pizza-3.avif',             category: 'Pizzas' },
+  { name: 'Cheese Lovers Pizza',   desc: 'Blend of 100% real mozzarella cheese.',                price: 'Rs 1300', img: 'assets/images/pizza-4.avif',             category: 'Pizzas' },
   // Rolls
   { name: 'Chicken Roll',   desc: 'Crispy chicken wrapped in a soft roll.',              price: 'Rs 350', img: 'assets/images/roll-1.avif', category: 'Rolls' },
   { name: 'Special Roll',   desc: 'Loaded special roll with sauce & veggies.',           price: 'Rs 450', img: 'assets/images/roll-2.avif', category: 'Rolls' },

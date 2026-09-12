@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="dark-mode">
 <head>
     <meta charset="UTF-8">
@@ -62,20 +62,7 @@
                         
                         <div class="about-right">
                             <div class="about-image" style="position: relative;">
-                                <video id="about-vid-display" loop muted playsinline preload="none" poster="../assets/images/logo.avif" data-src="../assets/images/about.mp4" style="border-radius: 24px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.1); display: block; position: relative; z-index: 2; height: 600px; object-fit: cover;"></video>
-                                <script>
-                                (function(){
-                                  var vid = document.getElementById('about-vid-display');
-                                  if (!vid) return;
-                                  var obs = new IntersectionObserver(function(entries){
-                                    if(entries[0].isIntersecting){
-                                      if(!vid.src){ vid.src = vid.dataset.src; vid.play(); }
-                                      obs.disconnect();
-                                    }
-                                  }, { threshold: 0.2 });
-                                  obs.observe(vid);
-                                })();
-                                </script>
+                                <img src="../assets/images/about.avif" alt="About us" style="border-radius: 24px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.1); display: block; position: relative; z-index: 2; height: 600px; object-fit: cover;">
                                 <div style="position: absolute; top: -15px; left: -15px; right: 15px; bottom: 15px; border: 2px solid var(--clr-primary); border-radius: 24px; z-index: 1;"></div>
                             </div>
                         </div>

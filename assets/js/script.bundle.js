@@ -927,8 +927,8 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             const custHtml = (cust.phone || cust.name || cust.address) ? `
                 <div style="background:rgba(0,0,0,0.03);border-left:3px solid var(--clr-primary);border-radius:0 8px 8px 0;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.88rem;">
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;">
-                        ${cust.phone ? `<div><span style="color:var(--clr-text-secondary);font-weight:600;">Phone:</span> <span style="color:var(--clr-text-primary);">${cust.phone}</span></div>` : ''}
-                        ${cust.name ? `<div><span style="color:var(--clr-text-secondary);font-weight:600;">Name:</span> <span style="color:var(--clr-text-primary);">${cust.name}</span></div>` : ''}
+                        ${cust.name ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Name:</span> <span style="color:var(--clr-text-primary);">${cust.name}</span></div>` : ''}
+                        ${cust.phone ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Phone:</span> <span style="color:var(--clr-text-primary);">${cust.phone}</span></div>` : ''}
                         ${cust.email ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Email:</span> <span style="color:var(--clr-text-primary);">${cust.email}</span></div>` : ''}
                         ${(cust.address && cust.address !== 'Pickup') ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Address:</span> <span style="color:var(--clr-text-primary);">${cust.address}</span></div>` : ''}
                         ${cust.city ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Area/City:</span> <span style="color:var(--clr-text-primary);">${cust.city}</span></div>` : ''}

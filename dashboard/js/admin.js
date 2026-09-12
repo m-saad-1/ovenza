@@ -174,7 +174,7 @@ function initAnalyticsCharts() {
     analyticsCharts.branchRevenue = new Chart(document.getElementById('chartBranchRevenue'), {
         type: 'doughnut',
         data: {
-            labels: ['Hospital Road Central Park, Lahore', 'Hospital Road Central Park, Lahore', '8A Commercial, Pak Arab, Lahore'],
+            labels: ['Hospital Road Central Park, Lahore', 'Hospital Road Central Park, Lahore', ''],
             datasets: [{
                 data: [55, 30, 15],
                 backgroundColor: [brandColor, accentColor, warningColor]

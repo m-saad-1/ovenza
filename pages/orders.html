@@ -151,6 +151,12 @@
                 let now = Date.now();
                 if (!order.lastUpdated) order.lastUpdated = now;
                 
+                // Ensure order ID exists to prevent random generation in render loop
+                if (!order.id) {
+                    order.id = 'ORD-' + Math.floor(Math.random() * 10000);
+                    needsUpdate = true;
+                }
+                
                 // Auto progression logic
                 if (currentStatusIndex < STAGES.length - 1) {
                     let timeElapsed = now - order.lastUpdated;
@@ -170,29 +176,29 @@
                 let itemsHtml = '';
                 if(order.items && order.items.length > 0) {
                     itemsHtml = order.items.map(item => `
-                        <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.6rem;">
-                            ${item.image ? `<img loading="lazy" decoding="async" src="${item.image}" alt="${item.title}" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0;">` : ''}
-                            <div style="flex: 1;">
-                                <p style="font-weight: 600; font-size: 0.9rem; margin: 0 0 0.1rem; color: var(--clr-text-primary);">${item.title} x ${item.qty}</p>
-                                ${item.desc ? `<p style="font-size: 0.8rem; color: #888; margin: 0;">${item.desc}</p>` : ''}
+                        <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                            ${item.image ? `<img loading="lazy" decoding="async" src="${item.image}" alt="${item.title}" style="width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">` : ''}
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 0.2rem;">
+                                <p style="font-weight: 600; font-size: 0.95rem; margin: 0; color: var(--clr-text-primary);">${item.title} <span style="color: var(--clr-primary); font-size: 0.85rem; margin-left: 0.3rem;">x ${item.qty}</span></p>
+                                ${item.desc ? `<p style="font-size: 0.8rem; color: var(--clr-text-secondary, #888); margin: 0; line-height: 1.3;">${item.desc}</p>` : ''}
                             </div>
-                            <span style="font-weight: 700; font-size: 0.9rem; color: var(--clr-text-primary); white-space: nowrap;">Rs ${(item.price || item.basePrice || 0) * item.qty}</span>
+                            <span style="font-weight: 700; font-size: 1rem; color: var(--clr-text-primary); white-space: nowrap;">Rs ${(item.price || item.basePrice || 0) * item.qty}</span>
                         </div>
                     `).join('');
                 }
 
                 html += `
-                <div class="order-card" style="background: var(--clr-surface, #fff); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 1.5rem; border: 1px solid rgba(0,0,0,0.05);">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-                        <div>
-                            <p style="font-size: 0.8rem; color: #999; margin: 0 0 0.2rem;">Order #${order.id || 'ORD-'+Math.floor(Math.random()*1000)}</p>
-                            <p style="font-size: 0.85rem; color: var(--clr-text-secondary, #666); margin: 0;">${order.date}</p>
-                            ${order.status !== 'Delivered' ? `<p style="font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; margin: 0.3rem 0 0 0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px; margin-top:-2px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Est. Delivery: ~35 mins</p>` : `<p style="font-size: 0.85rem; color: #2e7d32; font-weight: 600; margin: 0.3rem 0 0 0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px; margin-top:-2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>Delivered Successfully</p>`}
+                <div class="order-card" style="background: var(--clr-surface, #fff); border-radius: 16px; padding: 1.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 2rem; border: 1px solid rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                            <p style="font-size: 0.85rem; color: var(--clr-text-secondary, #888); margin: 0; font-weight: 500;">Order #${order.id}</p>
+                            <p style="font-size: 0.9rem; color: var(--clr-text-primary); margin: 0; font-weight: 600;">${order.date}</p>
+                            ${order.status !== 'Delivered' ? `<p style="font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; margin: 0; display: flex; align-items: center; gap: 0.3rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Est. Delivery: ~35 mins</p>` : `<p style="font-size: 0.85rem; color: #2e7d32; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 0.3rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>Delivered Successfully</p>`}
                         </div>
-                        <span style="background: ${order.status === 'Delivered' ? '#e8f5e9' : 'rgba(167, 2, 1, 0.1)'}; color: ${order.status === 'Delivered' ? '#2e7d32' : 'var(--clr-primary)'}; font-size: 0.78rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 50px; text-transform: uppercase;">${order.status}</span>
+                        <span style="background: ${order.status === 'Delivered' ? '#e8f5e9' : 'rgba(167, 2, 1, 0.1)'}; color: ${order.status === 'Delivered' ? '#2e7d32' : 'var(--clr-primary)'}; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 1rem; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;">${order.status}</span>
                     </div>
                     
-                    <div class="order-timeline">
+                    <div class="order-timeline" style="margin-bottom: 2rem;">
                         <div class="timeline-track">
                             <div class="timeline-progress" style="width: ${progressPercent}%;"></div>
                         </div>
@@ -205,23 +211,25 @@
                         }).join('')}
                     </div>
                     
-                    <div style="border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1rem; margin-bottom: 1rem; margin-top: 1.5rem;">
+                    <div style="border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; margin-bottom: 1.5rem;">
                         ${itemsHtml}
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1rem;">
-                        <span style="font-size: 0.9rem; color: var(--clr-text-primary);">Total</span>
-                        <span style="font-size: 1.1rem; font-weight: 700; color: var(--clr-text-primary);">Rs ${order.total}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; margin-bottom: 1.5rem;">
+                        <span style="font-size: 1rem; color: var(--clr-text-secondary, #666); font-weight: 500;">Total Amount</span>
+                        <span style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary);">Rs ${order.total}</span>
                     </div>
-                    <div style="margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                        <a href="menu.html" class="btn btn-primary" style="border-radius: 50px; padding: 0.6rem 1.25rem; font-size: 0.85rem; font-weight: 600; text-decoration: none;">Reorder</a>
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                        <a href="menu.html" class="btn btn-primary" style="border-radius: 50px; padding: 0.7rem 1.5rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>Reorder</a>
                     </div>
                 </div>
                 `;
             });
             
             // Only rewrite DOM if content changed (prevents re-render flickering)
-            if (wrapper.innerHTML !== html) {
+            let currentHtmlData = wrapper.getAttribute('data-last-html') || '';
+            if (currentHtmlData !== html) {
                 wrapper.innerHTML = html;
+                wrapper.setAttribute('data-last-html', html);
             }
             
             if (needsUpdate) {

@@ -9,8 +9,8 @@ const Store = {
             taxRate: 0.16, // 16% GST
         },
         branches: [
-            { id: "b1", name: "Hospital Road Central Park", status: "Open", todayRevenue: 124500 },
-            { id: "b2", name: "8A Commercial, Pak Arab, Lahore", status: "Open", todayRevenue: 98400 }
+            { id: "b1", name: "Hospital Road Central Park, Lahore", status: "Open", todayRevenue: 124500 },
+            { id: "b2", name: "8A Commercial, Pak Arab, Lahore", status: "Open", todayRevenue: 87200 }
         ],
         categories: [
             { id: "c1", name: "Combos" },
@@ -173,7 +173,7 @@ const Store = {
             { category: "Taxes & Fees", amount: -350000, percent: -7.7 },
             { category: "Net Profit", amount: 850000, percent: 18.8 }
         ],
-        currentBranch: "Hospital Road Central Park",
+        currentBranch: "Hospital Road Central Park, Lahore",
         dateRange: "Today"
     },
 

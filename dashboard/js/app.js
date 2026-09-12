@@ -670,7 +670,7 @@ window.triggerDemoNotifications = function() {
 // ==========================================================================
 // Branch Switch Modal
 // ==========================================================================
-const BRANCH_PINS = { 'b1': '1234', 'b2': '5678' };
+const BRANCH_PINS = { 'b1': '1234' };
 let activeBranchId = 'b1';
 
 window.openBranchSwitchModal = function() {

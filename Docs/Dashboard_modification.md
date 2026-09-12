@@ -286,7 +286,7 @@ Example:
 Delivery
 Website
 Ahmed Khan
-8A Commercial, Pak Arab, Lahore
+
 Rs. 2,350
 Preparing
 ```
@@ -1134,7 +1134,7 @@ Delivery:
 #10584
 
 DELIVERY
-8A Commercial, Pak Arab, Lahore
+
 
 3 × Chicken Burger
 1 × Fries
