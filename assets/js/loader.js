@@ -347,7 +347,7 @@ ${s}`)}function Y(){const e=window.BB_CONFIG;E("beforeend","body",`
 </div>
 
 <!-- Location Picker Sub-Sheet -->
-<div class="modal-overlay" id="loc-picker-overlay" role="dialog" aria-modal="true" style="z-index:10002; display:none; opacity:0; pointer-events:none;" aria-labelledby="modal-generic-title">
+<div class="modal-overlay" id="loc-picker-overlay" role="dialog" aria-modal="true" style="z-index:100006; display:none; opacity:0; pointer-events:none;" aria-labelledby="modal-generic-title">
   <div class="modal-sheet" id="loc-picker-sheet">
     <div class="modal-drag-handle"></div>
     <div id="loc-picker-header">
