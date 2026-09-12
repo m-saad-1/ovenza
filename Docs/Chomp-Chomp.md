@@ -2,7 +2,7 @@
 
 ### Read the instruction in @Agent.md first.
 
-We are working on the **pizzano** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
+We are working on the **ChompChomp** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
 
 ### 1. Assets & Menu — CRITICAL
 
@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #FB6815 to #FF6900. 
+Change the complete website color from #FB6815 to #ac040b. 
 
 Apply it consistently while maintaining proper contrast and readability.
 
@@ -81,9 +81,12 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📍+92 331-4436662
+📍+92 03001013556
 
-📍Shop No. 8A Shaheen Plaza Sector i-10/Markaz, Islamabad, Pakistan 44000
+📍Hospital Road Central Park, Lahore
+ 
+📍8A Commercial, Pak Arab, Lahore
+
 
 * When there is just one location, dont show the branch selection bar in the Dashboard.
 * Change the demo map to the actual map of the location.
@@ -197,5 +200,5 @@ Finally, verify the complete website on **desktop and mobile** and ensure there 
 
 After complete implementation and validation,First create a PRIVATE repo and then push the changes to the `main` branch of the git repository.
 
-Repo Should be: `https://github.com/m-saad-1/pizzano`
+Repo Should be: `https://github.com/m-saad-1/Chomp-Chomp`
 

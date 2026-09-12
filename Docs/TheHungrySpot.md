@@ -2,7 +2,7 @@
 
 ### Read the instruction in @Agent.md first.
 
-We are working on the **gopizza** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
+We are working on the **TheHungrySpot** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
 
 ### 1. Assets & Menu — CRITICAL
 
@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #FB6815 to #C9232A. 
+Change the complete website color from #FB6815 to #E53935. 
 
 Apply it consistently while maintaining proper contrast and readability.
 
@@ -81,9 +81,9 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📍+92 333 8198833
+📍+92 326 5550444
 
-📍Outside Main Gate, Block 1 Phase A Wapda Town, Gujranwala, Pakistan 52132
+📍 C - block Bank Square, Model Town, Lahore
 
 
 * When there is just one location, dont show the branch selection bar in the Dashboard.
@@ -198,5 +198,5 @@ Finally, verify the complete website on **desktop and mobile** and ensure there 
 
 After complete implementation and validation,First create a PRIVATE repo and then push the changes to the `main` branch of the git repository.
 
-Repo Should be: `https://github.com/m-saad-1/gopizza`
+Repo Should be: `https://github.com/m-saad-1/the-hungry-spot`
 
