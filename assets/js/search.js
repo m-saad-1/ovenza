@@ -393,9 +393,7 @@
     overlay.classList.remove('item-modal-open');
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-    if (window.innerWidth <= 768) {
-      history.pushState({ searchOpen: true }, "");
-    }
+    history.pushState({ searchOpen: true }, "");
   }
 
   function closeSearch() {

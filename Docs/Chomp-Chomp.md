@@ -81,11 +81,9 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📍+92 03001013556
+📍+92 331-8442222
 
-📍Hospital Road Central Park, Lahore
- 
-📍8A Commercial, Pak Arab, Lahore
+📍Main Gate Wapda Town Gujranwala, Gujranwala, Pakistan
 
 
 * When there is just one location, dont show the branch selection bar in the Dashboard.
