@@ -112,8 +112,10 @@
         overflow-y: auto;
         padding: 1rem 1.25rem 1.5rem;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
       }
+      #search-results-body::-webkit-scrollbar { display: none; }
       #search-results-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
