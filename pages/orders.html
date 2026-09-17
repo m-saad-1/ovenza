@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="../assets/css/style.bundle.css?v=16">
     <!-- Component Loader -->
     <script defer src="../assets/js/config.js"></script>
-    <script defer src="../assets/js/loader.js?v=11"></script>
+    <script defer src="../assets/js/loader.js?v=8"></script>
     <style>
         .order-timeline {
             display: flex; justify-content: space-between; position: relative; margin: 1.5rem 0; padding: 0;
@@ -117,129 +117,8 @@
     </main>
     <script defer src="../assets/js/menu-data.js"></script>
     <script defer src="../assets/js/search.js?v=2"></script>
-<script defer src="../assets/js/script.bundle.js"></script>
+<script defer src="../assets/js/script.bundle.js?v=10"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const STAGES = ["Pending", "Confirmed", "Preparing", "Out for Delivery", "Delivered"];
-        const STAGE_DELAY_MS = 6000; // 6 seconds per stage for demo
-        
-        function renderOrders() {
-            const wrapper = document.querySelector('.dynamic-orders-wrapper');
-            const emptyState = document.querySelector('.empty-orders-state');
-            
-            let orders = JSON.parse(localStorage.getItem("hdm_orders")) || [];
-            
-            // Seeded demo order removed per requirements. Newly placed demo orders will still work.
-            
-            if (orders.length === 0) {
-                wrapper.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            wrapper.style.display = 'block';
-            emptyState.style.display = 'none';
-            
-            let html = '';
-            let needsUpdate = false;
-            
-            orders.forEach(order => {
-                let currentStatusIndex = STAGES.indexOf(order.status);
-                if (currentStatusIndex === -1) currentStatusIndex = 0;
-                
-                let now = Date.now();
-                if (!order.lastUpdated) order.lastUpdated = now;
-                
-                // Ensure order ID exists to prevent random generation in render loop
-                if (!order.id) {
-                    order.id = 'ORD-' + Math.floor(Math.random() * 10000);
-                    needsUpdate = true;
-                }
-                
-                // Auto progression logic
-                if (currentStatusIndex < STAGES.length - 1) {
-                    let timeElapsed = now - order.lastUpdated;
-                    let stagesToAdvance = Math.floor(timeElapsed / STAGE_DELAY_MS);
-                    
-                    if (stagesToAdvance > 0) {
-                        currentStatusIndex = Math.min(STAGES.length - 1, currentStatusIndex + stagesToAdvance);
-                        order.status = STAGES[currentStatusIndex];
-                        order.lastUpdated = now - (timeElapsed % STAGE_DELAY_MS);
-                        needsUpdate = true;
-                    }
-                }
-                
-                let progressPercent = (currentStatusIndex / (STAGES.length - 1)) * 100;
-                
-                // Render items
-                let itemsHtml = '';
-                if(order.items && order.items.length > 0) {
-                    itemsHtml = order.items.map(item => `
-                        <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-                            ${item.image ? `<img loading="lazy" decoding="async" src="${item.image}" alt="${item.title}" style="width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">` : ''}
-                            <div style="flex: 1; display: flex; flex-direction: column; gap: 0.2rem;">
-                                <p style="font-weight: 600; font-size: 0.95rem; margin: 0; color: var(--clr-text-primary);">${item.title} <span style="color: var(--clr-primary); font-size: 0.85rem; margin-left: 0.3rem;">x ${item.qty}</span></p>
-                                ${item.desc ? `<p style="font-size: 0.8rem; color: var(--clr-text-secondary, #888); margin: 0; line-height: 1.3;">${item.desc}</p>` : ''}
-                            </div>
-                            <span style="font-weight: 700; font-size: 1rem; color: var(--clr-text-primary); white-space: nowrap;">Rs ${(item.price || item.basePrice || 0) * item.qty}</span>
-                        </div>
-                    `).join('');
-                }
 
-                html += `
-                <div class="order-card" style="background: var(--clr-surface, #fff); border-radius: 16px; padding: 1.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 2rem; border: 1px solid rgba(0,0,0,0.05);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-                            <p style="font-size: 0.85rem; color: var(--clr-text-secondary, #888); margin: 0; font-weight: 500;">Order #${order.id}</p>
-                            <p style="font-size: 0.9rem; color: var(--clr-text-primary); margin: 0; font-weight: 600;">${order.date}</p>
-                            ${order.status !== 'Delivered' ? `<p style="font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; margin: 0; display: flex; align-items: center; gap: 0.3rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Est. Delivery: ~35 mins</p>` : `<p style="font-size: 0.85rem; color: #2e7d32; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 0.3rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>Delivered Successfully</p>`}
-                        </div>
-                        <span style="background: ${order.status === 'Delivered' ? '#e8f5e9' : 'rgba(167, 2, 1, 0.1)'}; color: ${order.status === 'Delivered' ? '#2e7d32' : 'var(--clr-primary)'}; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 1rem; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;">${order.status}</span>
-                    </div>
-                    
-                    <div class="order-timeline" style="margin-bottom: 2rem;">
-                        <div class="timeline-track">
-                            <div class="timeline-progress" style="width: ${progressPercent}%;"></div>
-                        </div>
-                        ${STAGES.map((stage, idx) => {
-                            let classes = "timeline-step";
-                            if (idx < currentStatusIndex) classes += " completed";
-                            else if (idx === currentStatusIndex && stage !== 'Delivered') classes += " pulsing completed";
-                            else if (idx === currentStatusIndex && stage === 'Delivered') classes += " completed";
-                            return `<div class="${classes}"><div class="step-icon"></div><span class="desktop-hide-text">${stage}</span></div>`;
-                        }).join('')}
-                    </div>
-                    
-                    <div style="border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; margin-bottom: 1.5rem;">
-                        ${itemsHtml}
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; margin-bottom: 1.5rem;">
-                        <span style="font-size: 1rem; color: var(--clr-text-secondary, #666); font-weight: 500;">Total Amount</span>
-                        <span style="font-size: 1.25rem; font-weight: 700; color: var(--clr-text-primary);">Rs ${order.total}</span>
-                    </div>
-                    <div style="display: flex; justify-content: flex-end; gap: 1rem;">
-                        <a href="menu.html" class="btn btn-primary" style="border-radius: 50px; padding: 0.7rem 1.5rem; font-size: 0.9rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>Reorder</a>
-                    </div>
-                </div>
-                `;
-            });
-            
-            // Only rewrite DOM if content changed (prevents re-render flickering)
-            let currentHtmlData = wrapper.getAttribute('data-last-html') || '';
-            if (currentHtmlData !== html) {
-                wrapper.innerHTML = html;
-                wrapper.setAttribute('data-last-html', html);
-            }
-            
-            if (needsUpdate) {
-                localStorage.setItem("hdm_orders", JSON.stringify(orders));
-            }
-        }
-        
-        renderOrders();
-        setInterval(renderOrders, 1000); // Check every second for demo progression
-    });
-</script>
 </body>
 </html>

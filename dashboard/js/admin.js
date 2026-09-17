@@ -42,11 +42,96 @@ function renderHR(state) {
                 <td>${s.role}</td>
                 <td style="color: var(--clr-text-secondary); font-size: 0.85rem;">${s.shift}</td>
                 <td><span class="badge ${statusClass}">${s.status}</span></td>
-                <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openGenericModal('employee', '${s.id}')">Manage</button></td>
+                <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openEmployeeModal('${s.id}')">Manage</button></td>
             </tr>
         `;
     }).join('');
 }
+
+window.openEmployeeModal = function(employeeId) {
+    const state = window.Store.state;
+    const emp = state.staff.find(s => s.id === employeeId);
+    if (!emp) return;
+
+    document.getElementById('generic-modal-title').textContent = `Manage Staff - ${emp.name}`;
+    
+    // Generate permissions based on role
+    const isManager = emp.role === 'Manager' || emp.role === 'Admin';
+    const isCashier = emp.role === 'Cashier' || isManager;
+    
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:1.5rem; padding:1rem; background:var(--clr-bg-app); border-radius:8px;">
+            <div>
+                <div style="font-size:1.1rem; font-weight:700;">${emp.name}</div>
+                <div style="color:var(--clr-text-secondary); font-size:0.85rem;">${emp.role}</div>
+            </div>
+            <div style="text-align:right;">
+                <span class="badge ${emp.status === 'Present' ? 'badge-success' : 'badge-warning'}">${emp.status}</span>
+                <div style="margin-top:0.5rem;">
+                    ${emp.status === 'Present' ? `<button class="btn btn-outline" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="showToast('Clocked out ${emp.name}', 'info'); closeGenericModal();">Clock Out</button>` : `<button class="btn btn-primary" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="showToast('Clocked in ${emp.name}', 'success'); closeGenericModal();">Clock In</button>`}
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom:1.5rem;">
+            <div style="font-size:0.85rem; font-weight:700; text-transform:uppercase; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Role-Based Access Control (RBAC)</div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; background:var(--clr-bg-app); padding:1rem; border-radius:8px;">
+                <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;">
+                    <input type="checkbox" ${isCashier ? 'checked' : ''}> Process Payments
+                </label>
+                <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;">
+                    <input type="checkbox" ${isManager ? 'checked' : ''}> Apply Discounts
+                </label>
+                <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;">
+                    <input type="checkbox" ${isManager ? 'checked' : ''}> Refund Orders
+                </label>
+                <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;">
+                    <input type="checkbox" ${isManager ? 'checked' : ''}> View Finance/P&L
+                </label>
+                <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;">
+                    <input type="checkbox" ${isManager ? 'checked' : ''}> Adjust Inventory
+                </label>
+                <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; cursor:pointer;">
+                    <input type="checkbox" ${emp.role === 'Admin' ? 'checked' : ''}> Manage System Settings
+                </label>
+            </div>
+        </div>
+        
+        <div>
+            <div style="font-size:0.85rem; font-weight:700; text-transform:uppercase; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Recent Activity Log</div>
+            <div style="background:var(--clr-bg-app); border-radius:8px; padding:0.5rem;">
+                <div style="padding:0.5rem; border-bottom:1px solid var(--clr-border); display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span>Clocked In</span>
+                    <span style="color:var(--clr-text-secondary);">Today, 08:55 AM</span>
+                </div>
+                ${isManager ? `
+                <div style="padding:0.5rem; border-bottom:1px solid var(--clr-border); display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span>Voided Item on Order #10480</span>
+                    <span style="color:var(--clr-text-secondary);">Today, 10:15 AM</span>
+                </div>
+                <div style="padding:0.5rem; display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span>Applied 10% Discount to Order #10482</span>
+                    <span style="color:var(--clr-text-secondary);">Today, 11:30 AM</span>
+                </div>
+                ` : `
+                <div style="padding:0.5rem; display:flex; justify-content:space-between; font-size:0.8rem;">
+                    <span>Processed Payment Order #10481</span>
+                    <span style="color:var(--clr-text-secondary);">Today, 09:30 AM</span>
+                </div>
+                `}
+            </div>
+        </div>
+    `;
+
+    document.getElementById('generic-modal-save').textContent = 'Save Permissions';
+    document.getElementById('generic-modal-save').onclick = () => {
+        showToast(`Permissions updated for ${emp.name}`, 'success');
+        closeGenericModal();
+    };
+
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
 
 // --- FINANCE & P&L ---
 function renderFinance(state) {
@@ -67,6 +152,49 @@ function renderFinance(state) {
         `;
     }).join('');
 }
+
+window.openExpenseModal = function() {
+    document.getElementById('generic-modal-title').textContent = `Log Expense`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Expense Category</label>
+            <select id="exp-category" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+                <option value="Rent">Rent</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Salaries">Salaries</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Other">Other Overhead</option>
+            </select>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Amount (Rs.)</label>
+            <input type="number" id="exp-amount" placeholder="0" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Description (Optional)</label>
+            <textarea id="exp-desc" rows="3" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);"></textarea>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Date</label>
+            <input type="date" id="exp-date" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+        </div>
+    `;
+
+    document.getElementById('generic-modal-save').textContent = 'Log Expense';
+    document.getElementById('generic-modal-save').onclick = () => {
+        const cat = document.getElementById('exp-category').value;
+        const amt = parseFloat(document.getElementById('exp-amount').value) || 0;
+        if (amt > 0) {
+            window.Store.state.finance.push({ category: 'OpEx: ' + cat, amount: -amt, percent: ((amt/4520000)*100).toFixed(1) });
+            showToast(`Expense logged: Rs. ${amt} for ${cat}`, 'success');
+            window.Store.notify();
+        }
+        closeGenericModal();
+    };
+
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
 
 // --- DEEP ANALYTICS ---
 let analyticsCharts = {};
@@ -324,6 +452,32 @@ function initAnalyticsCharts() {
             }
         }
     });
+    // 14. Sales Forecasting (ML)
+    const ctxForecast = document.getElementById('chartSalesForecast');
+    if (ctxForecast) {
+        analyticsCharts.salesForecast = new Chart(ctxForecast, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5 (Est)', 'Week 6 (Est)'],
+                datasets: [{
+                    label: 'Actual Sales',
+                    data: [110, 115, 112, 120, null, null],
+                    borderColor: brandColor,
+                    tension: 0.4
+                }, {
+                    label: 'Forecasted Sales',
+                    data: [null, null, null, 120, 125, 130],
+                    borderColor: accentColor,
+                    borderDash: [5, 5],
+                    tension: 0.4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                plugins: { legend: { display: true, position: 'top' } }
+            }
+        });
+    }
 }
 
 function renderAnalytics(state) {

@@ -1,53 +1,64 @@
-### Dashboard Modifications
+### Orders & Progress Synchronization
 
-Implement the following changes while preserving the existing dashboard design, functionality, and responsiveness.
+1. **Order Sorting & Cancellation**
 
-1. **Sidebar Counters**
+   * In the Admin Panel **Orders** tab, always show the **newest orders at the top**.
+   * When an order is cancelled, move it to the **Cancelled Orders** section/list.
+   * Sort Cancelled Orders with the **most recently cancelled order at the top**.
+   * Ensure sorting updates automatically whenever a new order is created, cancelled, or its status changes.
 
-   * Add notification/order counters to relevant sidebar tabs such as:
+2. **Actual Order Progress**
 
-     * Orders
-     * Reservations
-     * Delivery
-     * Other tabs where a count/status indicator is useful.
-   * Use **number badges** where an actual count is meaningful.
-   * For some tabs, use only a **small notification dot** instead of a number.
-   * Keep badges compact and visually consistent with the sidebar.
+   * Fix the customer-side **Orders page** so it always displays the order's **actual current progress**.
+   * Do not show hardcoded/default progress, cancellation, refund, or placeholder statuses.
+   * The displayed progress must come directly from the order's current status.
+   * Ensure the progress pipeline/line, completed steps, active step, timestamps, and status text all correspond to the actual order state.
 
-2. **POS Menu Items**
+3. **Order Details Modal**
 
-   * Remove the visible scrollbar from the POS menu-items container.
-   * Keep the existing horizontal scrolling functionality.
-   * Users should still be able to scroll/swipe through the menu items without seeing a scrollbar.
+   * Remove all **emojis from the timeline/progress section**.
+   * Display the **time/timestamp at the beginning of each progress status**, before the progress text.
+   * Remove default/static text such as **Cancel, Refund, or other actions/statuses** when they do not apply to the actual order.
+   * Show only the **actual progress history and applicable actions** for that specific order.
+   * Ensure the timeline accurately reflects the order's real status progression.
 
-3. **Content & Media Management**
+4. **Modal Layering / Z-Index**
 
-   * Under **Offer Images**, add all offer images currently used in the existing demo.
-   * Keep the **exact existing demo names** for each offer.
-   * Ensure these images are actually connected to the relevant offer content instead of being static placeholders.
-   * Under **Gallery**, add all media currently used in the website's Gallery section.
-   * Connect the Gallery management tab to the actual **Gallery page**, so changes made in the dashboard are reflected on the website.
-   * In the **Contact** section, display the currently selected **branch name**.
-   * Have **one branch selected by default**.
-   * When the user attempts to switch to another branch, require **branch credentials/authentication** before allowing the switch.
-   * Keep the selected branch state consistent across relevant dashboard sections.
+   * Fix the **Split Bill modal** so it opens correctly in the foreground.
+   * Audit all other Dashboard modals for the same issue.
+   * Every modal must appear **above the correct page content, sidebar, cards, dropdowns, and other UI layers**.
+   * Ensure modal overlays and z-index values are consistent.
+   * Prevent one modal or page element from incorrectly appearing above another modal.
+   * Apply a proper global modal layering system instead of fixing only Split Bill with a one-off z-index.
 
-4. **About Panel Button**
+5. **Dashboard ↔ Customer Order Synchronization**
 
-   * Add a new **“About Panel”** floating/juggling button at the bottom-right.
-   * On mobile, position it directly **above the “Open on Desktop” button**.
-   * Remove the juggling/attention animation from the **“Open on Desktop”** button.
-   * The new **About Panel** button should be the only one using the juggling/attention animation.
-   * Clicking **About Panel** should open a professional informational modal explaining:
+   * When an admin updates an order's progress/status in the Dashboard, **synchronously update the same order on the customer's Orders page**.
+   * Both sides must use the same underlying order state.
+   * Changes should be reflected without requiring a manual page refresh whenever the application's architecture supports real-time state updates.
+   * Keep the following synchronized:
 
-     * What this admin panel/dashboard is.
-     * What the different dashboard capabilities are.
-     * How the panel can be customized for each restaurant/business.
-     * That the restaurant will receive only the features and services relevant to its business needs.
-     * How modules, workflows, branding, permissions, and functionality can be tailored to the restaurant.
-   * Keep the modal fully responsive and properly styled in both Light and Dark modes.
-   * Ensure the button/modal does not overlap the chatbot, cart, footer, or other floating controls.
+     * Current status
+     * Progress pipeline
+     * Completed steps
+     * Active step
+     * Status text
+     * Timestamps
+     * Cancellation state
+     * Delivery/Pickup information
+
+### Required Order Flow
+
+Ensure the actual order lifecycle is reflected consistently on both sides:
+
+**Accepted → Sent for Preparing → Preparing → Ready → Dispatched → Out for Delivery → Delivered**
+
+If an order is cancelled, show **Cancelled** based on the actual cancellation event rather than displaying it as a default action/status.
 
 ### Final Verification
 
-Verify all changes on desktop and mobile. Ensure counters, branch selection/authentication, media connections, floating buttons, and the About Panel modal are fully functional—not just visual mockups.
+Test one newly placed order from start to finish:
+
+**Customer places order → Admin accepts → Send for Preparing → KDS prepares → Ready → Dispatch → Out for Delivery → Delivered**
+
+At every step, verify that the **Admin Panel and Customer Orders page show the same current status, progress, timestamps, and order details**.

@@ -320,6 +320,18 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                             <textarea id="cc-address" class="cc-input" required placeholder="House/Apartment #, Street, etc." rows="2"></textarea>
                         </div>
                         
+                        <!-- Pickup Time Field -->
+                        <div id="cc-pickup-time-group" style="display:none; margin-bottom:1rem;">
+                            <label class="cc-label">Pickup Time *</label>
+                            <div style="display:flex; gap:0.5rem; margin-bottom:0.8rem;">
+                                <button type="button" id="cc-time-asap" style="flex:1; padding:0.8rem; border-radius:8px; font-size:0.9rem; font-weight:600; border:2px solid var(--clr-primary); background:var(--clr-primary); color:#fff; cursor:pointer; transition:all 0.2s;">ASAP (~20 min)</button>
+                                <button type="button" id="cc-time-later" style="flex:1; padding:0.8rem; border-radius:8px; font-size:0.9rem; font-weight:600; border:2px solid var(--clr-border); background:var(--clr-surface); color:var(--clr-text-primary); cursor:pointer; transition:all 0.2s;">Schedule</button>
+                            </div>
+                            <div id="cc-time-input-wrap" style="display:none;">
+                                <input type="time" id="cc-time-input" class="cc-input" style="padding:0.8rem;">
+                            </div>
+                        </div>
+                        
                         <label class="cc-label" style="margin-top:0.5rem; margin-bottom:0.8rem;">Payment Method</label>
                         <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
                             <label class="cc-method-label">
@@ -370,14 +382,16 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         const editBtn    = document.getElementById('cc-edit-location');
         const feeRow     = document.getElementById('cc-delivery-fee-row');
         const addrInput  = document.getElementById('cc-address');
+        const timeGrp    = document.getElementById('cc-pickup-time-group');
 
         if(isPickup) {
-            if(locLabel)  locLabel.textContent = 'Pickup Outlet';
-            if(cityInput) cityInput.value = 'Main Branch (Default)';
+            if(locLabel)  locLabel.textContent = 'Pickup At *';
+            if(cityInput) cityInput.value = cityStr || 'Main Branch (Default)';
             if(addrGroup) addrGroup.style.display = 'none';
-            if(editBtn)   editBtn.style.display = 'none';
+            if(editBtn)   editBtn.style.display = 'block';
             if(feeRow)    feeRow.style.display = 'none';
             if(addrInput) addrInput.removeAttribute('required');
+            if(timeGrp)   timeGrp.style.display = 'block';
         } else {
             if(locLabel)  locLabel.textContent = 'Delivery Area/City *';
             if(cityInput) cityInput.value = cityStr;
@@ -385,6 +399,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             if(editBtn)   editBtn.style.display = 'block';
             if(feeRow)    feeRow.style.display = 'flex';
             if(addrInput) addrInput.setAttribute('required', 'true');
+            if(timeGrp)   timeGrp.style.display = 'none';
         }
     }
     
@@ -554,6 +569,27 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
     document.getElementById('cc-go-checkout').addEventListener('click', showCheckoutView);
     document.getElementById('cc-back-cart').addEventListener('click', showCartView);
     
+    document.getElementById('cc-time-asap').addEventListener('click', () => {
+        document.getElementById('cc-time-asap').style.background = 'var(--clr-primary)';
+        document.getElementById('cc-time-asap').style.color = '#fff';
+        document.getElementById('cc-time-asap').style.borderColor = 'var(--clr-primary)';
+        document.getElementById('cc-time-later').style.background = 'var(--clr-surface)';
+        document.getElementById('cc-time-later').style.color = 'var(--clr-text-primary)';
+        document.getElementById('cc-time-later').style.borderColor = 'var(--clr-border)';
+        document.getElementById('cc-time-input-wrap').style.display = 'none';
+        document.getElementById('cc-time-input').value = '';
+    });
+    
+    document.getElementById('cc-time-later').addEventListener('click', () => {
+        document.getElementById('cc-time-later').style.background = 'var(--clr-primary)';
+        document.getElementById('cc-time-later').style.color = '#fff';
+        document.getElementById('cc-time-later').style.borderColor = 'var(--clr-primary)';
+        document.getElementById('cc-time-asap').style.background = 'var(--clr-surface)';
+        document.getElementById('cc-time-asap').style.color = 'var(--clr-text-primary)';
+        document.getElementById('cc-time-asap').style.borderColor = 'var(--clr-border)';
+        document.getElementById('cc-time-input-wrap').style.display = 'block';
+    });
+    
     document.getElementById('cc-edit-location').addEventListener('click', (e) => {
         e.preventDefault();
         const locModal = document.getElementById('location-modal');
@@ -568,9 +604,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 if(locArea) cityStr += ` (${locArea})`;
                 originalCityValue = cityStr;
                 const currentLocType = localStorage.getItem('tl_location_type') || 'delivery';
-                if(currentLocType !== 'outlet') {
-                    document.getElementById('cc-city').value = cityStr;
-                }
+                document.getElementById('cc-city').value = cityStr;
             });
             observer.observe(document.getElementById('current-location-text'), { characterData: true, childList: true, subtree: true });
         }
@@ -597,6 +631,17 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         
         const orderId = Math.floor(100000 + Math.random() * 900000);
         
+        let selectedTime = "ASAP";
+        if (orderType === 'Pickup') {
+            const laterBtn = document.getElementById("cc-time-later");
+            if (laterBtn && laterBtn.style.background === 'var(--clr-primary)') {
+                const timeInput = document.getElementById("cc-time-input");
+                if (timeInput && timeInput.value) {
+                    selectedTime = timeInput.value;
+                }
+            }
+        }
+        
         const newOrder = {
             id: orderId,
             date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString(),
@@ -604,6 +649,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             status: "Pending",
             paymentMethod: payment,
             type: orderType,
+            pickupTime: selectedTime,
             customer: {
                 name: name || 'Guest',
                 phone: phone,
@@ -635,8 +681,8 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                       <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.8; flex-shrink:0; margin-top:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         <div>
-                          <p style="margin:0; font-weight:600; font-size:1rem; color:#fff;">${orderType === 'Pickup' ? 'Pickup Outlet' : city}</p>
-                          ${orderType === 'Delivery' ? `<p style="margin:0.2rem 0 0; opacity:0.8; font-size:0.9rem; line-height:1.4;">${address}</p>` : ''}
+                          <p style="margin:0; font-weight:600; font-size:1rem; color:#fff;">${orderType === 'Pickup' ? 'Pickup At: ' + city : city}</p>
+                          ${orderType === 'Delivery' ? `<p style="margin:0.2rem 0 0; opacity:0.8; font-size:0.9rem; line-height:1.4;">${address}</p>` : `<p style="margin:0.2rem 0 0; font-size:0.9rem; color: rgba(255,255,255,0.9); font-weight: 500;">Time: ${selectedTime === 'ASAP' ? 'ASAP (~20 mins)' : 'Scheduled for ' + (function(t){if(!t.includes(':'))return t;const[h,m]=t.split(':');const hi=parseInt(h);return (hi%12||12)+':'+m+' '+(hi>=12?'PM':'AM')})(selectedTime)}</p>`}
                         </div>
                       </div>
                       
@@ -867,26 +913,36 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         let html = '';
         
         orders.forEach(order => {
+            let STAGES = ["Accepted", "Sent for Preparing", "Preparing", "Ready", "Out for Delivery", "Delivered"];
+            if (order.type === 'Pickup') {
+                STAGES = ["Accepted", "Sent for Preparing", "Preparing", "Ready", "Delivered"];
+            }
+            if (order.status === 'Cancelled') {
+                STAGES = ["Accepted", "Cancelled"];
+            } else if (order.status === 'Refunded') {
+                STAGES = ["Accepted", "Cancelled", "Refunded"];
+            }
+
             let currentStatusIndex = STAGES.indexOf(order.status);
-            if (currentStatusIndex === -1) currentStatusIndex = 0;
+            if (currentStatusIndex === -1) {
+                if (order.status === 'New') {
+                    currentStatusIndex = 0;
+                } else if (order.status === 'Picked Up') {
+                    currentStatusIndex = STAGES.indexOf('Delivered');
+                } else {
+                    currentStatusIndex = 0;
+                }
+            }
             
             const now = Date.now();
             if (!order.lastUpdated) order.lastUpdated = now;
             
-            // Auto progression
-            if (currentStatusIndex < STAGES.length - 1) {
-                const timeElapsed = now - order.lastUpdated;
-                const stagesToAdvance = Math.floor(timeElapsed / STAGE_DELAY_MS);
-                if (stagesToAdvance > 0) {
-                    currentStatusIndex = Math.min(STAGES.length - 1, currentStatusIndex + stagesToAdvance);
-                    order.status = STAGES[currentStatusIndex];
-                    order.lastUpdated = now - (timeElapsed % STAGE_DELAY_MS);
-                    needsUpdate = true;
-                }
+            let progressPercent = 0;
+            if (currentStatusIndex > 0) {
+                progressPercent = currentStatusIndex >= STAGES.length - 1 ? 100 : (currentStatusIndex / (STAGES.length - 1)) * 100;
             }
             
-            const progressPercent = getProgressPercent(currentStatusIndex);
-            const isDelivered = order.status === 'Delivered';
+            const isDelivered = order.status === 'Delivered' || order.status === 'Picked Up' || order.status === 'Completed' || order.status === 'Cancelled' || order.status === 'Refunded';
             
             // Build timeline steps
             const stepsHtml = STAGES.map((stage, idx) => {
@@ -894,7 +950,18 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 if (idx < currentStatusIndex) cls += ' completed';
                 else if (idx === currentStatusIndex && !isDelivered) cls += ' pulsing completed';
                 else if (idx === currentStatusIndex && isDelivered) cls += ' completed';
-                return `<div class="${cls}"><div class="step-icon"></div><span>${stage}</span></div>`;
+                
+                let displayStage = stage;
+                if (order.type === 'Pickup' && stage === 'Delivered') displayStage = 'Picked Up';
+                if (order.type === 'Pickup' && stage === 'Out for Delivery') displayStage = 'Ready for Pickup';
+                
+                let colorOverrides = '';
+                if (stage === 'Cancelled') colorOverrides = 'color: var(--clr-danger); border-color: var(--clr-danger);';
+                if (stage === 'Refunded') colorOverrides = 'color: var(--clr-info); border-color: var(--clr-info);';
+                
+                const stepTime = (order.statusTimestamps && order.statusTimestamps[stage]) || (idx === 0 ? order.time : '');
+                
+                return `<div class="${cls}" style="${colorOverrides}"><div class="step-icon" style="${colorOverrides ? 'border-color:inherit;background:currentColor;' : ''}"></div><span style="${colorOverrides}">${displayStage}${stepTime ? `<br><small style="font-size:0.65rem;opacity:0.75;">${stepTime}</small>` : ''}</span></div>`;
             }).join('');
             
             // Build items html with images and full details
@@ -943,15 +1010,32 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
             
             const statusBadgeColor = isDelivered ? '#e8f5e9' : 'rgba(167,2,1,0.1)';
             const statusTextColor = isDelivered ? '#2e7d32' : 'var(--clr-primary)';
+            let timeDisplayStr = "Est. Delivery: ~35 mins";
+            if (order.type === 'Pickup') {
+                const pTime = order.pickupTime || "ASAP";
+                if (pTime === "ASAP") {
+                    timeDisplayStr = "Est. Pickup: ~20 mins";
+                } else {
+                    let formattedTime = pTime;
+                    if (pTime.includes(':')) {
+                        const [h, m] = pTime.split(':');
+                        const hInt = parseInt(h);
+                        const ampm = hInt >= 12 ? 'PM' : 'AM';
+                        const h12 = hInt % 12 || 12;
+                        formattedTime = `${h12}:${m} ${ampm}`;
+                    }
+                    timeDisplayStr = `Scheduled Pickup: ${formattedTime}`;
+                }
+            }
             
             html += `
-            <div class="order-card" style="background:var(--clr-surface,#fff);border-radius:16px;padding:1.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.05);margin-bottom:1.5rem;border:1px solid var(--clr-border);">
-                <!-- Header row -->
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+            <div class="order-card" style="margin-bottom:1.5rem;padding:1.5rem;background:var(--clr-bg-app);border-radius:12px;border:1px solid var(--clr-border);">
+                <!-- Header -->
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;border-bottom:1px solid var(--clr-border);padding-bottom:1rem;">
                     <div>
-                        <p style="font-size:0.75rem;color:#999;margin:0 0 0.15rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Order #${order.id || 'ORD-???'}</p>
-                        <p style="font-size:0.85rem;color:var(--clr-text-secondary,#666);margin:0 0 0.25rem;">${order.date || ''}</p>
-                        <p style="font-size:0.82rem;color:var(--clr-text-secondary);margin:0;">
+                        <h4 style="margin:0 0 0.4rem;font-size:1.1rem;color:var(--clr-text-primary);">Order #${order.id}</h4>
+                        <p style="margin:0 0 0.6rem;font-size:0.85rem;color:var(--clr-text-secondary);">${order.date}</p>
+                        <p style="margin:0;font-size:0.85rem;color:var(--clr-text-secondary);">
                             ${order.type ? `<strong>${order.type}</strong> &bull; ` : ''}
                             ${order.paymentMethod || 'Cash on Delivery'}
                         </p>
@@ -967,7 +1051,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                     ${stepsHtml}
                 </div>
                 
-                ${!isDelivered ? `<p style="font-size:0.85rem;color:var(--clr-primary);font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Est. Delivery: ~35 mins</p>` : `<p style="font-size:0.85rem;color:#2e7d32;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>Delivered Successfully</p>`}
+                ${!isDelivered ? `<p style="font-size:0.85rem;color:var(--clr-primary);font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>${timeDisplayStr}</p>` : `<p style="font-size:0.85rem;color:#2e7d32;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>${order.type === 'Pickup' ? 'Picked Up Successfully' : 'Delivered Successfully'}</p>`}
                 
                 <!-- Customer Details -->
                 ${custHtml}

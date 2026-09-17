@@ -1,1589 +1,670 @@
-# Complete Restaurant Management Dashboard
+Yes. Below is the **complete operational explanation of the admin panel**—what each module does, what screens/tabs it should contain, how the workflow works, and exactly how the **Owner, Manager, Host, Waiter, Cashier, Kitchen, Dispatcher, etc.** would use it.
 
-## Product, Functional, UI/UX & Demo Specification
+The most important principle is that these modules **must be connected**. An order created in POS should appear in Orders and KDS; when it becomes ready, it should enter Delivery if it's a delivery order; payment should affect Finance; the customer's profile should update; and the transaction should appear in Reports and Analytics.
 
-This document defines the complete dashboard experience for the MhStudio restaurant management platform demo.
+# Restaurant Admin Panel — Complete Operations Guide
 
-The dashboard must feel like a **real restaurant operating system**, not a collection of disconnected admin pages.
+## 1. ORDERS
 
-The key product concept is:
+### Purpose
 
-```text
-Customer Channels
-    ↓
-Website / Mobile App / QR / WhatsApp / Phone / POS
-    ↓
-Central Order Management
-    ↓
-POS / KDS / Delivery / Tables
-    ↓
-Customer CRM / Analytics / Marketing
-```
+Orders is the **central order-control system**.
 
-The system should clearly distinguish:
+Every order, regardless of where it originated, should eventually exist here.
 
-### Order Type
+### Order Sources
 
-* Dine-in
+Orders can originate from:
+
+* Website
+* Mobile App
+* POS
+* QR Menu
+* WhatsApp
+* Phone
+* Marketplace / Delivery Partner
+
+### Order Types
+
+Keep these two concepts separate:
+
+**Order Type**
+
+* Dine-In
 * Takeaway
 * Delivery
 
-### Order Source
+**Order Source**
 
 * Website
-* Mobile App
+* App
 * POS
 * QR
 * WhatsApp
 * Phone
 * Marketplace
 
-Every order should belong to an order type and an order source.
+For example:
 
-Example:
-
-```text
-Type: Delivery
-Source: Website
-```
+> Delivery order from Website
 
 or:
 
-```text
-Type: Dine-in
-Source: QR
-Table: T-12
-```
-
-or:
-
-```text
-Type: Delivery
-Source: POS
-```
-
-This distinction must be reflected throughout Orders, POS, KDS, Delivery and Analytics.
+> Dine-In order from QR
 
 ---
 
-# 1. Dashboard (`view-dashboard`)
+## Orders Tabs
 
-## Purpose
+### Tab 1 — All
 
-The main dashboard is the restaurant owner's control center.
+Shows every order.
 
-It should answer:
+Admin can:
 
-* How is the restaurant performing today?
-* How many orders are active?
-* Where are orders coming from?
-* What needs attention?
-* What products are selling?
-* How are branches performing?
-* Are there delivery or inventory problems?
-* What insights should the owner act on?
+* Search
+* Filter
+* Sort
+* Open order
+* Change status
+* View payment
+* View customer
+* View source
+* View order type
 
-## Header
-
-Show:
-
-> **Overview**
-
-Supporting text:
-
-> **Welcome back! Here's what's happening at Urban Flame today.**
-
-Header controls:
-
-* Branch selector
-* Date range
-* Global search
-* Notification bell
-* Demo Workspace badge
-* User profile
+This is the main operational view.
 
 ---
 
-## AI Insight Card
+### Tab 2 — Dine-In
 
-A prominent but compact insight card.
+Shows only dine-in orders.
 
-Example:
-
-> **AI Insight**
->
-> Friday evening demand is projected to be 23% higher than your weekly average. Consider increasing kitchen staffing between 7 PM and 10 PM.
-
-Provide:
-
-* Insight type
-* Short explanation
-* Recommendation
-* View Analytics action
-
-Use realistic simulated insights in demo mode.
-
----
-
-## KPI Grid
-
-Use 4–6 primary cards.
-
-### Today's Revenue
-
-* Revenue
-* Comparison vs previous day
-* Trend
-
-### Today's Orders
-
-* Total
-* Comparison
-* Trend
-
-### Average Order Value
-
-* AOV
-* Comparison
-* Trend
-
-### Pending Orders
-
-* Current count
-* Urgency indicator
-
-### Active Deliveries
-
-* Current delivery count
-
-### New Customers
-
-* Customers acquired today
-
-Avoid excessive KPI cards.
-
-The main overview should remain scannable.
-
----
-
-## Sales Overview
-
-Large chart.
-
-Filters:
-
-* Today
-* Last 7 Days
-* Last 30 Days
-* Last 3 Months
-* Custom Range
-
-Display:
-
-* Revenue
-* Orders
-
-Allow toggling between metrics.
-
----
-
-## Sales by Channel
-
-Show order source distribution:
-
-* Website
-* Mobile App
-* POS
-* QR
-* WhatsApp
-* Phone
-* Marketplace
-
-Example:
-
-```text
-Website       42%
-POS           26%
-WhatsApp      14%
-QR             9%
-Mobile App     6%
-Other          3%
-```
-
----
-
-## Order Type Snapshot
-
-Show:
-
-```text
-Dine-in       31
-Takeaway      18
-Delivery      35
-```
-
-This should be separate from channel analytics.
-
----
-
-## Live Order Snapshot
-
-Show:
-
-```text
-New
-Preparing
-Ready
-Out for Delivery
-Completed
-Cancelled
-```
-
-Each count should be clickable and navigate to Orders with the relevant filter applied.
-
----
-
-## Alerts & Action Center
-
-Show important issues:
-
-* New unconfirmed orders
-* Delayed deliveries
-* Low-stock ingredients
-* Pending reservations
-* Unassigned riders
-* Unusual sales drops
-* Expiring promotions
-
-Example:
-
-> **3 delivery orders waiting for rider assignment**
-
-> **Chicken Breast is below reorder level**
-
-> **2 reservations require confirmation**
-
----
-
-## Recent Orders
-
-Table:
+Each order should show:
 
 * Order ID
-* Type
-* Source
-* Customer
-* Table / Area
-* Total
+* Table
+* Guests
+* Customer if known
+* Items
+* Waiter
+* Order source
 * Status
-* Time
-* Action
+* Total
+* Payment status
 
 Example:
 
-```text
-#10582
-Delivery
-Website
-Ahmed Khan
-
-Rs. 2,350
-Preparing
-```
+> #ORD-1058
+> Table 14
+> QR Order
+> 3 Items
+> PKR 2,450
+> Preparing
 
 ---
 
-## Best-Selling Products
+### Tab 3 — Takeaway
 
-Show:
+Shows pickup orders.
 
-* Product
-* Orders
-* Revenue
-* Trend
+Typical workflow:
 
-Add:
+**Order Received**
 
-> **View Full Analytics**
+→ **Confirmed**
 
----
+→ **Preparing**
 
-## Top Branches
+→ **Ready**
 
-For multi-branch demos show:
+→ **Picked Up**
 
-* Branch
-* Revenue
-* Orders
-* Growth
+→ **Completed**
+
+The host/cashier can verify the customer's name/order number before handing over the food.
 
 ---
 
-# 2. Orders (`view-orders`)
+### Tab 4 — Delivery
 
-## Purpose
+Shows delivery orders.
 
-This is the **central order management system**.
+Typical workflow:
 
-Every order from every relevant channel should appear here.
+**Order Received**
 
-The owner should be able to manage:
+→ **Confirmed**
 
-* Dine-in
-* Takeaway
-* Delivery
-* Website orders
-* App orders
-* POS orders
-* QR orders
-* WhatsApp orders
-* Phone orders
-* Marketplace orders
+→ **Preparing**
 
----
+→ **Ready**
 
-## Header
+→ **Assigned**
 
-> **Orders Management**
+→ **Picked Up**
 
-Supporting text:
+→ **Out for Delivery**
 
-> **View, manage, and track every restaurant order from one place.**
+→ **Delivered**
 
-Actions:
+→ **Completed**
 
-* New Order
-* Export
-* Refresh
+The dispatcher uses this tab heavily.
 
 ---
 
-## Primary Order Type Tabs
+### Order Source Filters
 
-```text
-All Orders
-Dine-in
-Takeaway
-Delivery
-```
+Within the tabs, allow filtering by:
 
-These are the primary fulfillment types.
+* Website
+* App
+* POS
+* QR
+* WhatsApp
+* Phone
 
----
+  * Marketplace
 
-## Secondary Source Filters
+This lets management answer questions such as:
 
-```text
-All Sources
-Website
-Mobile App
-POS
-QR
-WhatsApp
-Phone
-Marketplace
-```
+> "Show me today's website orders."
+
+or:
+
+> "Show me delivery orders from WhatsApp."
 
 ---
 
-## Status Filters
+### Order Status Filters
 
-```text
-All
-New
-Confirmed
-Preparing
-Ready
-Assigned
-Out for Delivery
-Completed
-Cancelled
-Refunded
-```
+Use:
 
-The exact available statuses should adapt to the order type.
-
----
-
-## Order Statistics
-
-Show:
-
-* Total Orders
-* New Orders
+* New
+* Confirmed
 * Preparing
 * Ready
+* Assigned
 * Out for Delivery
 * Completed
 * Cancelled
-* Revenue
+* Refunded
 
-Use neutral, semantic styling rather than making every card heavily colored.
+Not every order type needs every status.
 
----
-
-## Search
-
-Search by:
-
-* Order ID
-* Customer name
-* Phone
-* Address
-* Table number
+For example, a dine-in order doesn't need "Out for Delivery."
 
 ---
 
-## Orders Table / Cards
+### Order Detail
 
-Desktop table columns:
+Clicking an order should open a detailed drawer/page.
 
-* Order ID
-* Type
-* Source
-* Customer
-* Table / Address
-* Items
-* Total
-* Payment
-* Status
-* Time
-* Actions
+Show:
 
-Mobile should use order cards.
-
----
-
-# Order Detail
-
-Selecting an order should open a detail drawer or dedicated page.
-
-Display:
-
-## Order Header
-
-```text
-#10582
-Delivery
-Website
-```
-
-## Customer
+#### Customer
 
 * Name
 * Phone
 * Email
+* Customer history
 
-## Fulfillment
+#### Fulfillment
 
-For Dine-in:
-
-* Branch
-* Table
-* Guests
-* Waiter
-
-For Takeaway:
-
-* Branch
-* Pickup time
-
-For Delivery:
-
-* Branch
-* Address
-* Delivery zone
-* Rider
-* ETA
-
-## Items
-
-Each item:
-
-* Image
-* Product
-* Quantity
-* Modifiers
-* Notes
-* Price
-
-## Pricing
-
-```text
-Subtotal
-Discount
-Delivery Fee
-Tax
-Total
-```
-
-## Payment
-
-* Method
-* Status
-* Transaction reference
-
-## Timeline
-
-Example:
-
-```text
-10:32  Order placed
-10:33  Confirmed
-10:37  Preparing
-10:52  Ready
-10:54  Rider assigned
-11:13  Delivered
-```
-
-## Actions
-
-Contextual actions:
-
-* Accept
-* Start Preparing
-* Mark Ready
-* Assign Rider
-* Mark Delivered
-* Cancel
-* Refund
-* Print
-* Reorder
-
----
-
-# Order Type: Dine-In
-
-Dine-in orders must support two methods.
-
-## Method A — Staff / Waiter Created Order
-
-```text
-POS
-↓
-Dine-in
-↓
-Select Table
-↓
-Add Items
-↓
-Send KOT
-↓
-Kitchen
-↓
-Preparing
-↓
-Ready
-↓
-Served
-↓
-Bill
-↓
-Payment
-↓
-Completed
-```
-
-The order must contain:
-
-* Branch
-* Table number
-* Guests
-* Waiter
-* Items
-* Notes
-* Payment
-
-The table remains linked to the open order until the bill is completed.
-
----
-
-# Dine-In Method B — Customer QR Ordering
-
-Each physical table can have a unique QR code.
-
-Example:
-
-```text
-Table 12
-↓
-Scan QR
-↓
-restaurant.com/menu?table=12
-```
-
-The system should automatically identify:
-
-* Branch
-* Table
-* Dine-in order type
-
-The customer should not manually enter the table number.
-
-Customer flow:
-
-```text
-Scan QR
-↓
-Menu
-↓
-Product
-↓
-Cart
-↓
-Checkout
-↓
-Dine-in
-↓
-Table 12
-↓
-Place Order
-```
-
-The order then enters the same central system.
-
-Example:
-
-```text
-#10583
-Dine-in
-QR
-Table 12
-NEW
-```
-
----
-
-# Dine-In Table Association
-
-Each dine-in order should retain its table relationship.
-
-Show:
-
-```text
-Table 12
-Open Order #10583
-4 Guests
-Rs. 2,840
-```
-
-Allow adding items to the existing open order.
-
-Example:
-
-```text
-Initial Order
-2 × Burger
-1 × Fries
-
-Additional Order
-1 × Pizza
-2 × Drinks
-```
-
----
-
-# Order Type: Takeaway
-
-Workflow:
-
-```text
-Website / Mobile App / POS / WhatsApp / Phone
-↓
-Takeaway
-↓
-Customer
-↓
-Pickup Time
-↓
-Order
-↓
-Kitchen
-↓
-Preparing
-↓
-Ready
-↓
-Picked Up
-↓
-Completed
-```
-
-Takeaway orders should not require a table.
-
-Required fields:
-
-* Customer
-* Phone
-* Pickup time
-* Items
-* Payment
-
----
-
-# Order Type: Delivery
-
-Delivery workflow:
-
-```text
-Website / App / POS / WhatsApp / Phone / Marketplace
-↓
-Delivery
-↓
-Customer
-↓
-Address
-↓
-Delivery Zone
-↓
-Delivery Fee
-↓
-Order
-↓
-Kitchen
-↓
-Ready
-↓
-Delivery Assignment
-↓
-Rider / Delivery Partner
-↓
-Out for Delivery
-↓
-Delivered
-```
-
-Delivery-specific data:
-
-* Customer
-* Phone
-* Address
-* Landmark
-* Zone
-* Delivery fee
-* Instructions
-* Rider
-* ETA
-* Payment
-
----
-
-# Online Order Flow
-
-For website/app orders:
-
-```text
-Customer
-↓
-Menu
-↓
-Cart
-↓
-Checkout
-↓
-Payment
-↓
-Order Created
-↓
-Central Orders
-↓
-Kitchen
-```
-
-Order source should be recorded automatically:
-
-```text
-Source: Website
-```
-
----
-
-# POS-Created Order Flow
-
-Staff can create all three order types.
-
-```text
-New Order
-
-[Dine-in]
-[Takeaway]
-[Delivery]
-```
-
-The POS creates the same centralized order object as the website.
-
----
-
-# Phone Order Flow
-
-If a customer calls:
-
-```text
-Customer calls
-↓
-Staff opens POS
-↓
-Delivery / Takeaway
-↓
-Customer details
-↓
-Items
-↓
-Order created
-↓
-Kitchen
-```
-
-The source should be:
-
-```text
-Source: Phone
-```
-
----
-
-# WhatsApp Order Flow
-
-For basic WhatsApp ordering:
-
-```text
-Website
-↓
-Cart
-↓
-Order Summary
-↓
-Open WhatsApp
-↓
-Pre-filled Order Message
-↓
-Customer Sends
-```
-
-The generated message should contain:
-
-* Order ID
-* Customer
 * Order type
-* Items
-* Total
-* Address where relevant
-
-Do not represent simple WhatsApp links as full WhatsApp Business API automation.
-
----
-
-# 3. POS (`view-pos`)
-
-## Purpose
-
-The POS is the staff-facing order creation and billing interface.
-
-It must support:
-
-* Dine-in
-* Takeaway
-* Delivery
-
----
-
-## Main Layout
-
-Desktop:
-
-```text
-┌─────────────────────────────────────────────┐
-│ POS Header                                  │
-├─────────────┬─────────────────┬─────────────┤
-│ Categories  │ Products         │ Current     │
-│             │                 │ Order       │
-│             │                 │             │
-│             │                 │             │
-└─────────────┴─────────────────┴─────────────┘
-```
-
----
-
-## Order Type Selector
-
-Prominent selector:
-
-```text
-Dine-in | Takeaway | Delivery
-```
-
-Selecting an order type dynamically changes the required fields.
-
----
-
-## Dine-In Form
-
-Show:
-
-* Branch
-* Table
-* Guests
-* Waiter
-
-Table selector should visually show:
-
-* Available
-* Occupied
-* Reserved
-* Cleaning
-
----
-
-## Takeaway Form
-
-Show:
-
-* Customer
-* Phone
-* Pickup time
-
----
-
-## Delivery Form
-
-Show:
-
-* Customer
-* Phone
+* Source
+* Table / pickup / delivery
 * Address
-* Area
 * Delivery zone
-* Delivery fee
-* Delivery instructions
+* Rider
 
----
-
-## Product Catalog
-
-Categories:
-
-* All
-* Combos
-* Burgers
-* Pizza
-* Rolls
-* Fries
-* Drinks
-* Extras
-* Desserts
-
-Product cards:
-
-* Image
-* Name
-* Price
-* Availability
-
-Clicking a product adds it to the order.
-
----
-
-## Product Modifiers
-
-Example:
-
-```text
-Size
-Regular
-Large + Rs.100
-
-Sauce
-Garlic
-BBQ
-Chipotle
-
-Extras
-Cheese + Rs.100
-Jalapeño + Rs.80
-```
-
-The selected modifiers appear in the cart.
-
----
-
-## Current Order
-
-Show:
+#### Items
 
 * Product
 * Quantity
+* Size
 * Modifiers
-* Notes
-* Price
+* Special instructions
 
-Quantity controls:
-
-`+` / `−`
-
----
-
-## Pricing
-
-Show:
+#### Pricing
 
 * Subtotal
 * Discount
 * Tax
-* Delivery fee where applicable
+* Delivery fee
+* Service charge
 * Total
 
----
+#### Payment
 
-## POS Actions
+* Cash
+* Card
+* Online
+* Other
+* Paid/unpaid/refunded
 
-* Hold Order
-* Save
-* Print KOT
-* Send to Kitchen
-* Print Bill
-* Checkout
-* Clear
-
-Do not make every button equally prominent.
-
-Primary action should change based on workflow.
-
----
-
-# 4. Kitchen / KDS (`view-kds`)
-
-## Purpose
-
-The Kitchen Display System receives orders from:
-
-* POS
-* Website
-* App
-* QR
-* WhatsApp workflow
-* Other integrated channels
-
-The kitchen should not care how the order originated.
-
-It needs:
-
-* Order type
-* Destination
-* Items
-* Quantity
-* Modifiers
-* Notes
-* Time
-
----
-
-## Header
-
-> **Kitchen Display System**
-
-Subtext:
-
-> **Monitor and manage food preparation in real time.**
-
-Controls:
-
-* Auto-refresh
-* Sound
-* Full View
-* Branch
-* Station filter
-
----
-
-## KDS Board
-
-Four operational columns:
-
-```text
-NEW
-PREPARING
-READY
-COMPLETED
-```
-
----
-
-## Order Ticket
+#### Timeline
 
 Example:
 
 ```text
-#10583
-
-DINE-IN
-TABLE 12
-
-2 × Chicken Burger
-1 × Loaded Fries
-
-No Mayo
-
-12 min
-
-[Start Preparing]
+7:12 PM  Order Received
+7:13 PM  Confirmed
+7:15 PM  Preparing
+7:32 PM  Ready
+7:35 PM  Rider Assigned
+7:38 PM  Picked Up
+7:57 PM  Delivered
 ```
 
-Delivery:
+### How Admin Uses Orders
 
-```text
-#10584
+The manager primarily uses Orders for **monitoring and intervention**.
 
-DELIVERY
+For example:
 
+> Delivery order has been preparing for 45 minutes.
 
-3 × Chicken Burger
-1 × Fries
+Manager opens the order → checks KDS status → contacts kitchen → takes appropriate action.
 
-15 min
-
-[Start Preparing]
-```
-
-Takeaway:
-
-```text
-#10585
-
-TAKEAWAY
-
-Pickup 8:30 PM
-
-1 × Large Pizza
-2 × Coke
-```
+Orders is therefore the **central operational truth**.
 
 ---
 
-## Ticket Details
-
-Display:
-
-* Order ID
-* Order type
-* Table/pickup/delivery
-* Customer where relevant
-* Time elapsed
-* Product image where useful
-* Item quantity
-* Modifiers
-* Special instructions
-
----
-
-## KDS Actions
-
-* Accept
-* Start Preparing
-* Mark Ready
-* Clear / Complete
-
-Delayed tickets should become visually more prominent.
-
----
-
-## KDS Workflow
-
-```text
-NEW
-↓
-PREPARING
-↓
-READY
-↓
-Fulfillment
-```
-
-For dine-in:
-
-```text
-READY
-↓
-SERVE
-```
-
-For takeaway:
-
-```text
-READY
-↓
-PICKUP
-```
-
-For delivery:
-
-```text
-READY
-↓
-RIDER ASSIGNMENT
-```
-
----
-
-# 5. Menu (`view-menu`)
+# 2. POS
 
 ## Purpose
 
-Manage all menu products and ordering configuration.
+POS is the **front-of-house transaction and order-entry system**.
+
+It is mainly used by:
+
+* Cashiers
+* Waiters
+* Hosts
+* Managers
 
 ---
 
-## Header
+## POS Order Type
 
-> **Menu Management**
+At the beginning of the transaction, staff selects:
 
-Subtext:
+### Dine-In
 
-> **Manage products, categories, modifiers, prices, and availability.**
+Then selects:
 
-Actions:
+> Table 12
 
-* Add Product
-* Add Category
-* Import Menu
+### Takeaway
+
+Then enters:
+
+> Customer / pickup information
+
+### Delivery
+
+Then enters:
+
+> Customer + address + contact information
 
 ---
 
-## Filters
+## Product Selection
 
+Staff sees:
+
+* Categories
+* Products
 * Search
-* Category
-* Branch
+* Product images
+* Prices
 * Availability
-* Status
 
----
+Example:
 
-## Product Table
+**Burgers**
 
-Columns:
+* Chicken Burger
+* Beef Burger
+* Zinger Burger
 
-* Product
-* Category
-* Price
-* Availability
-* Branch
-* Status
-* Actions
-
----
-
-## Product Management
-
-Each product includes:
-
-* Name
-* Description
-* Image
-* Price
-* Discount price
-* Category
-* SKU
-* Preparation time
-* Tax
-* Availability
-* Featured
-* Bestseller
-* Branch availability
+Clicking a product opens modifiers.
 
 ---
 
 ## Modifiers
 
-Support:
+Example:
 
-* Sizes
-* Add-ons
-* Sauces
-* Extras
+**Chicken Burger**
 
-Each modifier can have:
+Size:
 
-* Name
-* Price
-* Availability
+* Regular
+* Double
+
+Add-ons:
+
+* Cheese
+* Egg
+* Jalapeño
+
+Instructions:
+
+> No onions
+
+The final configuration is added to the cart.
 
 ---
 
-## Availability
+## Cart
 
-Allow:
+Cart shows:
 
-* Available
-* Temporarily unavailable
-* Out of stock
+* Product
+* Quantity
+* Modifiers
+* Price
+* Discount
+* Tax
+* Total
 
-Also support:
+Staff can:
 
-* Branch-specific availability
-* Time-based availability
+* Increase quantity
+* Decrease quantity
+* Remove item
+* Edit modifiers
+* Add notes
+
+---
+
+## POS Actions
+
+Important actions:
+
+**Hold Order**
+
+Temporarily save the order.
+
+**Resume**
+
+Bring it back.
+
+**Send to Kitchen**
+
+Send KOT/order to KDS.
+
+**Print KOT**
+
+Print kitchen ticket if printers are used.
+
+**Print Bill**
+
+Generate customer bill.
+
+**Apply Discount**
+
+Apply authorized discount.
+
+**Split Bill**
+
+Divide payment.
+
+**Merge Items**
+
+Combine items where required.
+
+**Pay**
+
+Complete payment.
+
+---
+
+## POS + KDS
+
+Example:
+
+Waiter enters:
+
+> Table 8
+> Chicken Karahi
+> 2 Naan
+> Coke
+
+Clicks:
+
+**Send to Kitchen**
+
+The KDS immediately receives the order.
+
+---
+
+# 3. KDS — KITCHEN DISPLAY SYSTEM
+
+## Purpose
+
+KDS is the **kitchen's operational queue**.
+
+Kitchen staff should not need to use the entire admin panel.
+
+They primarily see orders that require preparation.
+
+---
+
+## Main KDS Columns
+
+### New
+
+Orders waiting to be started.
+
+### Preparing
+
+Orders currently being prepared.
+
+### Ready
+
+Orders finished and waiting for pickup/service/dispatch.
+
+### Completed
+
+Orders already handed off or completed.
+
+---
+
+## Kitchen Ticket
 
 Example:
 
 ```text
-Breakfast
-7 AM – 12 PM
+#ORD-1058
+
+DINE-IN
+TABLE 14
+
+Chicken Burger × 2
+Fries × 1
+Coke × 2
+
+No onions
+Extra cheese
+
+Received: 7:12 PM
 ```
-
----
-
-# 6. Website & Content (`view-content`)
-
-Rename the current "Content & Media" module to:
-
-> **Website & Content**
-
-because this area controls more than images.
-
-## Purpose
-
-Allow the restaurant to manage its public-facing website without developer assistance for routine updates.
-
----
-
-## Inner Tabs
-
-```text
-Overview
-Offers
-Gallery
-Website Content
-Contact
-Opening Hours
-SEO
-```
-
----
-
-## Website Content
-
-Manage:
-
-* Restaurant description
-* Homepage sections
-* About
-* Featured dishes
-* Offers
-* FAQs
-* Contact information
-* Branch content
-
----
-
-## Offers
-
-Show:
-
-* Existing promotional banners
-* Active/inactive status
-* Start/end dates
 
 Actions:
 
-* Add
-* Edit
-* Delete
-* Activate/deactivate
+**Start**
+
+→ Preparing
+
+**Ready**
+
+→ Ready
+
+**Complete**
+
+→ Completed
 
 ---
 
-## Gallery
+## Kitchen Stations
 
-Manage:
+For larger restaurants, KDS can support stations such as:
 
-* Food photos
-* Interior
-* Team
-* Events
+* Grill
+* Fry
+* Pizza
+* Salad
+* Dessert
+* Bar
 
-Support:
-
-* Multiple upload
-* Reordering
-* Delete
-* Feature image
-
-Images should be optimized automatically where practical.
-
----
-
-## Contact Information
-
-Per branch:
-
-* Restaurant name
-* Phone
-* Email
-* WhatsApp
-* Address
-* Google Maps
-* Coordinates where applicable
-
----
-
-## Opening Hours
-
-For each day:
-
-* Open
-* Close
-* Closed
-
-Support split hours where needed.
+A single order may automatically route relevant items to the appropriate station.
 
 Example:
 
 ```text
-Monday
-11:00 AM – 11:00 PM
+Chicken Burger → Grill
+Fries → Fry Station
+Coke → Beverage
 ```
 
 ---
 
-## SEO
+## Kitchen Priority
 
-Allow basic editable fields:
+KDS should make urgent orders visible.
 
-* Page title
-* Meta description
-* Local keywords
-* Social preview
-* Restaurant structured data settings
+Priority can depend on:
+
+* Waiting time
+* Scheduled pickup
+* Delivery deadline
+* Manager priority
 
 ---
 
-# 7. Inventory & Supply (`view-inventory`)
+## KDS + Orders
+
+Changing status in KDS updates the central order.
+
+Example:
+
+```text
+KDS:
+Preparing → Ready
+
+Orders:
+Preparing → Ready
+```
+
+---
+
+## KDS + Delivery
+
+When a delivery order becomes:
+
+**Ready**
+
+it automatically becomes available in:
+
+**Delivery → Ready for Dispatch**
+
+---
+
+# 4. INVENTORY & SUPPLY
 
 ## Purpose
 
-Manage stock, ingredients, recipes, suppliers, purchasing and waste.
+Inventory controls the restaurant's **ingredients, stock, purchasing, recipes, and waste**.
 
 ---
 
-## Inner Tabs
+## Inventory Tabs
 
-```text
-Current Stock
-Recipes
-Suppliers
-Purchase Orders
-Waste
-```
+### Current Stock
 
----
-
-## Current Stock
-
-Columns:
+Shows:
 
 * Ingredient
-* SKU
 * Current quantity
 * Unit
-* Unit cost
 * Minimum level
-* Status
+* Stock status
 * Branch
-* Action
-
-Statuses:
-
-* Good
-* Low Stock
-* Out of Stock
-
----
-
-## Receive Stock
-
-Form:
-
-* Supplier
-* Ingredient
-* Quantity
-* Unit cost
-* Batch
-* Expiry
-* Branch
-
----
-
-## Recipes
-
-Map menu products to ingredients.
 
 Example:
 
-```text
-Chicken Burger
-
-1 Bun
-150g Chicken
-20g Cheese
-15g Sauce
-10g Lettuce
-5g Tomato
-```
-
-Display:
-
-* Selling price
-* Ingredient cost
-* Food cost %
-* Estimated margin
+> Chicken Breast
+> 5.2 kg
+> Low Stock
 
 ---
 
-## Suppliers
+### Recipe Mapping
 
-Table:
+Connect menu products to ingredients.
+
+Example:
+
+**Chicken Burger**
+
+```text
+Bun             1 unit
+Chicken         150g
+Cheese          1 slice
+Sauce           20g
+Vegetables      30g
+```
+
+When the product is sold, configured ingredient consumption can be calculated.
+
+---
+
+### Suppliers
+
+Store:
 
 * Supplier
 * Contact
-* Categories
-* Pending balance
-* Last delivery
-* Recent POs
-* Status
+* Products
+* Pricing
+* Payment terms
+* Purchase history
 
 ---
 
-## Purchase Orders
+### Purchase Orders
 
-Show:
+Workflow:
 
-* PO number
-* Supplier
-* Items
-* Amount
-* Date
-* Status
+**Low Stock**
 
-Statuses:
+→ **Create PO**
 
-* Draft
-* Ordered
-* Partially received
-* Received
-* Cancelled
+→ **Send to Supplier**
+
+→ **Supplier Delivers**
+
+→ **Receive Stock**
+
+→ **Inventory Updated**
 
 ---
 
-## Waste
+### Waste Management
 
 Record:
 
-* Date
 * Ingredient
 * Quantity
 * Reason
-* Value lost
+* Cost
 * Branch
-* Logged by
+* Date
+* Staff member
 
 Reasons:
 
@@ -1591,320 +672,184 @@ Reasons:
 * Expired
 * Damaged
 * Preparation waste
-* Incorrect order
+* Incorrect production
 
 ---
 
-# 8. Delivery (`view-delivery`)
+## Inventory Alerts
 
-## Rename
+Examples:
 
-Use:
+> Chicken Breast — 5.2 kg left
 
-> **Delivery & Fleet**
+> Mozzarella — 2.1 kg left
 
-instead of simply "Delivery Operations."
+The manager can click:
+
+**Create Purchase Order**
+
+directly from the alert.
 
 ---
+
+# 5. DELIVERY
 
 ## Purpose
 
-Manage:
+Delivery controls the entire operation between:
 
-* Delivery orders
-* Riders
-* Dispatch
-* Delivery zones
-* Live progress
-* Delivery partners
-* Fleet performance
-
----
-
-## Delivery Models
-
-Support conceptually:
-
-### Own Fleet
-
-```text
-Restaurant
-↓
-Own Rider
-↓
-Rider App
-↓
-Customer
-```
-
-### Delivery Partner
-
-```text
-Restaurant
-↓
-Delivery Partner
-↓
-Partner Rider
-↓
-Customer
-```
-
-### Hybrid
-
-Restaurant can use both.
-
----
-
-## Delivery Header
-
-Show:
-
-* Active deliveries
-* Ready for dispatch
-* Available riders
-* Unassigned orders
-* Delayed deliveries
+**Kitchen → Rider → Customer**
 
 ---
 
 ## Delivery Tabs
 
-```text
-Overview
-Active Deliveries
-Ready for Dispatch
-Riders
-Zones
-Live Map
-Partners
-Analytics
-```
+### Overview
+
+Shows:
+
+* Active deliveries
+* Ready for dispatch
+* Available riders
+* Average delivery time
+* Failed deliveries
 
 ---
 
-## Active Deliveries
+### Ready for Dispatch
 
-Table:
+Orders that are ready from KDS.
+
+Dispatcher selects:
+
+**Assign Rider**
+
+---
+
+### Active Deliveries
+
+Shows:
 
 * Order
-* Customer
-* Area
 * Rider
+* Customer
 * Status
 * ETA
-* Payment
-* Actions
 
 ---
 
-## Ready for Dispatch
+### Riders
 
-Show orders that are ready from KDS.
+Manage:
 
-Actions:
-
-> Assign Rider
-
----
-
-## Rider Management
-
-Show:
-
-* Name
-* Status
-* Current jobs
-* Completed jobs
-* On-time percentage
-* Total distance where available
-
-Statuses:
-
-* Online
-* Offline
-* Busy
-* On Break
-
----
-
-## Add Rider
-
-Fields:
-
-* Name
+* Rider profile
 * Phone
-* Rider ID
-* Branch
 * Vehicle
+* Branch
 * Status
+* Active deliveries
+* Completed deliveries
+* Performance
 
 ---
 
-## Rider Assignment
+### Zones
 
-Allow:
+Define:
 
-### Manual assignment
-
-Manager chooses rider.
-
-### Automatic assignment
-
-Demo can simulate assignment based on availability/proximity.
+* Area
+* Radius/polygon
+* Delivery fee
+* Minimum order
+* Estimated delivery time
 
 ---
 
-## Rider Rejection
+### Live Map
 
-If rider rejects a task, capture a reason.
+Shows riders and active deliveries where live location tracking is enabled.
 
-Example:
+---
+
+### Partners
+
+Manage external delivery providers/integrations.
+
+---
+
+### Analytics
+
+Track:
+
+* Delivery time
+* Rider performance
+* Completion rate
+* Rejections
+* Delivery distance
+* COD
+* Delivery costs
+
+---
+
+## Delivery Workflow
 
 ```text
-Vehicle issue
-Too far
-Weather
-Unavailable
-Other
-```
-
----
-
-## Live Map
-
-Show:
-
-* Branches
-* Active riders
-* Delivery locations
-* Routes
-
-For demo mode, use simulated map data.
-
-Clearly label it as demo/simulated where appropriate.
-
----
-
-## Delivery Status
-
-```text
-Unassigned
+Order
 ↓
-Assigned
+Kitchen
 ↓
-Accepted
+Ready
+↓
+Dispatch
+↓
+Rider Assigned
+↓
+Rider Accepts
 ↓
 Picked Up
 ↓
 Out for Delivery
 ↓
 Delivered
+↓
+Completed
 ```
 
 ---
 
-## Cash Collection
-
-For COD:
-
-```text
-Order Total
-PKR 2,350
-
-Cash Collected
-PKR 2,350
-```
-
-Allow rider to mark:
-
-> Payment Collected
-
----
-
-## Delivery Zones
-
-Manage:
-
-* Radius/area
-* Delivery fee
-* Minimum order
-* Free delivery threshold
-* Estimated time
-* Branch
-
-Example:
-
-```text
-0–3 km    Rs.100
-3–6 km    Rs.180
-6–10 km   Rs.250
-```
-
----
-
-## Delivery Partners
-
-Allow restaurant to see connected/available partner services.
-
-Statuses:
-
-* Connected
-* Available
-* Not Connected
-* Coming Soon
-
-Do not claim a live integration unless actually implemented.
-
----
-
-## Delivery Analytics
-
-Show:
-
-* Average delivery time
-* On-time rate
-* Failed deliveries
-* Rejections
-* Rider performance
-* Branch performance
-
----
-
-# 9. Reservations & Tables (`view-reservations`)
+# 6. RESERVATIONS
 
 ## Purpose
 
-Manage bookings and restaurant table occupancy.
+Reservations manage guests who plan to visit the restaurant.
+
+Used primarily by:
+
+* Host
+* Manager
 
 ---
 
-## Inner Tabs
+## Reservation Information
 
-```text
-Reservations
-Tables
-Floor Plan
-```
+Store:
 
----
-
-## Reservations
-
-Table:
-
-* Customer
+* Guest name
 * Phone
 * Date
 * Time
-* Guests
+* Party size
 * Table
-* Branch
+* Special request
 * Status
 
-Statuses:
+---
+
+## Reservation Status
 
 * Pending
 * Confirmed
+* Arrived
 * Seated
 * Completed
 * Cancelled
@@ -1912,93 +857,110 @@ Statuses:
 
 ---
 
-## New Booking
+## Host Workflow
 
-Fields:
+Example:
 
-* Customer
-* Phone
-* Date
-* Time
-* Guests
-* Branch
-* Table
-* Occasion
+> 8:00 PM
+> Ahmed Khan
+> 6 Guests
+
+Host confirms reservation.
+
+Guest arrives.
+
+Host clicks:
+
+**Arrived**
+
+Then:
+
+**Assign Table 14**
+
+Table status changes:
+
+**Reserved → Occupied**
+
+---
+
+## Reservation + Table
+
+The host can see the floor plan while assigning a reservation.
+
+This prevents double-booking a table.
+
+---
+
+## Reservation + Customer CRM
+
+If the guest already exists:
+
+> Ahmed Khan
+
+the system can show:
+
+* Previous visits
+* Orders
+* Spending
+* Preferences
 * Notes
 
 ---
 
-# Table Management
+# 7. TABLE MANAGEMENT
 
-Show visual floor plan.
+Although closely related to Reservations, Tables should be operationally connected to POS and Orders.
 
-Table states:
+## Table States
 
-```text
-Available
-Occupied
-Reserved
-Cleaning
-Blocked
-```
-
-Each table should display:
-
-* Number
-* Capacity
-* Guests
-* Current order
-* Total
-* Waiter
-* Time occupied
+* Available
+* Reserved
+* Occupied
+* Ordering
+* Payment
+* Cleaning
+* Blocked
 
 ---
 
 ## Table Detail
 
-Example:
+Click Table 14:
 
 ```text
-TABLE 12
+Table 14
+6 Guests
 
-Capacity
-4
+Waiter: Ali
 
-Guests
-4
+Order: #1058
+Value: PKR 4,850
 
-Status
-Occupied
-
-Order
-#10583
-
-Total
-PKR 2,840
-
-Waiter
-Hamza
+Status: Ordering
 ```
 
 Actions:
 
-* Add Items
-* View Order
-* Transfer Table
-* Split Bill
-* Print Bill
-* Close Table
+* Open order
+* Add items
+* Transfer table
+* Merge table
+* Split bill
+* Request cleaning
+* Close table
 
 ---
 
-# Table Lifecycle
+## Table Workflow
 
 ```text
 Available
 ↓
+Reserved
+↓
 Occupied
 ↓
-Order in Progress
+Ordering
 ↓
 Payment
 ↓
@@ -2009,121 +971,108 @@ Available
 
 ---
 
-# 10. Branches (`view-branches`)
+# 8. BRANCHES
 
 ## Purpose
 
-Manage multiple restaurant locations.
+Branches provide centralized management for restaurant groups.
 
 ---
 
-## Header
+## Branch Management
 
-> **Multi-Branch Management**
+Each branch can have:
 
-Subtext:
-
-> **Monitor locations, operations, menus, and performance from one place.**
-
----
-
-## Branch Cards
-
-Each card:
-
-* Branch name
+* Name
 * Address
-* Open/Closed
-* Revenue
-* Orders
+* Contact
+* Opening hours
+* Menu
+* Prices
+* Tables
 * Staff
-* Delivery activity
+* Inventory
+* Delivery zones
+* Orders
 
 ---
 
-## Branch Detail
+## Branch Switcher
 
-Tabs:
+Admin can select:
+
+**All Branches**
+
+or:
+
+**Main Branch**
+
+or:
+
+**Branch 2**
+
+or:
+
+**Branch 3**
+
+The dashboard then changes its data accordingly.
+
+---
+
+## Central vs Branch Data
+
+Owner can see:
+
+> Total Group Revenue
+
+while a branch manager sees:
+
+> Main Branch Revenue
+
+This requires role and branch permissions.
+
+---
+
+## Example
+
+Owner:
 
 ```text
-Overview
-Orders
-Menu
-Staff
-Inventory
-Delivery
-Analytics
-Settings
+All Branches
+Revenue: PKR 2.4M
+Orders: 3,420
+```
+
+Branch Manager:
+
+```text
+Main Branch
+Revenue: PKR 850K
+Orders: 1,120
 ```
 
 ---
 
-## Branch Settings
-
-Manage:
-
-* Address
-* Phone
-* Opening hours
-* Delivery zones
-* Menu
-* Tax settings
-* Branch-specific offers
-
-Growth package:
-
-> Up to 5 branches
-
-Custom package:
-
-> Multi-branch / unlimited scope based on agreement
-
----
-
-# 11. Customers (`view-customers`)
+# 9. CUSTOMERS / CRM
 
 ## Purpose
 
-Central CRM for customer profiles and behavior.
+CRM stores the restaurant's customer relationship data.
 
 ---
 
-## KPI Cards
+## Customer List
 
-* Total Customers
-* New Customers
-* Returning Customers
-* VIP Customers
-* At-Risk Customers
-* Average Lifetime Value
+Show:
 
-Do not display all KPIs simultaneously on mobile.
-
----
-
-## Filters
-
-* Search
-* Segment
-* Branch
-* Order count
-* Spend
-* Last order
-* Source
-
----
-
-## Customer Table
-
-Columns:
-
-* Customer
-* Contact
+* Name
+* Phone
 * Orders
-* Lifetime spend
-* Average order
-* Segment
+* Spending
 * Last order
+* Average order
+* Loyalty points
+* Segment
 
 ---
 
@@ -2134,1436 +1083,1641 @@ Example:
 ```text
 Ahmed Khan
 
-24 Orders
-PKR 48,500 Lifetime Spend
-PKR 2,021 AOV
+Orders: 24
+Total Spend: PKR 58,400
+AOV: PKR 2,433
+Last Order: 3 days ago
 
-Last Order
-2 days ago
+Favorite:
+Beef Burger
+
+Loyalty:
+2,450 points
 ```
 
-Tabs:
+---
 
-```text
-Overview
-Orders
-Preferences
-Loyalty
-Feedback
-```
+## Customer Timeline
 
 Show:
 
-* Phone
-* Email
-* Addresses
-* Favorite products
-* Preferred branch
-* First order
-* Last order
-* Spending
-* Loyalty points
-
----
-
-## Segments
-
-Provide:
-
-* New
-* Returning
-* VIP
-* High Spenders
-* Frequent
-* Inactive
-* At-Risk
-
----
-
-# 12. Loyalty & Reviews (`view-loyalty`)
-
-## Inner Tabs
-
 ```text
-Loyalty
-Rewards
-Reviews
+18 May — Delivery — PKR 2,350
+14 May — Dine-In — PKR 4,800
+07 May — Website — PKR 1,950
 ```
 
 ---
 
-## Loyalty Dashboard
+## Customer Segments
 
-KPIs:
+Examples:
 
-* Active Members
-* Points Issued
-* Rewards Redeemed
+* New
+* Repeat
+* VIP
+* High Value
+* Inactive
+* Dine-In Customers
+* Delivery Customers
 
----
-
-## Loyalty Members
-
-Table:
-
-* Customer
-* Tier
-* Points
-* Redeemed
-* Last activity
+Marketing can use these segments later.
 
 ---
 
-## Loyalty Tiers
+# 10. LOYALTY & REVIEWS
+
+## Loyalty Purpose
+
+Encourage customers to order again.
+
+---
+
+## Loyalty Configuration
+
+Admin can configure:
+
+* Points per spend
+* Reward thresholds
+* Membership tiers
+* Coupons
+* Birthday rewards
+* Referral rewards
 
 Example:
 
 ```text
-Silver
-Gold
-Platinum
+PKR 100 spent
+=
+10 points
 ```
 
 ---
 
-## Rewards
+## Loyalty Workflow
 
-Manage:
-
-* Reward name
-* Points required
-* Availability
-* Expiry
-* Redemption count
+```text
+Customer Orders
+↓
+Order Completed
+↓
+Points Added
+↓
+Customer Reaches Reward
+↓
+Reward Available
+↓
+Customer Uses Reward
+```
 
 ---
 
-# Reviews
+## Reviews
 
-Show:
+Collect/manage:
 
-* Average rating
-* Rating distribution
-* Recent reviews
-* Product feedback
+* Rating
+* Review
 * Customer
-* Date
 * Order
-
-Actions:
-
-* View
-* Respond
-* Mark resolved
+* Date
+* Response status
 
 ---
 
-# 13. Marketing (`view-marketing`)
+## Review Workflow
+
+```text
+Customer Leaves Review
+↓
+Review Appears in Admin
+↓
+Manager Reads
+↓
+Responds
+↓
+Marks Resolved
+```
+
+Low ratings can trigger an internal alert.
+
+---
+
+# 11. MARKETING
 
 ## Purpose
 
-Create promotions and measure customer engagement.
+Marketing turns customer data into **repeat orders and promotions**.
 
 ---
 
-## Header
+## Campaign Types
 
-> **Promotions & Marketing**
-
-Subtext:
-
-> **Create offers, target customers, and measure campaign performance.**
+* Discount
+* Coupon
+* Product promotion
+* Combo
+* Buy One Get One
+* Win-back
+* Birthday
+* New product
+* Branch campaign
+* Time-based promotion
 
 ---
 
-## Main Tabs
+## Target Audience
+
+Admin can select:
+
+**Everyone**
+
+or:
+
+**Customers who haven't ordered for 30 days**
+
+or:
+
+**VIP customers**
+
+or:
+
+**Customers who ordered burgers**
+
+---
+
+## Campaign Workflow
 
 ```text
-Campaigns
-Promotions
-Coupons
-Segments
+Choose Audience
+↓
+Create Offer
+↓
+Choose Channel
+↓
+Schedule
+↓
+Launch
+↓
+Track Results
 ```
 
 ---
 
-## Campaign Table
+## Marketing Analytics
 
-Columns:
+Track:
 
-* Campaign
-* Channel
-* Audience
-* Status
+* Sent
+* Delivered
+* Opened where supported
+* Clicked where supported
 * Orders
 * Revenue
 * Conversion
-* ROI
+* Campaign ROI
 
 ---
 
-## Promotion Types
-
-Support:
-
-* Percentage discount
-* Fixed discount
-* BOGO
-* Combo
-* First order
-* Minimum order
-* Branch-specific
-* Time-based
-
----
-
-## Campaign Builder
-
-Fields:
-
-* Campaign name
-* Audience
-* Offer
-* Channel
-* Start date
-* End date
-* Branch
-* Minimum order
-
----
-
-# 14. Analytics (`view-analytics`)
+# 12. ANALYTICS
 
 ## Purpose
 
-Provide deeper business intelligence.
+Analytics answers:
+
+**"What is happening in my restaurant?"**
 
 ---
 
-## Filters
+## Sales Analytics
 
-* Date range
-* Branch
-* Order type
-* Order source
-* Category
-* Product
-* Payment method
+Show:
 
----
-
-## Revenue KPIs
-
-* Total Revenue
-* Net Sales
+* Revenue
 * Orders
 * AOV
+* Growth
 * Discounts
-* Delivery Fees
+* Taxes
 
 ---
 
-## Customer KPIs
+## Customer Analytics
 
-* Total Customers
-* New Customers
-* Returning Customers
+Show:
+
+* New customers
+* Returning customers
 * Retention
-* Average Lifetime Value
+* Customer value
+* Order frequency
 
 ---
 
-## Operational KPIs
+## Product Analytics
 
-* Average Preparation Time
-* Average Delivery Time
-* Cancellation Rate
-* On-Time Delivery
-* Table Utilization
+Show:
 
----
-
-## Product KPIs
-
-* Best Seller
-* Worst Seller
-* Revenue Leader
-* Highest Margin
-* Most Ordered
+* Best sellers
+* Worst sellers
+* Revenue by product
+* Quantity sold
+* Category performance
 
 ---
 
-## Branch KPIs
+## Channel Analytics
 
-* Top Branch
-* Lowest Branch
-* Revenue by Branch
-* Orders by Branch
+Compare:
 
----
-
-## Charts
-
-Include:
-
-* Revenue & Sales Trends
-* Orders Over Time
-* Sales by Category
-* Orders by Type
-* Orders by Source
-* Top-Selling Products
-* Revenue by Branch
-* Customer Growth
-* Customer Retention
-* Reservation Trends
-* Delivery Trends
-* Inventory Trends
-* Waste Trends
-* Payment Method Breakdown
-* Reviews & Ratings
-* Promotion Performance
-
----
-
-# 15. AI Business Insights
-
-Include a dedicated insight layer within Analytics.
+* Website
+* App
+* POS
+* QR
+* WhatsApp
+* Marketplace
 
 Example:
 
-> Delivery cancellations are 32% higher this week.
-
-> Burger demand increased 18% during evening hours.
-
-> 12 high-value customers have not ordered in 30 days.
-
-> Branch B revenue is 14% below its four-week average.
-
-Each insight may include:
-
-* Observation
-* Business impact
-* Recommendation
+```text
+Website       32%
+POS           28%
+App           18%
+QR            12%
+WhatsApp      10%
+```
 
 ---
 
-# 16. Reports (`view-reports`)
+## Operational Analytics
+
+Show:
+
+* Average preparation time
+* Order completion time
+* Delivery time
+* Cancellation rate
+* Table turnover
+* Rider performance
+
+---
+
+## Branch Analytics
+
+Compare:
+
+```text
+Main Branch    PKR 850K
+Branch 2       PKR 620K
+Branch 3       PKR 490K
+```
+
+---
+
+## Analytics vs Reports
+
+**Analytics**
+
+Used to understand trends and make decisions.
+
+**Reports**
+
+Used to obtain detailed records and exportable data.
+
+---
+
+# 13. REPORTS
 
 ## Purpose
 
-Generate operational and management reports.
+Reports provide structured historical information.
 
 ---
 
-## Report Categories
+## Core Reports
 
-### Sales
+### Sales Report
 
-* Daily Sales
-* Monthly Sales
-* Product Sales
-* Category Sales
-* Branch Sales
-
-### Operations
-
+* Date
 * Orders
-* Delivery
-* Kitchen
-* Tables
-* Reservations
+* Revenue
+* Tax
+* Discounts
+* Net sales
 
-### Customers
+### Order Report
 
-* Customer Activity
-* Customer Spend
-* Retention
+* Order ID
+* Customer
+* Source
+* Type
+* Status
+* Total
 
-### Inventory
+### Product Report
 
-* Stock
+* Product
+* Quantity
+* Revenue
+
+### Payment Report
+
+* Cash
+* Card
+* Online
+* Other
+
+### Tax Report
+
+* Taxable sales
+* Tax
+* Tax breakdown
+
+### Inventory Report
+
+* Opening stock
 * Purchases
-* Waste
-* Food Cost
+* Consumption
+* Closing stock
 
-### Finance
+### Waste Report
+
+* Item
+* Quantity
+* Cost
+* Reason
+
+### Delivery Report
+
+* Rider
+* Deliveries
+* Time
+* Status
+* COD
+
+### Staff Report
+
+* Employee
+* Attendance
+* Orders
+* Activity
+
+### Branch Report
 
 * Revenue
-* Expenses
-* Payments
-* Profitability
+* Orders
+* AOV
+* Performance
 
 ---
 
-## Report Generator
+## Report Actions
 
-Controls:
+Admin should be able to:
 
-* Report type
-* Branch
-* Date range
-* Filters
+* Filter
+* Select date
+* Select branch
+* Export
+* Print
+* Download
 
-Action:
+Formats can include:
 
-> Generate Report
-
-When generated:
-
-* Preview
-* Export CSV
-* Export PDF
+* PDF
+* CSV
+* Excel
 
 ---
 
-# 17. HR & Staff (`view-hr`)
+# 14. HR & STAFF
 
 ## Purpose
 
-Manage restaurant employees and access.
+Manage employees and access to the system.
 
 ---
 
-## KPI Cards
+## Staff Profiles
 
-* Staff on Shift
-* Upcoming Shifts
-* Attendance Issues
-
-Avoid showing payroll as fully implemented unless the platform actually supports payroll.
-
----
-
-## Staff Table
-
-Columns:
+Store:
 
 * Name
+* Contact
 * Role
 * Branch
-* Shift
 * Status
-* Attendance
+* Joining date
+* Employee ID
 
 ---
 
 ## Roles
 
-* Owner
-* Admin
-* Manager
-* Cashier
-* Waiter
-* Kitchen
-* Rider
-* Marketing
+Examples:
+
+### Owner
+
+Full access.
+
+### Manager
+
+Operations + reports + staff + inventory.
+
+### Host
+
+Reservations + tables + guest information.
+
+### Waiter
+
+POS + tables + orders.
+
+### Cashier
+
+POS + payments.
+
+### Kitchen
+
+KDS only.
+
+### Dispatcher
+
+Delivery + riders.
+
+### Inventory Manager
+
+Inventory + suppliers + purchase orders.
+
+### Marketing
+
+CRM + loyalty + marketing.
+
+### Accountant
+
+Finance + reports.
 
 ---
 
 ## Permissions
 
-Permissions should control access to:
+Don't simply make permissions "Admin/User."
 
-* Orders
-* POS
-* KDS
-* Menu
-* Inventory
-* Customers
-* Delivery
-* Analytics
-* Reports
-* Settings
+Use granular permissions.
+
+Example:
+
+```text
+View Orders       ✓
+Edit Orders       ✓
+Cancel Orders     ✗
+Refund Orders     ✗
+View Finance      ✗
+```
 
 ---
 
-# 18. Finance (`view-finance`)
+## Attendance
+
+If included:
+
+* Clock in
+* Clock out
+* Attendance
+* Late
+* Absent
+* Hours worked
+
+---
+
+## Staff Activity
+
+Track important actions:
+
+> Ali changed order #1058.
+
+> Ahmed issued refund #R-102.
+
+> Manager changed product price.
+
+This creates accountability.
+
+---
+
+# 15. FINANCE
 
 ## Purpose
 
-Provide a simplified business-finance view.
+Finance shows the restaurant's financial activity.
+
+It should connect operational transactions with financial records.
 
 ---
 
-## KPI Cards
+## Revenue
 
-* Gross Revenue
-* Net Sales
-* Estimated COGS
-* Estimated Gross Profit
+Revenue can be broken down by:
+
+* Dine-in
+* Takeaway
+* Delivery
+* Website
+* App
+* POS
+* QR
+* Branch
 
 ---
 
-## P&L
+## Payments
 
-Rows:
+Track:
+
+* Cash
+* Card
+* Online payment
+* Bank transfer where applicable
+* Other configured methods
+
+---
+
+## Refunds
+
+Track:
+
+* Order
+* Amount
+* Reason
+* Date
+* Authorized by
+* Payment method
+
+---
+
+## Discounts
+
+Track:
+
+* Discount
+* Order
+* Campaign
+* Amount
+* Staff member
+
+This helps management understand how much revenue is being given away through promotions.
+
+---
+
+## Expenses
+
+Record business expenses such as:
+
+* Rent
+* Utilities
+* Salaries
+* Supplies
+* Delivery costs
+* Marketing
+* Maintenance
+* Other operating expenses
+
+---
+
+# 16. P&L — PROFIT & LOSS
+
+## Purpose
+
+P&L answers the owner's most important financial question:
+
+**"How profitable is my restaurant?"**
+
+---
+
+## Basic Structure
+
+```text
+Revenue
+-
+Cost of Goods Sold
+=
+Gross Profit
+
+Gross Profit
+-
+Operating Expenses
+=
+Operating Profit
+```
+
+Depending on the accounting implementation, additional items can be included to arrive at net profit.
+
+---
+
+## Revenue
+
+Example:
+
+```text
+Sales
+PKR 2,000,000
+```
+
+---
+
+## COGS
+
+Cost of ingredients/products sold.
+
+Example:
+
+```text
+Food Cost
+PKR 650,000
+```
+
+---
+
+## Gross Profit
+
+```text
+PKR 2,000,000
+-
+PKR 650,000
+=
+PKR 1,350,000
+```
+
+---
+
+## Operating Expenses
+
+Examples:
+
+```text
+Rent              200,000
+Salaries           300,000
+Utilities           80,000
+Marketing           50,000
+Delivery            70,000
+Other               50,000
+```
+
+---
+
+## P&L Dashboard
+
+Show:
 
 * Revenue
-* Discounts
-* Refunds
 * COGS
-* Delivery
-* Labor
+* Gross Profit
+* Gross Margin
 * Operating Expenses
-* Net Profit
+* Operating Profit
+* Net Profit where supported
+* Profit Margin
 
-Clearly label demo estimates where figures are simulated.
+### Important
 
----
-
-# 19. Website / Digital Setup (`view-website`)
-
-If a dedicated Website section is included in the dashboard, use it for configuration rather than duplicating Content & Media.
-
-It can contain:
-
-```text
-Website Overview
-Pages
-Navigation
-Homepage
-SEO
-Domain
-Preview
-```
+P&L should clearly distinguish **operational estimates** from formal accounting records if the system is not acting as a full accounting platform.
 
 ---
 
-## Website Preview
-
-Show:
-
-> **Preview Website**
-
-Include:
-
-* Desktop preview
-* Tablet preview
-* Mobile preview
-
----
-
-## Website Pages
-
-Manage:
-
-* Home
-* Menu
-* Offers
-* About
-* Gallery
-* Reservation
-* Contact
-
----
-
-# 20. QR Menu (`view-qr`)
+# 17. QR MENU & SELF-ORDERING
 
 ## Purpose
 
-Manage table and restaurant QR experiences.
+Allow customers to scan a table QR code and order from their phones.
 
 ---
 
-## QR Dashboard
+## Admin Functions
 
-Show:
+Admin manages:
 
-* Total QR scans
-* Unique visitors
-* Menu views
-* Orders generated
-* Conversion
-
----
-
-## QR Types
-
-### Table QR
-
-Specific to:
-
-* Branch
-* Table
-
-Example:
-
-```text
-Branch: F-7
-Table: 12
-```
-
-### General Menu QR
-
-Restaurant-wide menu.
-
----
-
-## Actions
-
-* Generate
-* Preview
-* Download
-* Assign
-* Replace
-
----
-
-# 21. Integrations (`view-integrations`)
-
-## Categories
-
-### Payments
-
-* JazzCash
-* Easypaisa
-* Cards
-
-### Communication
-
-* WhatsApp
-* SMS
-* Email
-
-### Business
-
-* Google Maps
-* Google Business
-* Analytics
-
-### Restaurant Technology
-
-* POS
-* KDS
-* Kitchen printers
-* Delivery services
-
-### Custom
-
-* APIs
-* Webhooks
-* Custom integrations
-
-Every integration should clearly show:
-
-```text
-Connected
-Available
-Not Connected
-Coming Soon
-```
-
-Never visually claim a live connection when it is only a demo.
-
----
-
-# 22. Settings (`view-settings`)
-
-Organize settings into sections.
-
-## Restaurant
-
-* Name
-* Logo
-* Currency
-* Tax
-* Contact
-
-## Branches
-
-* Branch configuration
-* Hours
-* Delivery zones
-
-## Orders
-
-* Order timing
-* Auto-confirmation
-* Preparation settings
-
-## Notifications
-
-* Email
-* WhatsApp
-* SMS
-* In-app
-
-## Users & Permissions
-
-* Users
-* Roles
-* Access
-
-## Appearance
-
-* Theme
+* QR codes
+* Tables
+* Menu
+* Product availability
+* Modifiers
+* Prices
 * Branding
-* Dashboard preferences
-
-## Security
-
-* Password
-* Sessions
-* 2FA
-* Audit logs
+* Ordering settings
 
 ---
 
-# 23. Global Header
+## Table QR Workflow
 
-The global header should contain:
+Each table has a unique QR.
 
-* Mobile sidebar toggle
-* Global search
-* Demo Workspace badge
-* Branch selector
-* Notifications
-* Profile
-
----
-
-# 24. Branch Selector
-
-Selecting a branch should update the relevant dashboard views.
-
-Options:
+Example:
 
 ```text
-All Branches
-F-7
-Bahria
-University Road
+Table 14
+QR-T14
 ```
 
-For sensitive branch switching, use a PIN only if genuinely required by the product design.
+Customer scans.
 
-Do not make branch switching unnecessarily frustrating in a demo.
-
----
-
-# 25. Global Notifications
-
-Notification dropdown should contain examples:
+System automatically knows:
 
 ```text
-New online order
-Table reservation
-Low stock
-Delivery delayed
-Rider assigned
-Promotion ending
+Branch: Main Branch
+Table: 14
 ```
 
-Each notification should link to the appropriate module.
+Customer should normally **not have to manually enter the table number**.
 
 ---
 
-# 26. Global Search
+## Customer Workflow
 
-Allow searching across:
+```text
+Scan
+↓
+Digital Menu
+↓
+Product
+↓
+Modifiers
+↓
+Cart
+↓
+Checkout
+↓
+Dine-In Order
+↓
+KDS
+↓
+Prepare
+↓
+Serve
+↓
+Payment
+```
 
-* Orders
-* Customers
+---
+
+## Multiple Orders
+
+A customer can order:
+
+```text
+First Order
+Food + Drinks
+
+Later:
+Dessert + Coffee
+```
+
+Additional orders can remain associated with the active table/session where configured.
+
+---
+
+# 18. WEBSITE BUILDER / WEBSITE MANAGEMENT
+
+## Purpose
+
+The restaurant owner can manage the public website from the admin ecosystem.
+
+This should not necessarily be a full drag-and-drop page builder like a generic website platform.
+
+For your restaurant product, it is better to have **structured restaurant content management** with controlled templates.
+
+---
+
+## Website Sections
+
+Admin can manage:
+
+### Homepage
+
+* Hero
+* Restaurant introduction
+* Featured products
+* Offers
+* CTA
+* Gallery
+
+### Menu
+
+* Categories
 * Products
-* Reservations
-* Branches
+* Prices
+* Availability
+
+### About
+
+* Restaurant story
+* Brand information
+
+### Gallery
+
+* Food images
+* Restaurant images
+
+### Offers
+
+* Promotions
+* Deals
+
+### Contact
+
+* Phone
+* Email
+* Address
+* Maps
+
+### Opening Hours
+
+* Daily hours
+* Special hours
+
+---
+
+## Website Builder Workflow
+
+Admin:
+
+```text
+Open Website
+↓
+Select Section
+↓
+Edit Content
+↓
+Preview
+↓
+Publish
+```
 
 Example:
 
-Searching:
+Restaurant launches:
 
-> Ahmed Khan
+**Eid Special — 20% Off**
 
-could return:
+Admin creates offer → uploads banner → clicks Publish.
+
+Website updates.
+
+---
+
+## Website Branding
+
+Configure:
+
+* Logo
+* Brand colors
+* Fonts
+* Buttons
+* Images
+* Restaurant information
+
+---
+
+## Website SEO
+
+Admin can manage:
+
+* Page title
+* Meta description
+* URL slug
+* Social sharing image
+* Local business information
+
+Advanced technical SEO should remain controlled by the platform/developer rather than exposing dangerous settings to restaurant staff.
+
+---
+
+# 19. INTEGRATIONS
+
+## Purpose
+
+Integrations allow the restaurant system to communicate with external platforms and hardware.
+
+---
+
+## Payment Integrations
+
+Connect supported:
+
+* Payment gateways
+* Card terminals
+* Online payment providers
+
+Payment flow:
 
 ```text
-Customer
-Ahmed Khan
-
-Orders
-#10582
-#10541
-#10492
+Customer Pays
+↓
+Payment Provider
+↓
+Payment Confirmation
+↓
+Restaurant Order Updated
 ```
 
 ---
 
-# 27. Toast Notifications
+## Delivery Integrations
 
-Use concise animated notifications.
+Connect supported delivery providers.
 
-Examples:
+Workflow:
 
-> New online order received.
-
-> Order #10582 sent to kitchen.
-
-> Rider assigned successfully.
-
-> Product availability updated.
-
-> Table 12 order updated.
-
-Keep them subtle.
-
----
-
-# 28. Demo Mode
-
-The entire dashboard is a demonstration.
-
-Use realistic data but clearly distinguish simulated functionality where necessary.
-
-Examples:
-
-> Demo Workspace
-
-> Demo Data
-
-> Simulated Live Tracking
-
-Do not falsely claim live external integrations.
+```text
+Restaurant Order
+↓
+Ready
+↓
+Delivery Partner
+↓
+Rider
+↓
+Delivery Status
+```
 
 ---
 
-# 29. Connected Demo State
+## WhatsApp
 
-This is one of the most important requirements.
+Possible integrations:
 
-The modules must feel connected.
+* WhatsApp order links
+* Customer communication
+* Automated notifications
+* Business/API workflows
+* AI-assisted conversations
+
+Important distinction:
+
+A simple WhatsApp order link is different from an automated WhatsApp Business/API implementation.
+
+---
+
+## Maps
+
+Used for:
+
+* Restaurant location
+* Delivery addresses
+* Rider navigation
+* Delivery zones
+* Maps
+* Customer directions
+
+---
+
+## Printers
+
+Restaurant can connect supported:
+
+* Receipt printers
+* KOT printers
+* Kitchen printers
 
 Example:
 
 ```text
-Customer Website
+POS Order
 ↓
-Create Delivery Order
+Kitchen Printer
 ↓
-Orders
-↓
-KDS
-↓
-Preparing
-↓
-Ready
-↓
-Delivery
-↓
-Assign Rider
-↓
-Delivered
-↓
-Customer History
-↓
-Analytics
+KOT
 ```
 
-Dine-in:
+---
+
+## KDS Integration
+
+Orders can automatically enter the kitchen display system.
+
+---
+
+## Accounting
+
+Where supported, sales/payment information can be synchronized with accounting software.
+
+---
+
+## Analytics / Tracking
+
+Connect supported analytics platforms for website and marketing measurement.
+
+---
+
+## API / Custom Integrations
+
+For larger restaurants or chains, provide API/webhook capabilities where appropriate.
+
+Possible use cases:
 
 ```text
-POS
+External System
 ↓
-Dine-in
+API
 ↓
-Table 12
+Restaurant Platform
+```
+
+or:
+
+```text
+Restaurant Platform
 ↓
-Order
+Webhook
+↓
+External System
+```
+
+---
+
+# 20. HOW THE ENTIRE RESTAURANT OPERATES
+
+This is the critical part.
+
+The modules shouldn't behave like independent pages.
+
+They should form one operational chain.
+
+---
+
+## DINE-IN
+
+```text
+Customer Arrives
+↓
+Reservation / Walk-In
+↓
+Host Assigns Table
+↓
+Table = Occupied
+↓
+Waiter Opens POS
+↓
+Selects Table
+↓
+Adds Items
+↓
+Send to Kitchen
 ↓
 KDS
 ↓
+Kitchen Prepares
+↓
 Ready
 ↓
-Served
+Waiter Serves
+↓
+Additional Orders
 ↓
 Bill
 ↓
 Payment
 ↓
-Table Available
+Completed
+↓
+Table = Cleaning
+↓
+Table = Available
 ```
 
-QR:
+---
+
+## QR DINE-IN
 
 ```text
-Table QR
+Customer Scans Table QR
 ↓
-Menu
+Table Identified
 ↓
-Dine-in Order
+Browse Menu
+↓
+Customize
+↓
+Place Order
 ↓
 Central Orders
 ↓
 KDS
-↓
-Table 12
-```
-
-The same demo data/state should be shared between these experiences.
-
----
-
-# 30. UI/UX Design Direction
-
-The dashboard must be:
-
-* Premium
-* Modern
-* Clean
-* Professional
-* Operational
-* Data-driven
-* Readable
-* Fast
-
-Avoid:
-
-* Generic admin-template appearance
-* Excessive gradients
-* Excessive glassmorphism
-* Heavy shadows
-* Giant cards
-* Excessive rounded containers
-* Unnecessary decoration
-
----
-
-# 31. Information Hierarchy
-
-Every screen must answer:
-
-1. What am I looking at?
-2. What matters?
-3. What action can I take?
-
-Prioritize information instead of filling empty space.
-
----
-
-# 32. Desktop Layout
-
-Use:
-
-* Persistent sidebar
-* Header
-* Multi-column layouts
-* Data tables
-* Side-by-side panels
-* Charts
-* Drawers
-
-Desktop should prioritize productivity.
-
----
-
-# 33. Tablet Layout
-
-Adapt:
-
-* Sidebar
-* KPI grids
-* Charts
-* Tables
-* Drawers
-
-Avoid cramped layouts.
-
----
-
-# 34. Mobile Layout
-
-The dashboard must be intentionally redesigned for mobile.
-
-Do not simply scale down the desktop interface.
-
-Core mobile navigation:
-
-```text
-Home
-Orders
-POS
-Menu
-More
-```
-
-Secondary modules should be placed under More.
-
----
-
-# 35. Mobile Order Cards
-
-Instead of desktop tables, show:
-
-```text
-#10582
-
-DELIVERY
-Ahmed Khan
-
-2 × Chicken Burger
-1 × Fries
-
-PKR 1,847
-
-Preparing
-
-[View]
-```
-
----
-
-# 36. Mobile POS
-
-Prioritize:
-
-```text
-Order Type
-↓
-Categories
-↓
-Products
-↓
-Cart
-↓
-Checkout
-```
-
-Cart can become a bottom drawer/full-screen panel.
-
----
-
-# 37. Mobile KDS
-
-Use large cards with large touch targets.
-
-Actions should be easy to tap:
-
-* Start
-* Ready
-* Complete
-
----
-
-# 38. Accessibility
-
-Maintain:
-
-* Keyboard navigation
-* Focus states
-* Semantic HTML
-* Proper labels
-* Good contrast
-* Accessible buttons
-* Non-color-only status indicators
-
----
-
-# 39. Typography
-
-Use highly readable modern typography.
-
-Maintain consistent hierarchy:
-
-```text
-Page Title
-Section Title
-Card Title
-Primary Metric
-Body
-Secondary
-Metadata
-```
-
-Avoid extremely small text.
-
----
-
-# 40. Status System
-
-Use a consistent semantic system.
-
-```text
-Success
-Warning
-Danger
-Info
-Neutral
-```
-
-Example:
-
-```text
-✓ Completed
-⚠ Delayed
-× Cancelled
-● Preparing
-```
-
-Do not use color alone.
-
----
-
-# 41. Tables
-
-Desktop tables should support:
-
-* Search
-* Sort
-* Filters
-* Pagination
-* Row hover
-* Detail drawer
-
-On mobile, use cards or horizontal-scroll tables only where necessary.
-
----
-
-# 42. Modals & Drawers
-
-Use:
-
-### Modal
-
-For focused actions.
-
-### Drawer
-
-For:
-
-* Order details
-* Customer details
-* Quick edits
-
-### Full Page
-
-For:
-
-* Analytics
-* Inventory
-* Settings
-* Complex workflows
-
----
-
-# 43. Loading States
-
-Use skeleton loaders for:
-
-* KPI cards
-* Orders
-* Tables
-* Charts
-* Customers
-
----
-
-# 44. Empty States
-
-Every module needs useful empty states.
-
-Example:
-
-> No active deliveries.
-
-Then:
-
-> Assign a rider when an order is ready.
-
----
-
-# 45. Error & Feedback States
-
-Provide useful messages.
-
-Examples:
-
-> Unable to save menu item. Please try again.
-
-> Rider could not be assigned.
-
-> Payment status could not be updated.
-
-Do not show raw technical errors.
-
----
-
-# 46. Performance
-
-The dashboard must remain fast despite its large feature set.
-
-Use:
-
-* Route-level code splitting
-* Lazy loading
-* Efficient state management
-* Paginated tables
-* Virtualized large lists where needed
-* Optimized charts
-* Shared components
-
-Do not load every dashboard module simultaneously.
-
----
-
-# 47. Dashboard Route Loading
-
-Load heavy modules only when needed.
-
-```text
-Dashboard
-→ Overview
-
-Orders
-→ Orders bundle
-
-POS
-→ POS bundle
-
-KDS
-→ KDS bundle
-
-Analytics
-→ Analytics bundle
-
-Inventory
-→ Inventory bundle
-```
-
----
-
-# 48. Data Consistency
-
-A single order should appear consistently across:
-
-* Orders
-* POS
-* KDS
-* Delivery
-* Customer profile
-* Analytics
-
-A single customer should maintain consistent:
-
-* Name
-* Phone
-* Orders
-* Spend
-* Loyalty
-
-A single table should maintain:
-
-* Status
-* Order
-* Guests
-* Waiter
-
----
-
-# 49. Demo Interaction Rules
-
-Important actions should visibly update the UI.
-
-Examples:
-
-### Create POS order
-
-Order appears in:
-
-* Orders
-* KDS
-
-### KDS marks ready
-
-Order becomes:
-
-> Ready
-
-and appears in:
-
-> Ready for Dispatch
-
-for delivery.
-
-### Assign rider
-
-Delivery changes:
-
-> Unassigned → Assigned
-
-### Mark delivered
-
-Order becomes:
-
-> Delivered / Completed
-
-Customer history updates.
-
-### Close dine-in bill
-
-Table changes:
-
-> Occupied → Cleaning/Available
-
----
-
-# 50. Final Product Architecture
-
-The full product should communicate:
-
-```text
-                         CUSTOMER CHANNELS
-
-Website ───────┐
-Mobile App ────┤
-QR ────────────┤
-WhatsApp ──────┤
-Phone ─────────┤
-POS ───────────┘
-       │
-       ▼
-CENTRAL ORDER MANAGEMENT
-       │
-       ├───────────────┐
-       │               │
-       ▼               ▼
-     DINE-IN        TAKEAWAY
-       │               │
-     Table            Pickup
-       │               │
-       └───────┬───────┘
-               │
-               ▼
-             DELIVERY
-               │
-        Address / Rider
-               │
-               ▼
-             KDS
-               │
-          Preparation
-               │
-      ┌────────┼─────────┐
-      ▼        ▼         ▼
-    TABLE     PICKUP    RIDER
-      │        │         │
-      └────────┼─────────┘
-               ▼
-           COMPLETED
-               │
-       ┌───────┼────────┐
-       ▼       ▼        ▼
-      CRM   Analytics  Marketing
-       │       │        │
-       └───────┼────────┘
-               ▼
-          Repeat Business
-```
-
----
-
-# 51. Final Demo Experience
-
-The demo should tell a complete story.
-
-### Customer Side
-
-```text
-Discover Restaurant
-↓
-Website / App
-↓
-View Menu
-↓
-Choose Delivery / Takeaway / Dine-in
-↓
-Order
-```
-
-### Restaurant Side
-
-```text
-Order Received
-↓
-Central Orders
-↓
-POS / KDS
 ↓
 Kitchen
 ↓
-Fulfillment
+Ready
+↓
+Serve
+↓
+Payment
+↓
+Completed
+```
+
+---
+
+## TAKEAWAY
+
+```text
+Website / App / POS / WhatsApp / Phone
+↓
+Takeaway Order
+↓
+Kitchen
+↓
+Preparing
+↓
+Ready
+↓
+Customer Arrives
+↓
+Order Verified
+↓
+Picked Up
+↓
+Completed
+```
+
+---
+
+## DELIVERY
+
+```text
+Website / App / POS / WhatsApp / Phone / Marketplace
+↓
+Delivery Order
+↓
+Kitchen
+↓
+Preparing
+↓
+Ready
+↓
+Dispatch Queue
+↓
+Rider Assigned
+↓
+Accepted
+↓
+Picked Up
+↓
+Out for Delivery
+↓
+Delivered
+↓
+Completed
+```
+
+---
+
+# 21. INVENTORY CONNECTION
+
+Inventory should also connect to sales.
+
+Example:
+
+```text
+Burger Sold
+↓
+Recipe
+↓
+Chicken -150g
+Cheese -1
+Bun -1
+Sauce -20g
+↓
+Stock Updated
+```
+
+When stock reaches the minimum threshold:
+
+```text
+Low Stock Alert
+↓
+Manager
+↓
+Purchase Order
+↓
+Supplier
+↓
+Receive Stock
+↓
+Inventory Updated
+```
+
+---
+
+# 22. CUSTOMER CONNECTION
+
+Every completed order can contribute to customer history.
+
+```text
+Order Completed
+↓
+Customer Profile Updated
+↓
+Order History
+↓
+Total Spend
+↓
+AOV
+↓
+Favorite Products
+↓
+Loyalty Points
+```
+
+That data can then be used by:
+
+**CRM → Loyalty → Marketing → Analytics**
+
+---
+
+# 23. FINANCE CONNECTION
+
+A completed transaction should also feed the financial layer.
+
+```text
+Order
+↓
+Payment
+↓
+Revenue
+↓
+Payment Method
+↓
+Finance
+↓
+Reports
+↓
+Analytics
+↓
+P&L
+```
+
+Refunds, discounts, taxes, and other configured financial events should similarly be recorded.
+
+---
+
+# 24. MANAGEMENT CONNECTION
+
+The owner doesn't need to watch every order manually.
+
+The system should surface exceptions.
+
+Example:
+
+```text
+Inventory Low
+Delivery Delayed
+Order Waiting Too Long
+Payment Failed
+Reservation Conflict
+High Cancellation Rate
+Sales Drop
+```
+
+These appear in:
+
+**Dashboard → Alerts / Action Center**
+
+The owner then investigates only what requires attention.
+
+---
+
+# 25. ROLE-BASED EXPERIENCE
+
+The same platform should look different depending on who logs in.
+
+## OWNER
+
+Main focus:
+
+* Dashboard
+* Analytics
+* Finance
+* P&L
+* Reports
+* Branches
+* Customers
+* Marketing
+* Settings
+
+---
+
+## MANAGER
+
+Main focus:
+
+* Dashboard
+* Orders
+* POS
+* KDS monitoring
+* Inventory
+* Delivery
+* Reservations
+* Staff
+* Reports
+
+---
+
+## HOST
+
+Main focus:
+
+* Reservations
+* Tables
+* Guests
+* Dine-in status
+
+---
+
+## WAITER
+
+Main focus:
+
+* Tables
+* POS
+* Orders
+* KOT
+
+---
+
+## CASHIER
+
+Main focus:
+
+* POS
+* Orders
+* Payments
+* Receipts
+
+---
+
+## KITCHEN STAFF
+
+Main focus:
+
+* KDS
+
+They should not see:
+
+* Finance
+* HR
+* Marketing
+* Settings
+
+unless explicitly authorized.
+
+---
+
+## DISPATCHER
+
+Main focus:
+
+* Delivery
+* Ready for Dispatch
+* Riders
+* Live Map
+
+---
+
+## INVENTORY MANAGER
+
+Main focus:
+
+* Inventory
+* Recipes
+* Suppliers
+* Purchase Orders
+* Waste
+
+---
+
+## MARKETING STAFF
+
+Main focus:
+
+* Customers
+* Loyalty
+* Reviews
+* Marketing
+
+---
+
+## ACCOUNTANT
+
+Main focus:
+
+* Finance
+* Reports
+* P&L
+
+---
+
+# 26. THE ADMIN PANEL'S CORE DATA FLOW
+
+The architecture should effectively behave like this:
+
+```text
+                    CUSTOMER
+                       │
+       ┌───────────────┼────────────────┐
+       ↓               ↓                ↓
+    WEBSITE           APP              QR
+       │               │                │
+       └───────────────┼────────────────┘
+                       ↓
+                 CENTRAL ORDERS
+                       │
+            ┌──────────┼───────────┐
+            ↓          ↓           ↓
+           POS         KDS       DELIVERY
+            │          │           │
+            │          ↓           ↓
+            │       KITCHEN      RIDER
+            │                      │
+            └──────────┬───────────┘
+                       ↓
+                    PAYMENT
+                       │
+             ┌─────────┼─────────┐
+             ↓         ↓         ↓
+           CRM      FINANCE    ANALYTICS
+             │         │         │
+             ↓         ↓         ↓
+         LOYALTY     P&L       REPORTS
+             │
+             ↓
+         MARKETING
+```
+
+Supporting everything:
+
+```text
+MENU
+INVENTORY
+SUPPLIERS
+BRANCHES
+STAFF
+RESERVATIONS
+INTEGRATIONS
+WEBSITE
+```
+
+---
+
+# 27. WHAT THE OWNER ACTUALLY DOES EVERY DAY
+
+The admin panel should make the owner's daily workflow simple.
+
+### Morning
+
+Check:
+
+* Yesterday's revenue
+* Orders
+* Best sellers
+* Inventory alerts
+* Staff
+* Today's reservations
+
+### During Service
+
+Monitor:
+
+* Live orders
+* Kitchen delays
+* Delivery
+* Tables
+* Payment issues
+* Stock
+
+### Evening
+
+Review:
+
+* Revenue
+* Orders
+* Delivery
+* Table utilization
+* Cash
+* Staff activity
+
+### End of Day
+
+Review:
+
+* Daily sales
+* Payment reconciliation
+* Cash
+* Expenses
+* Inventory movement
+* Operational issues
+
+The owner should **not need to manually operate every transaction**.
+
+The staff performs operations; management supervises and makes decisions.
+
+---
+
+# 28. WHAT THE HOST ACTUALLY DOES
+
+The Host should have a much simpler interface.
+
+Typical workflow:
+
+```text
+Reservations
+↓
+Today's Bookings
+↓
+Guest Arrives
+↓
+Mark Arrived
+↓
+Assign Table
+↓
+Seat Guest
+↓
+Monitor Table
+↓
+Notify Waiter
+```
+
+The host should be able to quickly see:
+
+* Available tables
+* Reserved tables
+* Occupied tables
+* Upcoming reservations
+* Waiting guests
+* Table duration
+
+---
+
+# 29. WHAT MAKES THIS A REAL RMS
+
+The difference between a basic admin dashboard and a genuine **Restaurant Management System** is the connection between modules.
+
+For example:
+
+### Product Sale
+
+```text
+POS
+↓
+Order
+↓
+KDS
+↓
+Inventory
+↓
+Customer
+↓
+Loyalty
+↓
+Finance
+↓
+Analytics
 ```
 
 ### Delivery
 
 ```text
-Ready
+Order
 ↓
-Fleet
+KDS
+↓
+Delivery
 ↓
 Rider
 ↓
 Customer
 ↓
-Delivered
-```
-
-### Business Management
-
-```text
-Customer
+Payment
 ↓
-CRM
-↓
-Loyalty
-↓
-Marketing
+Finance
 ↓
 Analytics
-↓
-Business Insight
 ```
 
----
+### Dine-In
 
-# 52. Final Product Goal
+```text
+Reservation
+↓
+Table
+↓
+POS / QR
+↓
+KDS
+↓
+Payment
+↓
+Table Turnover
+↓
+Customer
+↓
+Analytics
+```
 
-The dashboard must make a restaurant owner understand:
-
-> **This is the central system for running my restaurant's digital and operational workflow.**
-
-It should demonstrate that MhStudio can provide:
-
-* Restaurant website
-* Online ordering
-* POS
-* KDS
-* Dine-in management
-* Table management
-* QR ordering
-* Takeaway
-* Delivery
-* Fleet management
-* Rider app
-* Reservations
-* Menu management
-* Customer CRM
-* Loyalty
-* Promotions
-* Marketing
-* Inventory
-* Supplier management
-* Multi-branch management
-* Analytics
-* AI insights
-* Website/content management
-* Hosting
-* Deployment
-* Maintenance
-* Integrations
-
-The demo should not attempt to make every advanced feature production-complete.
-
-Instead, it should make the **entire operating model believable, connected, understandable, and visually polished**.
-
-The client should be able to click through the dashboard and understand:
-
-> **How an order enters the restaurant, how staff processes it, how the kitchen handles it, how delivery or dine-in fulfillment works, how customer information is retained, and how the owner can use the resulting data to manage and grow the business.**
+That is what makes the platform feel like a **real restaurant operating system rather than a collection of admin pages**.

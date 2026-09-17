@@ -62,7 +62,7 @@ function renderStock(state) {
             <td style="font-weight: 600;">${item.qty} ${item.unit}</td>
             <td>Rs. ${item.cost} / ${item.unit}</td>
             <td><span class="badge ${statusClass}">${statusText}</span></td>
-            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Adjust</button></td>
+            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openStockAdjustModal('${item.id}')">Adjust</button></td>
         `;
         tbody.appendChild(tr);
     });
@@ -87,7 +87,7 @@ function renderRecipes(state) {
             <td>Rs. ${recipe.cost.toLocaleString()}</td>
             <td>Rs. ${recipe.price.toLocaleString()}</td>
             <td style="font-weight: 700; ${fcClass}">${fcPercent}%</td>
-            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Edit Recipe</button></td>
+            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openRecipeEditModal('${recipe.productId}')">Edit Recipe</button></td>
         `;
         tbody.appendChild(tr);
     });
@@ -110,7 +110,7 @@ function renderSuppliers(state) {
             <td style="font-size: 0.85rem; color: var(--clr-text-secondary);">${supplier.lastDelivery}</td>
             <td style="font-size: 0.85rem; font-weight: 500;">${supplier.recentPOs}</td>
             <td><span class="badge ${supplier.status === 'Active' ? 'badge-success' : 'badge-danger'}">${supplier.status}</span></td>
-            <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">View POs</button></td>
+            <td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="openSupplierPOModal('${supplier.id}')">Add PO</button></td>
         `;
         tbody.appendChild(tr);
     });
@@ -136,3 +136,111 @@ function renderWaste(state) {
         tbody.appendChild(tr);
     });
 }
+
+/* ==========================================================================
+   Phase 4: Inventory Management Modals
+   ========================================================================== */
+
+window.openStockAdjustModal = function(itemId) {
+    const item = window.Store.state.inventory.find(i => i.id === itemId);
+    if (!item) return;
+    
+    document.getElementById('generic-modal-title').textContent = `Adjust Stock - ${item.name}`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Current Qty (${item.unit})</label>
+            <input type="text" value="${item.qty}" disabled style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px;">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">New Qty</label>
+            <input type="number" id="adj-qty" value="${item.qty}" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Reason</label>
+            <select id="adj-reason" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+                <option>New Delivery Received</option>
+                <option>Physical Count Correction</option>
+                <option>Waste / Spoilage</option>
+            </select>
+        </div>
+    `;
+    
+    document.getElementById('generic-modal-save').textContent = 'Save Adjustment';
+    document.getElementById('generic-modal-save').onclick = () => {
+        item.qty = parseFloat(document.getElementById('adj-qty').value) || 0;
+        showToast(`Stock adjusted for ${item.name}`, 'success');
+        window.Store.notify();
+        closeGenericModal();
+    };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
+
+window.openRecipeEditModal = function(productId) {
+    const recipe = window.Store.state.recipes.find(r => r.productId === productId);
+    if (!recipe) return;
+    
+    document.getElementById('generic-modal-title').textContent = `Edit Recipe - ${recipe.name}`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Ingredients</label>
+            <textarea id="rec-ingredients" rows="4" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">${recipe.ingredients.join('\n')}</textarea>
+        </div>
+        <div style="display:flex; gap:1rem; margin-bottom: 1rem;">
+            <div style="flex:1;">
+                <label style="font-size: 0.85rem; font-weight: 600;">Cost (Rs.)</label>
+                <input type="number" id="rec-cost" value="${recipe.cost}" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+            </div>
+            <div style="flex:1;">
+                <label style="font-size: 0.85rem; font-weight: 600;">Sale Price (Rs.)</label>
+                <input type="number" id="rec-price" value="${recipe.price}" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+            </div>
+        </div>
+        <div style="font-size:0.85rem; color:var(--clr-info);">Updating this will recalculate Food Cost % dynamically.</div>
+    `;
+    
+    document.getElementById('generic-modal-save').textContent = 'Save Recipe';
+    document.getElementById('generic-modal-save').onclick = () => {
+        recipe.ingredients = document.getElementById('rec-ingredients').value.split('\n').map(s => s.trim()).filter(Boolean);
+        recipe.cost = parseFloat(document.getElementById('rec-cost').value) || 0;
+        recipe.price = parseFloat(document.getElementById('rec-price').value) || 0;
+        
+        // Also update product catalog price
+        const prod = window.Store.state.products.find(p => p.id === productId);
+        if (prod) prod.price = recipe.price;
+        
+        showToast(`Recipe updated for ${recipe.name}`, 'success');
+        window.Store.notify();
+        closeGenericModal();
+    };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
+
+window.openSupplierPOModal = function(supplierId) {
+    const supplier = window.Store.state.suppliers.find(s => s.id === supplierId);
+    if (!supplier) return;
+    
+    document.getElementById('generic-modal-title').textContent = `Create PO - ${supplier.name}`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Items to Order</label>
+            <textarea placeholder="e.g. 50kg Chicken Breast\n200x Burger Buns" rows="3" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);"></textarea>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Expected Delivery Date</label>
+            <input type="date" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Estimated Amount (Rs.)</label>
+            <input type="number" placeholder="0" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+        </div>
+    `;
+    
+    document.getElementById('generic-modal-save').textContent = 'Generate PO';
+    document.getElementById('generic-modal-save').onclick = () => {
+        showToast(`Purchase Order generated and sent to ${supplier.name}`, 'success');
+        supplier.recentPOs = `#PO-${Math.floor(1000 + Math.random() * 9000)}`;
+        window.Store.notify();
+        closeGenericModal();
+    };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};

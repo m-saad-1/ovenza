@@ -22,3 +22,15 @@ img.is-loaded {
 
 
 @media (max-width: 768px) { .nav-right { gap: 0 !important; } .nav-right .mobile-menu-btn { margin-left: 0 !important; } }
+
+/* Dark mode tweaks for About page info cards */
+html.dark-mode .info-details-card,
+html.dark-mode .info-details-card h3,
+html.dark-mode .info-details-card p,
+html.dark-mode .info-details-card li,
+html.dark-mode .info-details-card span,
+html.dark-mode .info-details-card strong,
+html.dark-mode .about-section-title,
+html.dark-mode .about-section-subtitle {
+    color: #ffffff !important;
+}

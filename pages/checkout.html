@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../assets/css/style.bundle.css?v=16">
     <!-- Component Loader -->
     <script defer src="../assets/js/config.js"></script>
-    <script defer src="../assets/js/loader.js?v=11"></script>
+    <script defer src="../assets/js/loader.js?v=8"></script>
 </head>
 <body>
 <div id="page-loader" class="page-loader">
@@ -133,7 +133,10 @@
                                     <textarea id="cust-address" class="checkout-input" placeholder="House/Apartment #, Street, etc." required rows="2" style="resize: none;"></textarea>
                                 </div>
                                 <div style="grid-column: 1 / -1;">
-                                    <label for="cust-city" class="field-label">City / Area</label>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                        <label for="cust-city" class="field-label" style="margin-bottom: 0;">City / Area</label>
+                                        <a href="#" onclick="event.preventDefault(); if(window._tl_openLocationModal) window._tl_openLocationModal();" style="font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; text-decoration: none;">Edit Location</a>
+                                    </div>
                                     <input type="text" id="cust-city" class="checkout-input" placeholder="e.g. DC Colony, Gujranwala" required>
                                 </div>
                                 <div style="grid-column: 1 / -1;">
@@ -194,7 +197,7 @@
     </main>
     <script defer src="../assets/js/menu-data.js"></script>
     <script defer src="../assets/js/search.js"></script>
-    <script defer src="../assets/js/script.bundle.js"></script>
+    <script defer src="../assets/js/script.bundle.js?v=8"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -226,31 +229,81 @@
             }
 
             // Delivery vs Pickup Logic based on header
-            const locType = localStorage.getItem('tl_location_type') || 'delivery';
-            const locName = localStorage.getItem('tl_location_name') || 'Select Location';
-            
-            if (locType === 'outlet') {
-                // Hide address field, set city to outlet name
-                document.getElementById('cust-address').parentElement.style.display = 'none';
-                document.getElementById('cust-address').required = false;
+            function applyCheckoutPageLocationLogic() {
+                const locType = localStorage.getItem('tl_location_type') || 'delivery';
+                const locName = localStorage.getItem('tl_location_name') || 'Select Location';
+                const locArea = localStorage.getItem('tl_location_area');
+                let cityStr = locName;
+                if(locArea) cityStr += ` (${locArea})`;
                 
                 const cityField = document.getElementById('cust-city');
-                cityField.value = locName;
-                cityField.readOnly = true;
-                cityField.parentElement.querySelector('label').textContent = 'Pickup Outlet';
-                
-                // Hide delivery fee row
+                const addrField = document.getElementById('cust-address');
                 const feeRow = document.querySelector('.checkout-summary-box > div:nth-of-type(2)');
-                if (feeRow && feeRow.textContent.includes('Delivery Fee')) {
-                    feeRow.style.display = 'none';
+                
+                if (locType === 'outlet') {
+                    // Hide address field, set city to outlet name
+                    if(addrField) {
+                        addrField.parentElement.style.display = 'none';
+                        addrField.required = false;
+                    }
+                    
+                    if(cityField) {
+                        cityField.value = locName;
+                        cityField.placeholder = 'Selected Pickup Location';
+                        cityField.readOnly = true;
+                        cityField.parentElement.querySelector('label').textContent = 'Pickup At *';
+                    }
+                    
+                    // Hide delivery fee row
+                    if (feeRow && feeRow.textContent.includes('Delivery Fee')) {
+                        feeRow.style.display = 'none';
+                    }
+                    
+                    // Force re-render of totals without delivery fee
+                    if(window.CartManager && window.CartManager.updateUI) {
+                        setTimeout(() => window.CartManager.updateUI(), 50);
+                    }
+                } else {
+                    // Delivery logic
+                    if(addrField) {
+                        addrField.parentElement.style.display = 'block';
+                        addrField.required = true;
+                    }
+                    
+                    if(cityField) {
+                        cityField.value = cityStr;
+                        cityField.readOnly = false;
+                        cityField.parentElement.querySelector('label').textContent = 'City / Area *';
+                    }
+                    
+                    // Show delivery fee row
+                    if (feeRow && feeRow.textContent.includes('Delivery Fee')) {
+                        feeRow.style.display = 'flex';
+                    }
+                    
+                    // Force re-render of totals with delivery fee
+                    if(window.CartManager && window.CartManager.updateUI) {
+                        setTimeout(() => window.CartManager.updateUI(), 50);
+                    }
                 }
-            } else {
-                // Pre-fill city with location string
-                let cityStr = locName;
-                const locArea = localStorage.getItem('tl_location_area');
-                if(locArea) cityStr += ` (${locArea})`;
-                document.getElementById('cust-city').value = cityStr;
+                
+                // Dynamically update payment method text
+                const codRadio = document.querySelector('input[name="payment_method"][value="Cash on Delivery"], input[name="payment_method"][value="Cash at Pickup"]');
+                if (codRadio) {
+                    codRadio.value = locType === 'outlet' ? 'Cash at Pickup' : 'Cash on Delivery';
+                    const codLabel = codRadio.nextElementSibling;
+                    if (codLabel) {
+                        codLabel.textContent = locType === 'outlet' ? 'Cash at Pickup' : 'Cash on Delivery';
+                    }
+                }
             }
+            
+            applyCheckoutPageLocationLogic();
+            
+            // Listen for changes from the top navbar location selector
+            window.addEventListener('tl_location_changed', () => {
+                applyCheckoutPageLocationLogic();
+            });
 
         });
     </script>

@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
         window.Store.notify();
     }, 60000);
 
+    // Listen for cross-tab storage changes (e.g. new orders from customer site)
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'hdm_orders') {
+            if (window.Store && typeof window.Store.refreshLocalOrders === 'function') {
+                window.Store.refreshLocalOrders();
+            }
+        }
+    });
+
     // Desktop Preference Modal Logic
     if (window.innerWidth <= 1024 && !sessionStorage.getItem('desktop_pref_shown')) {
         const prefModal = document.getElementById('desktop-pref-modal');

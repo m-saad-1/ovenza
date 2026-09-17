@@ -270,10 +270,13 @@ function renderPOSCart() {
 
     const subtotal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     const tax = Math.round(subtotal * state.restaurant.taxRate);
-    const total = subtotal + tax;
+    const discount = window.currentPOSDiscount || 0;
+    const total = subtotal + tax - discount;
 
     subtotalEl.textContent = `Rs. ${subtotal.toLocaleString()}`;
     taxEl.textContent = `Rs. ${tax.toLocaleString()}`;
+    const discountEl = document.getElementById('pos-discount');
+    if (discountEl) discountEl.textContent = `Rs. ${discount.toLocaleString()}`;
     totalEl.textContent = `Rs. ${total.toLocaleString()}`;
 }
 
@@ -453,4 +456,170 @@ window.closeKitchenConfirmModal = function() {
 window.confirmSendToKitchen = function() {
     closeKitchenConfirmModal();
     window.submitPOSOrder();
+};
+
+/* ==========================================================================
+   Phase 2: POS Payment/Checkout Flow
+   ========================================================================== */
+window.openPOSPaymentModal = function() {
+    if (posCart.length === 0) {
+        showToast("Cart is empty!", "error");
+        return;
+    }
+    const state = window.Store.state;
+    const subtotal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const tax = Math.round(subtotal * state.restaurant.taxRate);
+    let total = subtotal + tax - (window.currentPOSDiscount || 0);
+    
+    // Delivery fee check
+    if (currentPOSOrderType === 'Delivery') {
+        const zone = document.getElementById('pos-field-zone')?.value;
+        const deliveryFee = zone === 'Zone A' ? 150 : 250;
+        total += deliveryFee;
+    }
+
+    document.getElementById('generic-modal-title').textContent = `Checkout`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="font-size: 1.25rem; font-weight: 700; text-align: center; margin-bottom: 1.5rem; color: var(--clr-primary);">
+            Total Due: ${state.restaurant.currency} ${total.toLocaleString()}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Select Payment Method</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border: 1px solid var(--clr-border); border-radius: 6px; cursor: pointer;">
+                    <input type="radio" name="pos-pay-method" value="Cash" checked onchange="toggleCashInput(true)">
+                    <span>💵 Cash</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border: 1px solid var(--clr-border); border-radius: 6px; cursor: pointer;">
+                    <input type="radio" name="pos-pay-method" value="Card" onchange="toggleCashInput(false)">
+                    <span>💳 Credit/Debit Card</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border: 1px solid var(--clr-border); border-radius: 6px; cursor: pointer;">
+                    <input type="radio" name="pos-pay-method" value="Wallet" onchange="toggleCashInput(false)">
+                    <span>📱 JazzCash/EasyPaisa</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border: 1px solid var(--clr-border); border-radius: 6px; cursor: pointer;">
+                    <input type="radio" name="pos-pay-method" value="Later" onchange="toggleCashInput(false)">
+                    <span>⏳ Pay Later</span>
+                </label>
+            </div>
+        </div>
+        
+        <div id="cash-input-group" style="margin-bottom: 1.5rem;">
+            <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Amount Tendered</label>
+            <input type="number" id="pos-cash-tendered" value="${total}" style="width: 100%; padding: 0.75rem; border: 1px solid var(--clr-border); border-radius: 6px; font-size: 1.1rem; font-weight: 600; background: var(--clr-bg-app); color: var(--clr-text-primary);" oninput="updatePOSChange(${total})">
+            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                <span style="font-size: 0.85rem; color: var(--clr-text-secondary);">Change Due:</span>
+                <strong id="pos-cash-change" style="color: var(--clr-success); font-size: 1.1rem;">${state.restaurant.currency} 0</strong>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('generic-modal-save').textContent = 'Process Payment';
+    document.getElementById('generic-modal-save').onclick = () => { processPOSPayment(total); };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
+
+window.toggleCashInput = function(show) {
+    document.getElementById('cash-input-group').style.display = show ? 'block' : 'none';
+};
+
+window.updatePOSChange = function(total) {
+    const tendered = parseFloat(document.getElementById('pos-cash-tendered').value) || 0;
+    const change = Math.max(0, tendered - total);
+    document.getElementById('pos-cash-change').textContent = `${window.Store.state.restaurant.currency} ${change.toLocaleString()}`;
+};
+
+window.processPOSPayment = function(total) {
+    const methodElement = document.querySelector('input[name="pos-pay-method"]:checked');
+    const method = methodElement ? methodElement.value : 'Cash';
+    
+    // Temporarily attach payment info to window to be used by submitPOSOrder
+    window.currentPOSPaymentMethod = method;
+    window.currentPOSPaymentStatus = method === 'Later' ? 'Unpaid' : 'Paid';
+    
+    // Submit order
+    window.submitPOSOrder();
+    closeGenericModal();
+    
+    // Reset temporary variables
+    window.currentPOSDiscount = 0;
+    window.currentPOSPaymentMethod = null;
+    window.currentPOSPaymentStatus = null;
+    renderPOSCart();
+};
+
+window.openApplyDiscountModal = function() {
+    if (posCart.length === 0) { showToast("Cart is empty!", "error"); return; }
+    
+    document.getElementById('generic-modal-title').textContent = 'Apply Discount';
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="margin-bottom: 1rem;">
+            <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Discount Type</label>
+            <select id="pos-discount-type" style="width: 100%; padding: 0.75rem; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg-app); color: var(--clr-text-primary);">
+                <option value="amount">Fixed Amount (Rs.)</option>
+                <option value="percentage">Percentage (%)</option>
+            </select>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Discount Value</label>
+            <input type="number" id="pos-discount-val" style="width: 100%; padding: 0.75rem; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg-app); color: var(--clr-text-primary);" placeholder="e.g. 500 or 10">
+        </div>
+    `;
+    document.getElementById('generic-modal-save').textContent = 'Apply';
+    document.getElementById('generic-modal-save').onclick = () => { applyPOSDiscount(); };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
+
+window.applyPOSDiscount = function() {
+    const type = document.getElementById('pos-discount-type').value;
+    const val = parseFloat(document.getElementById('pos-discount-val').value) || 0;
+    
+    const subtotal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    let discount = 0;
+    
+    if (type === 'amount') {
+        discount = val;
+    } else {
+        discount = Math.round(subtotal * (val / 100));
+    }
+    
+    if (discount > subtotal) {
+        showToast("Discount cannot exceed subtotal", "error");
+        return;
+    }
+    
+    window.currentPOSDiscount = discount;
+    showToast(`Discount of Rs. ${discount} applied.`, "success");
+    closeGenericModal();
+    renderPOSCart();
+};
+
+window.openSplitBillModalPOS = function() {
+    if (posCart.length === 0) { showToast("Cart is empty!", "error"); return; }
+    const subtotal = posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const tax = Math.round(subtotal * window.Store.state.restaurant.taxRate);
+    const total = subtotal + tax - (window.currentPOSDiscount || 0);
+    
+    // Inject into generic modal
+    document.getElementById('generic-modal-title').textContent = `Split Bill (POS)`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <p style="color:var(--clr-text-secondary); margin-bottom:1rem;">Total: <strong>Rs. ${total.toLocaleString()}</strong></p>
+        <div>
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.5rem;">Split by number of people</label>
+            <input type="number" id="split-count-pos" min="2" max="20" value="2" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:6px; background:var(--clr-bg-app); color:var(--clr-text-primary);" oninput="updateSplitPreviewPOS(${total})">
+        </div>
+        <div id="split-preview-pos" style="margin-top:1rem; padding:1rem; background:var(--clr-bg-app); border-radius:8px; text-align:center; font-size:1.1rem; font-weight:700; color:var(--clr-primary);">
+            Rs. ${Math.round(total / 2).toLocaleString()} per person
+        </div>
+    `;
+    document.getElementById('generic-modal-save').textContent = 'Print Split Bills';
+    document.getElementById('generic-modal-save').onclick = () => { showToast('Split bills printed!', 'success'); closeGenericModal(); };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
+
+window.updateSplitPreviewPOS = function(total) {
+    const count = parseInt(document.getElementById('split-count-pos').value) || 2;
+    document.getElementById('split-preview-pos').textContent = `Rs. ${Math.round(total / count).toLocaleString()} per person`;
 };

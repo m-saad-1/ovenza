@@ -98,6 +98,33 @@ window.openCustomerProfile = function(id) {
     panel.style.display = 'block';
 
     const avgOrder = c.orders > 0 ? Math.round(c.lifetimeSpend / c.orders) : 0;
+    
+    // Generate mock timeline based on lastOrder
+    const timelineHtml = `
+        <div style="margin-top: 1.5rem;">
+            <div style="font-size:0.85rem; color:var(--clr-text-secondary); margin-bottom:1rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Customer Journey</div>
+            <div style="position:relative; padding-left:1rem; border-left:2px solid var(--clr-border);">
+                <!-- Event 1 -->
+                <div style="position:relative; margin-bottom:1rem;">
+                    <div style="position:absolute; left:-1.45rem; top:0.2rem; width:12px; height:12px; border-radius:50%; background:var(--clr-primary); border:2px solid var(--clr-bg-panel);"></div>
+                    <div style="font-size:0.85rem; font-weight:600;">Last Order (${c.lastOrder})</div>
+                    <div style="font-size:0.8rem; color:var(--clr-text-secondary);">Ordered via App - Rs. ${avgOrder}</div>
+                </div>
+                <!-- Event 2 -->
+                <div style="position:relative; margin-bottom:1rem;">
+                    <div style="position:absolute; left:-1.45rem; top:0.2rem; width:12px; height:12px; border-radius:50%; background:var(--clr-success); border:2px solid var(--clr-bg-panel);"></div>
+                    <div style="font-size:0.85rem; font-weight:600;">Feedback Left</div>
+                    <div style="font-size:0.8rem; color:var(--clr-text-secondary);">Rated 5 stars for food quality.</div>
+                </div>
+                <!-- Event 3 -->
+                <div style="position:relative;">
+                    <div style="position:absolute; left:-1.45rem; top:0.2rem; width:12px; height:12px; border-radius:50%; background:var(--clr-text-muted); border:2px solid var(--clr-bg-panel);"></div>
+                    <div style="font-size:0.85rem; font-weight:600;">Account Created</div>
+                    <div style="font-size:0.8rem; color:var(--clr-text-secondary);">Joined Urban Flame Kitchen.</div>
+                </div>
+            </div>
+        </div>
+    `;
 
     content.innerHTML = `
         <div style="text-align:center; margin-bottom:1.5rem;">
@@ -113,7 +140,7 @@ window.openCustomerProfile = function(id) {
             </div>
             <div style="flex:1; background:var(--clr-bg-app); padding:0.75rem; border-radius:8px; text-align:center;">
                 <div style="font-size:0.75rem; color:var(--clr-text-secondary);">Avg Order</div>
-                <div style="font-weight:700; font-size:1.1rem;">${avgOrder}</div>
+                <div style="font-weight:700; font-size:1.1rem;">Rs. ${avgOrder}</div>
             </div>
         </div>
         
@@ -127,11 +154,17 @@ window.openCustomerProfile = function(id) {
             <span class="badge ${c.segment==='VIP'?'badge-success':(c.segment==='At-Risk'?'badge-danger':'badge-info')}">${c.segment}</span>
         </div>
         
+        ${timelineHtml}
+        
         <div style="display:flex; gap:0.5rem; margin-top:2rem;">
             <button class="btn btn-primary" style="flex:1;">Send Offer</button>
-            <button class="btn btn-outline" style="flex:1;">Edit</button>
+            <button class="btn btn-outline" style="flex:1;" onclick="closeCustomerProfile()">Close</button>
         </div>
     `;
+};
+
+window.closeCustomerProfile = function() {
+    document.getElementById('customer-profile-panel').style.display = 'none';
 };
 
 // --- LOYALTY ---
@@ -207,16 +240,78 @@ function renderMarketing(state) {
 }
 
 // --- CAMPAIGN SIMULATION ---
-window.openCampaignModal = function() {
-    openGenericModal('campaign');
+window.publishReview = function(reviewId) {
+    const state = window.Store.state;
+    const review = state.reviews.find(r => r.id === reviewId);
+    if(review) {
+        review.status = 'Published';
+        showToast('Review published to website', 'success');
+        window.Store.notify();
+    }
 };
 
-window.publishReview = function(id) {
-    const state = window.Store.state;
-    const review = state.reviews.find(r => r.id === id);
-    if (review) {
-        review.status = 'Published';
+window.openCampaignModal = function() {
+    document.getElementById('generic-modal-title').textContent = `Create Marketing Campaign`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Campaign Name</label>
+            <input type="text" id="camp-name" placeholder="e.g. Weekend Flash Sale" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+        </div>
+        
+        <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+            <div style="flex:1;">
+                <label style="font-size: 0.85rem; font-weight: 600;">Target Audience</label>
+                <select id="camp-audience" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+                    <option value="All">All Customers</option>
+                    <option value="VIP">VIP Segment</option>
+                    <option value="At-Risk">At-Risk Segment</option>
+                    <option value="New">New Customers</option>
+                </select>
+            </div>
+            <div style="flex:1;">
+                <label style="font-size: 0.85rem; font-weight: 600;">Channel</label>
+                <select id="camp-channel" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+                    <option value="SMS">SMS</option>
+                    <option value="Email">Email</option>
+                    <option value="Push Notification">App Push Notification</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Launch Schedule</label>
+            <input type="datetime-local" id="camp-schedule" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Message / Offer Content</label>
+            <textarea id="camp-content" rows="4" placeholder="Enter your promotional message here..." style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);"></textarea>
+        </div>
+    `;
+    
+    document.getElementById('generic-modal-save').textContent = 'Launch Campaign';
+    document.getElementById('generic-modal-save').onclick = () => {
+        const name = document.getElementById('camp-name').value;
+        const channel = document.getElementById('camp-channel').value;
+        
+        if (!name) {
+            showToast('Please enter a campaign name', 'warning');
+            return;
+        }
+        
+        // Add to state
+        window.Store.state.campaigns.unshift({
+            id: 'c' + Date.now(),
+            name: name,
+            channel: channel,
+            status: 'Scheduled',
+            conversions: 0,
+            revenue: 0
+        });
+        
+        showToast(`Campaign "${name}" scheduled successfully via ${channel}.`, 'success');
         window.Store.notify();
-        showToast("Review published successfully.", "success");
-    }
+        closeGenericModal();
+    };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
 };

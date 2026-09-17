@@ -189,10 +189,136 @@ function renderReservations(state) {
             <td>${r.guests} pax</td>
             <td>Table ${r.tableId}</td>
             <td><span class="badge ${badgeClass}">${r.status}</span></td>
-            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Edit</button></td>
+            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openReservationModal('${r.id}')">Edit</button></td>
         </tr>
     `}).join('');
 }
+
+window.openReservationModal = function(reservationId) {
+    const state = window.Store.state;
+    const res = state.reservations.find(r => r.id === reservationId);
+    if (!res) return;
+    
+    // Find CRM history for this customer
+    const crmCustomer = state.crm ? state.crm.find(c => c.name === res.customer || c.phone === res.phone) : null;
+    let crmHtml = '';
+    if (crmCustomer) {
+        crmHtml = `
+            <div style="margin-bottom: 1rem; padding: 0.75rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 6px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--clr-text-secondary); text-transform:uppercase;">CRM Insights</span>
+                    <span class="badge badge-info" style="font-size:0.7rem;">${crmCustomer.segment}</span>
+                </div>
+                <div style="font-size:0.85rem; display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+                    <div><strong>Total Visits:</strong> ${crmCustomer.orders}</div>
+                    <div><strong>Lifetime Spend:</strong> Rs. ${(crmCustomer.spent || 0).toLocaleString()}</div>
+                    <div style="grid-column: 1 / -1;"><strong>Last Visit:</strong> ${crmCustomer.lastVisit || 'Unknown'}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    document.getElementById('generic-modal-title').textContent = `Manage Reservation`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem;">${res.customer}</div>
+        <div style="font-size: 0.85rem; color: var(--clr-text-secondary); margin-bottom: 1rem;">${res.phone || ''}</div>
+        
+        ${crmHtml}
+        
+        <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+            <div style="flex:1;">
+                <label style="font-size: 0.85rem; font-weight: 600;">Date & Time</label>
+                <input type="text" value="${res.datetime}" disabled style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+            </div>
+            <div style="flex:1;">
+                <label style="font-size: 0.85rem; font-weight: 600;">Guests</label>
+                <input type="number" value="${res.guests}" disabled style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Table Assignment</label>
+            <select id="res-table-select" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+                <option value="${res.tableId}">Table ${res.tableId} (Current)</option>
+                ${state.tables.filter(t => t.id !== res.tableId && t.status !== 'Occupied').map(t => `<option value="${t.id}">Table ${t.id} (${t.capacity} pax)</option>`).join('')}
+            </select>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Status</label>
+            <select id="res-status-select" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+                <option value="Confirmed" ${res.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                <option value="Seated" ${res.status === 'Seated' ? 'selected' : ''}>Seated</option>
+                <option value="No-show" ${res.status === 'No-show' ? 'selected' : ''}>No-show</option>
+                <option value="Cancelled" ${res.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+        </div>
+    `;
+    
+    document.getElementById('generic-modal-save').textContent = 'Save Changes';
+    document.getElementById('generic-modal-save').onclick = () => {
+        res.tableId = document.getElementById('res-table-select').value;
+        const newStatus = document.getElementById('res-status-select').value;
+        res.status = newStatus;
+        
+        if (newStatus === 'Seated') {
+            const table = state.tables.find(t => t.id === res.tableId);
+            if (table) {
+                table.status = 'Occupied';
+                table.customer = res.customer;
+                table.amount = 'Rs. 0';
+            }
+        }
+        
+        showToast(`Reservation for ${res.customer} updated.`, 'success');
+        window.Store.notify();
+        closeGenericModal();
+    };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
+
+window.openTableTransferModal = function(currentTableId) {
+    const state = window.Store.state;
+    const currentTable = state.tables.find(t => t.id === currentTableId);
+    if (!currentTable) return;
+    
+    const availableTables = state.tables.filter(t => t.id !== currentTableId && t.status !== 'Occupied');
+    
+    document.getElementById('generic-modal-title').textContent = `Transfer Table ${currentTable.id}`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div style="margin-bottom: 1rem; color: var(--clr-text-secondary); font-size: 0.9rem;">
+            Transferring <strong>${currentTable.customer || 'Guests'}</strong> from Table ${currentTable.id} (Current Bill: ${currentTable.amount || 'Rs. 0'})
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Select Destination Table</label>
+            <select id="transfer-table-select" style="width: 100%; padding: 0.5rem; background: var(--clr-bg-app); border: 1px solid var(--clr-border); border-radius: 4px; color: var(--clr-text-primary);">
+                ${availableTables.map(t => `<option value="${t.id}">Table ${t.id} (${t.capacity} pax) - ${t.status}</option>`).join('')}
+            </select>
+        </div>
+    `;
+    
+    document.getElementById('generic-modal-save').textContent = 'Transfer';
+    document.getElementById('generic-modal-save').onclick = () => {
+        const destId = document.getElementById('transfer-table-select').value;
+        const destTable = state.tables.find(t => t.id === destId);
+        if (destTable) {
+            // Move data
+            destTable.status = 'Occupied';
+            destTable.customer = currentTable.customer;
+            destTable.amount = currentTable.amount;
+            
+            // Clear current
+            currentTable.status = 'Cleaning';
+            currentTable.customer = null;
+            currentTable.amount = null;
+            
+            showToast(`Table ${currentTable.id} transferred to Table ${destId}.`, 'success');
+            window.Store.notify();
+            closeGenericModal();
+        }
+    };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
 
 // --- TABLES ---
 function renderTables(state) {
@@ -383,6 +509,9 @@ window.simulateTableAction = function(tableId, action) {
         table.customer = null;
         table.time = null;
         showToast(`Reservation cancelled for Table ${tableId}.`, "success");
+    } else if (action === 'Transfer') {
+        openTableTransferModal(tableId);
+        return; // Modal handles the state update and UI refresh
     } else {
         showToast(`Simulated: ${action} for Table ${tableId}`, "info");
     }

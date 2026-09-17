@@ -89,9 +89,16 @@ Search the entire codebase for:
 
 
 * When there is just one location, dont show the branch selection bar in the Dashboard.
+
 * Change the demo map to the actual map of the location.
 
-* Verify Home, about, Reservation, dashboard, footer for location. 
+Verify location, email adn contact in:
+* Home page
+* about page
+* Reservation page
+* dashboard
+* footer etc. 
+Just keep locations that are provided, no duplication, no missing anywhere. 
 
 
 ### 7. Update Dashboard

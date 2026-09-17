@@ -74,7 +74,17 @@ const Store = {
         orders: (function() {
             const now = new Date();
             const getTimeAgo = (mins) => new Date(now.getTime() - mins * 60000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            return [
+            
+            // Try loading from admin persistence first
+            try {
+                const adminStored = localStorage.getItem("crust_admin_orders");
+                if (adminStored) {
+                    return JSON.parse(adminStored);
+                }
+            } catch(e) { console.error("Error parsing crust_admin_orders", e); }
+            
+            // Fallback to demo orders if no persistence exists
+            const demoOrders = [
                 { id: "10482", customer: "Ahmed Khan", type: "Delivery", source: "Website", branchId: "b1", total: 2350, payment: "Paid", status: "Preparing", kitchenStatus: "Preparing", time: getTimeAgo(25), notes: "Extra spicy, no mayo please.", items: [
                     { id: "p11", name: "Tower Burger", qty: 2, variant: "Large, Extra Cheese" },
                     { id: "p26", name: "Cheese Fries", qty: 1, variant: "Regular" },
@@ -92,6 +102,8 @@ const Store = {
                     { id: "p15", name: "Crown crust Pizza", qty: 1, variant: "Medium, Extra Cheese" }
                 ]}
             ];
+            
+            return demoOrders;
         })(),
         customers: [
             { id: "u1", name: "Ahmed Khan", phone: "+92 03001013556", orders: 24, lifetimeSpend: 48500, lastOrder: "2 days ago" },
@@ -184,31 +196,134 @@ const Store = {
     },
 
     notify() {
+        this.saveAdminOrders();
         this.listeners.forEach(listener => listener(this.state));
     },
+    
+    saveAdminOrders() {
+        try {
+            localStorage.setItem("crust_admin_orders", JSON.stringify(this.state.orders));
+        } catch (e) {
+            console.error("Error saving admin orders", e);
+        }
+    },
 
-    // Example action
+    // Status transition order — used to prevent backwards transitions
+    _statusOrder: ["New", "Accepted", "Sent for Preparing", "Preparing", "Ready", "Out for Delivery", "Completed", "Delivered", "Cancelled"],
+
     updateOrderStatus(orderId, newStatus) {
         const order = this.state.orders.find(o => o.id === orderId);
-        if (order) {
-            order.status = newStatus;
-            this.notify();
+        if (!order) return;
+
+        // Guard: prevent backwards transitions (Cancelled is always allowed)
+        if (newStatus !== 'Cancelled') {
+            const currentIdx = this._statusOrder.indexOf(order.status);
+            const newIdx = this._statusOrder.indexOf(newStatus);
+            if (newIdx < currentIdx) {
+                console.warn(`Blocked backwards status transition: ${order.status} → ${newStatus}`);
+                return;
+            }
         }
+
+        order.status = newStatus;
+
+        // Record per-step timestamp
+        if (!order.statusTimestamps) order.statusTimestamps = {};
+        order.statusTimestamps[newStatus] = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        if (order._isLocal) {
+            try {
+                let localOrders = JSON.parse(localStorage.getItem("hdm_orders")) || [];
+                const localOrder = localOrders.find(o => o.id.toString() === orderId.toString());
+                if (localOrder) {
+                    localOrder.status = newStatus;
+                    if (!localOrder.statusTimestamps) localOrder.statusTimestamps = {};
+                    localOrder.statusTimestamps[newStatus] = order.statusTimestamps[newStatus];
+                    localStorage.setItem("hdm_orders", JSON.stringify(localOrders));
+                }
+            } catch(e) {}
+        }
+        this.notify();
     },
     
     updateKitchenStatus(orderId, newKitchenStatus) {
         const order = this.state.orders.find(o => o.id === orderId);
-        if (order) {
-            order.kitchenStatus = newKitchenStatus;
-            if (newKitchenStatus === 'Preparing') order.status = 'Preparing';
-            if (newKitchenStatus === 'Ready') order.status = 'Ready';
-            this.notify();
+        if (!order) return;
+        order.kitchenStatus = newKitchenStatus;
+        const newOrderStatus = newKitchenStatus === 'Preparing' ? 'Preparing' : newKitchenStatus === 'Ready' ? 'Ready' : null;
+        if (newOrderStatus) {
+            order.status = newOrderStatus;
+            if (!order.statusTimestamps) order.statusTimestamps = {};
+            order.statusTimestamps[newOrderStatus] = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
         }
+        if (order._isLocal) {
+            try {
+                let localOrders = JSON.parse(localStorage.getItem("hdm_orders")) || [];
+                const localOrder = localOrders.find(o => o.id.toString() === orderId.toString());
+                if (localOrder) {
+                    localOrder.status = order.status;
+                    if (newOrderStatus) {
+                        if (!localOrder.statusTimestamps) localOrder.statusTimestamps = {};
+                        localOrder.statusTimestamps[newOrderStatus] = order.statusTimestamps[newOrderStatus];
+                    }
+                    localStorage.setItem("hdm_orders", JSON.stringify(localOrders));
+                }
+            } catch(e) {}
+        }
+        this.notify();
     },
     
     setBranch(branchName) {
         this.state.currentBranch = branchName;
         this.notify();
+    },
+    
+    refreshLocalOrders() {
+        try {
+            const stored = localStorage.getItem("hdm_orders");
+            if (stored) {
+                let localOrders = JSON.parse(stored).map(o => ({
+                    id: o.id.toString(),
+                    customer: o.customer ? o.customer.name : "Walk-in",
+                    type: o.type || "Delivery",
+                    source: "Website",
+                    branchId: "b1",
+                    total: o.total || 0,
+                    payment: (o.paymentMethod === "Cash on Delivery" || o.paymentMethod === "Cash at Pickup") ? "Unpaid" : "Paid",
+                    status: o.status === "Pending" ? "New" : o.status,
+                    kitchenStatus: o.status === "Pending" ? "New" : o.status,
+                    time: o.date ? o.date.split(" ")[1] || o.date : new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                    notes: o.customer ? o.customer.notes : "",
+                    address: o.customer ? o.customer.address : "",
+                    items: (o.items || []).map(i => ({
+                        id: i.id || "p0",
+                        name: i.title || i.name,
+                        qty: i.qty || 1,
+                        price: (i.basePrice || 0) + (i.addonsTotal || 0),
+                        variant: [i.size, ...(i.extras || [])].filter(Boolean).join(', ') || "",
+                        image: i.image || ''
+                    })),
+                    statusTimestamps: o.statusTimestamps || {},
+                    _isLocal: true
+                }));
+                
+                let addedNew = false;
+                const existingIds = new Set(this.state.orders.map(o => o.id));
+                
+                localOrders.forEach(lo => {
+                    if (!existingIds.has(lo.id)) {
+                        this.state.orders.unshift(lo);
+                        addedNew = true;
+                    }
+                });
+                
+                if (addedNew) {
+                    this.notify();
+                }
+            }
+        } catch (e) {
+            console.error("Error refreshing hdm_orders", e);
+        }
     }
 };
 

@@ -13,6 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
             renderKDSBoard(window.Store.state);
         });
     });
+
+    const stationFilter = document.getElementById('kds-station-filter');
+    if (stationFilter) {
+        stationFilter.addEventListener('change', () => {
+            renderKDSBoard(window.Store.state);
+        });
+    }
 });
 
 function renderKDSBoard(state) {
@@ -69,9 +76,26 @@ function renderKDSBoard(state) {
         if (kStatus === 'Completed' && !colCompleted) return;
 
         let itemsHtml = '';
+        let hasVisibleItems = false;
         if (order.items && order.items.length > 0) {
             itemsHtml = order.items.map(i => {
                 const product = state.products ? state.products.find(p => p.id === i.id) : null;
+                
+                // Station Filtering
+                let matchesFilter = true;
+                const filterVal = document.getElementById('kds-station-filter')?.value || 'all';
+                if (filterVal !== 'all' && product) {
+                    matchesFilter = false;
+                    if (product.categoryId === 'c1') matchesFilter = true; // Combos show everywhere
+                    if (filterVal === 'hot' && ['c2', 'c3', 'c4', 'c5'].includes(product.categoryId)) matchesFilter = true;
+                    if (filterVal === 'cold' && ['c7', 'c8'].includes(product.categoryId)) matchesFilter = true;
+                    if (filterVal === 'grill' && product.categoryId === 'c2') matchesFilter = true;
+                    if (filterVal === 'drinks' && product.categoryId === 'c6') matchesFilter = true;
+                }
+                
+                if (!matchesFilter) return '';
+                hasVisibleItems = true;
+
                 const imgHtml = (product && product.image) 
                     ? `<img src="${product.image}" alt="${i.name}" style="width: 28px; height: 28px; border-radius: 4px; object-fit: cover;">` 
                     : `<div style="width: 28px; height: 28px; border-radius: 4px; background: var(--clr-bg-app); display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>`;
@@ -88,7 +112,17 @@ function renderKDSBoard(state) {
                 </div>`;
             }).join('');
         } else {
+            hasVisibleItems = true;
             itemsHtml = `<div style="font-size:0.85rem; padding-bottom: 0.35rem; border-bottom: 1px dashed var(--clr-border);">1x Custom Order Items</div>`;
+        }
+        
+        // Hide entire order if no items match the current station filter
+        if (!hasVisibleItems) {
+            if (kStatus === 'New') newCount--;
+            else if (kStatus === 'Preparing') prepCount--;
+            else if (kStatus === 'Ready') readyCount--;
+            else if (kStatus === 'Completed') compCount--;
+            return;
         }
 
         const typeColor = order.type === 'Dine-in' ? 'var(--clr-info)' : (order.type === 'Delivery' ? 'var(--clr-primary)' : 'var(--clr-warning)');
@@ -112,7 +146,13 @@ function renderKDSBoard(state) {
         }
         
         const elapsed = Math.floor((Date.now() - orderDate) / 60000) || 1; 
-        const urgencyStyle = elapsed >= 10 && kStatus !== 'Completed' ? 'border-color: var(--clr-danger); background: rgba(239,68,68,0.04);' : elapsed >= 5 && kStatus !== 'Completed' ? 'border-color: var(--clr-warning); background: rgba(245,158,11,0.04);' : '';
+        const isCritical = elapsed >= 10 && kStatus !== 'Completed';
+        const urgencyStyle = isCritical ? 'border-color: var(--clr-danger); background: rgba(239,68,68,0.04);' : elapsed >= 5 && kStatus !== 'Completed' ? 'border-color: var(--clr-warning); background: rgba(245,158,11,0.04);' : '';
+        
+        // CRM Lookup for VIP status
+        const crmCustomer = state.crm ? state.crm.find(c => c.name === order.customer || c.phone === order.phone) : null;
+        const isVIP = crmCustomer && crmCustomer.segment === 'VIP';
+        const priorityBadge = isVIP ? `<span style="font-size: 0.75rem; font-weight: 700; color: #8b5cf6; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(139, 92, 246, 0.15); padding: 0.2rem 0.5rem; border-radius: 4px;">VIP</span>` : (isCritical ? `<span style="font-size: 0.75rem; font-weight: 700; color: var(--clr-danger); text-transform: uppercase; letter-spacing: 0.5px; background: var(--clr-danger-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">URGENT</span>` : '');
 
         card.className = `kds-card ${statusClass}`;
         card.setAttribute('style', urgencyStyle);
@@ -122,10 +162,13 @@ function renderKDSBoard(state) {
                     <h3 style="margin: 0; font-size: 1.3rem; font-weight: 800; color: var(--clr-text-primary);">#${order.id}</h3>
                     <div style="display: flex; gap: 0.5rem; align-items: center;">
                         <span style="font-size: 0.75rem; font-weight: 700; color: ${typeColor}; text-transform: uppercase; letter-spacing: 0.5px; background: ${typeColor}15; padding: 0.2rem 0.5rem; border-radius: 4px;">${order.type}</span>
-                        <span style="font-size: 0.75rem; color: var(--clr-text-secondary); font-weight: 600;">${order.time}</span>
+                        ${priorityBadge}
                     </div>
                 </div>
-                <span style="font-size:0.75rem; color:${elapsed>=10?'var(--clr-danger)':elapsed>=5?'var(--clr-warning)':'var(--clr-text-primary)'}; font-weight:600; padding:0.2rem 0.4rem; border-radius:4px; ${elapsed>=10?'background:var(--clr-danger-bg);':elapsed>=5?'background:rgba(245,158,11,0.1);':''}">${elapsed} min</span>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem;">
+                    <span style="font-size:0.75rem; color:${elapsed>=10?'var(--clr-danger)':elapsed>=5?'var(--clr-warning)':'var(--clr-text-primary)'}; font-weight:600; padding:0.2rem 0.4rem; border-radius:4px; ${elapsed>=10?'background:var(--clr-danger-bg);':elapsed>=5?'background:rgba(245,158,11,0.1);':''}">${elapsed} min</span>
+                    <span style="font-size: 0.7rem; color: var(--clr-text-secondary); font-weight: 600;">${order.time}</span>
+                </div>
             </div>
             
             <div style="font-size: 0.85rem; color: var(--clr-text-secondary); font-weight: 500; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--clr-border);">

@@ -63,7 +63,12 @@ window.renderFullOrdersTable = function() {
     if (statusFilter !== 'All') filtered = filtered.filter(o => o.status === statusFilter);
     if (typeFilter !== 'All') filtered = filtered.filter(o => o.type === typeFilter);
     if (sourceFilter !== 'All') filtered = filtered.filter(o => o.source === sourceFilter);
-    if (window._orderTypeFilter !== 'All') filtered = filtered.filter(o => o.type === window._orderTypeFilter);
+    if (window._orderTypeFilter === 'Cancelled') {
+        filtered = filtered.filter(o => o.status === 'Cancelled');
+    } else {
+        filtered = filtered.filter(o => o.status !== 'Cancelled');
+        if (window._orderTypeFilter !== 'All') filtered = filtered.filter(o => o.type === window._orderTypeFilter);
+    }
     if (searchFilter) {
         filtered = filtered.filter(o => 
             o.id.toLowerCase().includes(searchFilter) || 
@@ -199,10 +204,17 @@ window.openOrderDrawer = function(orderId) {
             </div>
         </div>
         
-        ${order.type === 'Delivery' && order.address ? `
+        ${order.type === 'Delivery' ? `
         <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--clr-bg-app); border-radius: 8px;">
             <p style="margin: 0 0 0.5rem 0; color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;">Delivery Details</p>
-            <p style="margin: 0; font-size: 0.9rem;">${order.address} (${order.zone})</p>
+            <p style="margin: 0; font-size: 0.9rem;">${order.customer?.address || order.address || 'No Address Provided'} (${order.customer?.city || order.zone || ''})</p>
+        </div>` : ''}
+        
+        ${order.type === 'Pickup' ? `
+        <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--clr-bg-app); border-radius: 8px;">
+            <p style="margin: 0 0 0.5rem 0; color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;">Pickup Details</p>
+            <p style="margin: 0 0 0.3rem 0; font-size: 0.9rem;">Pickup At: ${order.customer?.city || order.city || 'Selected Outlet'}</p>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--clr-primary); font-weight: 600;">Time: ${order.pickupTime ? (order.pickupTime === 'ASAP' ? 'ASAP (~20 mins)' : 'Scheduled for ' + (function(t){if(!t.includes(':'))return t;const[h,m]=t.split(':');const hi=parseInt(h);return (hi%12||12)+':'+m+' '+(hi>=12?'PM':'AM')})(order.pickupTime)) : 'ASAP (~20 mins)'}</p>
         </div>` : ''}
         
         ${order.type === 'Dine-in' && order.tableId ? `
@@ -289,94 +301,263 @@ window.openOrderDetailModal = function(orderId) {
         <span class="badge" style="background:${statusColor}20; color:${statusColor}; padding:0.2rem 0.6rem;">${order.status}</span>
     `;
     
+    // CRM Lookup
+    const crmCustomer = state.crm ? state.crm.find(c => c.name === order.customer || c.phone === order.phone) : null;
+    
     let subtotal = 0;
     const itemsHtml = (order.items || []).map(item => {
-        const product = state.products.find(p => p.id === item.id) || { price: 0, image: '../assets/images/placeholder.avif' };
-        const price = item.price || product.price;
+        const product = state.products.find(p => p.id === item.id) || {};
+        const price = item.price || product.price || 0;
         const qty = item.qty || item.quantity || 1;
-        const total = price * qty;
-        subtotal += total;
+        const itemTotal = price * qty;
+        subtotal += itemTotal;
+        const imgSrc = item.image || product.image || '../assets/images/placeholder.avif';
         return `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--clr-border);">
             <div style="display:flex; gap:1rem; align-items:center;">
-                <img src="${product.image}" alt="${item.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px; background:var(--clr-border);">
+                <img src="${imgSrc}" alt="${item.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px; background:var(--clr-border);">
                 <div>
                     <div style="font-weight:600; font-size:0.95rem;">${item.name}</div>
-                    ${item.variant ? '<div style="font-size:0.8rem; color:var(--clr-text-secondary); margin-top:0.15rem;">'+item.variant+'</div>' : ''}
+                    ${item.variant ? `<div style="font-size:0.8rem; color:var(--clr-text-secondary); margin-top:0.15rem;">${item.variant}</div>` : ''}
                     <div style="font-size:0.8rem; color:var(--clr-text-muted); margin-top:0.15rem;">${qty}x @ Rs. ${price.toLocaleString()}</div>
                 </div>
             </div>
-            <div style="font-weight:600; font-size:0.95rem;">Rs. ${total.toLocaleString()}</div>
+            <div style="font-weight:600; font-size:0.95rem;">Rs. ${itemTotal.toLocaleString()}</div>
         </div>
         `;
     }).join('');
     
-    // Fallback if total wasn't calculated correctly from items
     if (subtotal === 0 && order.total) subtotal = order.total;
-    const tax = Math.round(subtotal * 0.16 / 1.16);
-    const deliveryFee = order.type === 'Delivery' ? 150 : 0;
-    const grandTotal = subtotal + deliveryFee;
+    const taxRate = 0.16;
+    const taxIncluded = Math.round(subtotal * taxRate / (1 + taxRate));
+    const discount = order.discount || 0;
+    const deliveryFee = order._isLocal ? (order.deliveryFee || 0) : (order.type === 'Delivery' ? 150 : 0);
+    const serviceCharge = order.serviceCharge || 0;
+    const grandTotal = order._isLocal ? order.total : (subtotal + deliveryFee);
+    
+    // Payment method badge
+    const payMethod = order.paymentMethod || order.payment || 'N/A';
+    const payStatus = order.paymentStatus || order.payment || 'Pending';
+    const payBadge = (payStatus === 'Paid' || payStatus === 'Completed') ? 'badge-success' : payStatus === 'Refunded' ? 'badge-info' : 'badge-warning';
     
     document.getElementById('order-detail-body').innerHTML = `
+        <!-- Customer + CRM Row -->
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
             <div class="card" style="padding:1rem;">
                 <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Customer</div>
                 <div style="font-weight:600;">${order.customer || 'Walk-in'}</div>
-                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">${order.customer !== 'Walk-in' ? '+92 03001013556' : ''}</div>
+                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">${order.phone || ''}</div>
+                ${order.email ? `<div style="font-size:0.8rem; color:var(--clr-text-secondary);">${order.email}</div>` : ''}
+                ${crmCustomer ? `
+                <div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--clr-border);">
+                    <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.4rem;">Customer History</div>
+                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <div style="background:var(--clr-bg-app); border-radius:6px; padding:0.3rem 0.6rem; text-align:center;">
+                            <div style="font-size:0.7rem; color:var(--clr-text-secondary);">Total Orders</div>
+                            <div style="font-weight:700; font-size:0.9rem;">${crmCustomer.orders}</div>
+                        </div>
+                        <div style="background:var(--clr-bg-app); border-radius:6px; padding:0.3rem 0.6rem; text-align:center;">
+                            <div style="font-size:0.7rem; color:var(--clr-text-secondary);">Lifetime Spend</div>
+                            <div style="font-weight:700; font-size:0.9rem;">Rs. ${crmCustomer.lifetimeSpend.toLocaleString()}</div>
+                        </div>
+                        <div style="background:var(--clr-bg-app); border-radius:6px; padding:0.3rem 0.6rem; text-align:center;">
+                            <div style="font-size:0.7rem; color:var(--clr-text-secondary);">Points</div>
+                            <div style="font-weight:700; font-size:0.9rem; color:var(--clr-warning);">★ ${crmCustomer.points || 0}</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:0.4rem; font-size:0.78rem; color:var(--clr-text-muted);">Segment: <strong>${crmCustomer.segment}</strong> · ${crmCustomer.tier} Tier · Last: ${crmCustomer.lastOrder}</div>
+                </div>` : ''}
             </div>
             <div class="card" style="padding:1rem;">
                 <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Fulfillment</div>
                 <div style="font-weight:600;">${order.type}</div>
-                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">${order.type === 'Dine-in' ? ('Table ' + (order.table || order.tableId || 'T-01')) : order.type === 'Delivery' ? (order.address || '') : 'Ready for pickup'}</div>
+                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">
+                    ${order.type === 'Dine-in' ? `Table ${order.table || order.tableId || 'T-01'} · ${order.guests || 'N/A'} Guests` : 
+                      order.type === 'Pickup' ? ('Pickup At: ' + (order.customer?.city || order.city || 'Selected Outlet')) : 
+                      (order.customer?.address || order.address || 'Address not provided')}
+                </div>
+                ${order.zone ? `<div style="font-size:0.8rem; color:var(--clr-text-secondary); margin-top:0.25rem;">Zone: ${order.zone}</div>` : ''}
+                ${order.rider ? `<div style="font-size:0.8rem; color:var(--clr-info); margin-top:0.25rem;">🏍 Rider: ${order.rider}</div>` : ''}
+                <div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--clr-border);">
+                    <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.4rem;">Payment</div>
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <span class="badge ${payBadge}">${payStatus}</span>
+                        <span style="font-size:0.85rem; color:var(--clr-text-secondary);">${payMethod !== payStatus ? payMethod : ''}</span>
+                    </div>
+                </div>
             </div>
         </div>
+        
+        <!-- Items -->
         <div style="margin-bottom:1.5rem;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Items</div>
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Items (${(order.items || []).length})</div>
             ${itemsHtml || '<p style="color:var(--clr-text-muted);">No items</p>'}
         </div>
-        <div style="background:var(--clr-bg-app); border-radius:8px; padding:1rem;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Subtotal (incl. tax)</span><span>Rs. ${subtotal.toLocaleString()}</span></div>
-            ${deliveryFee ? '<div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Delivery Fee</span><span>Rs. '+deliveryFee+'</span></div>' : ''}
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Tax (16%) included</span><span>Rs. ${tax.toLocaleString()}</span></div>
-            <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; border-top:1px solid var(--clr-border); padding-top:0.75rem;"><span>Total</span><span style="color:var(--clr-primary);">Rs. ${grandTotal.toLocaleString()}</span></div>
+        
+        <!-- Pricing Breakdown -->
+        <div style="background:var(--clr-bg-app); border-radius:8px; padding:1rem; margin-bottom:1.5rem;">
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Pricing Breakdown</div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Subtotal</span><span>Rs. ${subtotal.toLocaleString()}</span></div>
+            ${discount > 0 ? `<div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Discount</span><span style="color:var(--clr-success);">-Rs. ${discount.toLocaleString()}</span></div>` : ''}
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Tax (16% incl.)</span><span>Rs. ${taxIncluded.toLocaleString()}</span></div>
+            ${deliveryFee > 0 ? `<div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Delivery Fee</span><span>Rs. ${deliveryFee.toLocaleString()}</span></div>` : ''}
+            ${serviceCharge > 0 ? `<div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Service Charge</span><span>Rs. ${serviceCharge.toLocaleString()}</span></div>` : ''}
+            <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; border-top:1px solid var(--clr-border); padding-top:0.75rem; margin-top:0.5rem;"><span>Total</span><span style="color:var(--clr-primary);">Rs. ${grandTotal.toLocaleString()}</span></div>
         </div>
-        <div style="margin-top:1.25rem; padding:0.75rem; background:var(--clr-bg-app); border-radius:8px;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Order Timeline</div>
-            <div style="font-size:0.85rem; color:var(--clr-text-secondary); line-height:1.8;">
-                <div>✓ Order placed — ${order.time}</div>
-                ${!['New'].includes(order.status) ? '<div>✓ Accepted</div>' : ''}
-                ${!['New','Accepted'].includes(order.status) ? '<div>✓ Sent for Preparing</div>' : ''}
-                ${['Ready','Dispatched','Out for Delivery','Completed','Delivered'].includes(order.status) ? '<div>✓ Ready</div>' : ''}
-                ${['Dispatched','Out for Delivery','Completed','Delivered'].includes(order.status) ? '<div>✓ Dispatched</div>' : ''}
-                ${['Completed','Delivered'].includes(order.status) ? '<div>✓ Completed</div>' : ''}
+        
+        <!-- Order Timeline -->
+        <div style="padding:0.75rem; background:var(--clr-bg-app); border-radius:8px;">
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Order Timeline</div>
+            <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                ${buildOrderTimeline(order)}
             </div>
         </div>
+        ${order.notes ? `<div style="margin-top:1rem; padding:0.75rem; background:rgba(245,158,11,0.08); border-radius:8px; border-left:3px solid var(--clr-warning);"><span style="font-size:0.85rem; font-weight:600;">📌 Note: </span><span style="font-size:0.85rem;">${order.notes}</span></div>` : ''}
     `;
     
-    // Build action buttons according to strict workflow
+    // Build action buttons
     const actions = [];
     if (order.status === 'New') {
         actions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); closeOrderDetailModal(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
     } else if (order.status === 'Accepted') {
         actions.push(`<button class="btn btn-warning" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); closeOrderDetailModal(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
-    } else if (order.status === 'Sent for Preparing' || order.status === 'Preparing') {
-        // Kitchen is handling it. Only show print bill or cancel.
     } else if (order.status === 'Ready') {
         if (order.type === 'Delivery') {
              actions.push(`<button class="btn btn-info" onclick="closeOrderDetailModal(); openDispatchModal('${order.id}')">Dispatch</button>`);
         } else {
              actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Complete Order</button>`);
         }
-    } else if (order.status === 'Dispatched' || order.status === 'Out for Delivery') {
+    } else if (order.status === 'Out for Delivery') {
         actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Mark Delivered / Complete</button>`);
     }
     
-    actions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">Print Bill</button>`);
+    actions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
+    if (order.type !== 'Delivery') {
+        actions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
+    }
+    if (['Completed','Delivered'].includes(order.status)) {
+        actions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info);" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
+    }
     if (!['Completed','Delivered','Cancelled'].includes(order.status)) {
         actions.push(`<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger);" onclick="window.Store.updateOrderStatus('${order.id}','Cancelled'); closeOrderDetailModal();">Cancel Order</button>`);
     }
     
     document.getElementById('order-detail-actions').innerHTML = actions.join('');
+};
+
+// Build timeline HTML helper
+function buildOrderTimeline(order) {
+    const steps = [
+        { key: 'New', label: 'Order Received' },
+        { key: 'Accepted', label: 'Confirmed' },
+        { key: 'Sent for Preparing', label: 'Sent to Kitchen' },
+        { key: 'Preparing', label: 'Preparing' },
+        { key: 'Ready', label: 'Ready' },
+        { key: 'Out for Delivery', label: 'Out for Delivery' },
+        { key: 'Completed', label: 'Delivered / Completed' },
+        { key: 'Cancelled', label: 'Cancelled' },
+        { key: 'Refunded', label: 'Refunded' }
+    ];
+    
+    const statusOrder = ['New','Accepted','Sent for Preparing','Preparing','Ready','Out for Delivery','Completed','Delivered'];
+    const currentIdx = statusOrder.indexOf(order.status);
+    
+    return steps.map((step) => {
+        const ts = order.statusTimestamps && order.statusTimestamps[step.key];
+        const isFirst = step.key === 'New';
+        const isDone = ts || isFirst || statusOrder.indexOf(step.key) <= currentIdx;
+        const isCancelled = step.key === 'Cancelled' && order.status === 'Cancelled';
+        const isRefunded = step.key === 'Refunded' && order.status === 'Refunded';
+        
+        if (!isDone && !isCancelled && !isRefunded) return '';
+        if (order.status !== 'Cancelled' && step.key === 'Cancelled') return '';
+        if (order.status !== 'Refunded' && step.key === 'Refunded') return '';
+        
+        const time = ts || (isFirst ? order.time : '');
+        const color = isCancelled ? 'var(--clr-danger)' : isRefunded ? 'var(--clr-info)' : 'var(--clr-success)';
+        
+        return `
+        <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.85rem;">
+            ${time ? `<div style="font-weight:600; color:var(--clr-text-secondary); min-width:60px;">${time}</div>` : '<div style="min-width:60px;"></div>'}
+            <div style="width:8px; height:8px; border-radius:50%; background:${color}; flex-shrink:0;"></div>
+            <div style="flex:1;">
+                <div style="font-weight:600; color:var(--clr-text-primary);">${step.label}</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// Split Bill Modal
+window.openSplitBillModal = function(orderId) {
+    const state = window.Store.state;
+    const order = state.orders.find(o => o.id === orderId || o.id === parseInt(orderId));
+    if (!order) return;
+    
+    const totalAmount = order.total || 0;
+    
+    // Inject into generic modal
+    document.getElementById('generic-modal-title').textContent = `Split Bill — Order #${order.id}`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <p style="color:var(--clr-text-secondary); margin-bottom:1rem;">Total: <strong>Rs. ${totalAmount.toLocaleString()}</strong></p>
+        <div>
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.5rem;">Split by number of people</label>
+            <input type="number" id="split-count" min="2" max="20" value="2" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:6px; background:var(--clr-bg-app); color:var(--clr-text-primary);" oninput="updateSplitPreview(${totalAmount})">
+        </div>
+        <div id="split-preview" style="margin-top:1rem; padding:1rem; background:var(--clr-bg-app); border-radius:8px; text-align:center; font-size:1.1rem; font-weight:700; color:var(--clr-primary);">
+            Rs. ${Math.round(totalAmount / 2).toLocaleString()} per person
+        </div>
+    `;
+    document.getElementById('generic-modal-save').textContent = 'Print Split Bills';
+    document.getElementById('generic-modal-save').onclick = () => { showToast('Split bills printed!', 'success'); closeGenericModal(); };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
+};
+
+window.updateSplitPreview = function(total) {
+    const count = parseInt(document.getElementById('split-count').value) || 2;
+    document.getElementById('split-preview').textContent = `Rs. ${Math.round(total / count).toLocaleString()} per person`;
+};
+
+// Refund Modal
+window.openRefundModal = function(orderId) {
+    const state = window.Store.state;
+    const order = state.orders.find(o => o.id === orderId || o.id === parseInt(orderId));
+    if (!order) return;
+    
+    document.getElementById('generic-modal-title').textContent = `Process Refund — Order #${order.id}`;
+    document.getElementById('generic-modal-body').innerHTML = `
+        <div>
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.5rem;">Refund Amount</label>
+            <input type="number" id="refund-amount" value="${order.total}" max="${order.total}" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:6px; background:var(--clr-bg-app); color:var(--clr-text-primary);">
+        </div>
+        <div>
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.5rem;">Reason</label>
+            <select id="refund-reason" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:6px; background:var(--clr-bg-app); color:var(--clr-text-primary);">
+                <option>Customer complaint</option>
+                <option>Wrong order delivered</option>
+                <option>Order never arrived</option>
+                <option>Food quality issue</option>
+                <option>Duplicate charge</option>
+                <option>Other</option>
+            </select>
+        </div>
+        <div>
+            <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:0.5rem;">Refund Method</label>
+            <select id="refund-method" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:6px; background:var(--clr-bg-app); color:var(--clr-text-primary);">
+                <option>Original payment method</option>
+                <option>Cash</option>
+                <option>Loyalty Points</option>
+                <option>Store Credit</option>
+            </select>
+        </div>
+    `;
+    document.getElementById('generic-modal-save').textContent = 'Process Refund';
+    document.getElementById('generic-modal-save').onclick = () => {
+        const reason = document.getElementById('refund-reason').value;
+        window.Store.updateOrderStatus(orderId, 'Refunded');
+        showToast(`Refund processed for Order #${orderId} — ${reason}`, 'success');
+        closeGenericModal();
+    };
+    document.getElementById('generic-modal-overlay').style.display = 'flex';
 };
 
 window.closeOrderDetailModal = function() {
@@ -395,15 +576,28 @@ window.openDispatchModal = function(orderId) {
     document.getElementById('dispatch-title').textContent = 'Dispatch Order #' + order.id;
     
     const riders = state.riders.filter(r => r.status === 'Online');
-    const riderOptions = riders.map(r => `<option value="${r.id}">${r.name} (${r.activeDeliveries} active)</option>`).join('');
+    const riderOptions = riders.map(r => `<option value="${r.name}">${r.name} (${r.activeDeliveries} active)</option>`).join('');
+    
+    const isUnpaid = order.payment === 'Unpaid' || order.paymentStatus === 'Unpaid' || order.paymentMethod === 'Cash on Delivery' || order.paymentMethod === 'Cash at Pickup';
     
     document.getElementById('dispatch-body').innerHTML = `
-        <div style="margin-bottom:1.5rem; padding:1rem; background:var(--clr-bg-app); border-radius:8px;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Delivery Address</div>
-            <div style="font-weight:600;">${order.customer}</div>
-            <div style="font-size:0.9rem;">${order.address || 'Address not provided'}</div>
-            ${order.zone ? '<div style="font-size:0.8rem; color:var(--clr-text-secondary); margin-top:0.25rem;">Zone: '+order.zone+'</div>' : ''}
-            ${order.notes ? '<div style="font-size:0.8rem; color:var(--clr-warning); margin-top:0.5rem;">Note: '+order.notes+'</div>' : ''}
+        <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
+            <!-- Map Placeholder -->
+            <div style="flex:1; background:var(--clr-bg-app); border-radius:8px; display:flex; flex-direction:column; overflow:hidden;">
+                <div style="flex:1; background:#e5e7eb; display:flex; align-items:center; justify-content:center; position:relative; min-height:120px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="position:absolute; top:20px; left:30px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2" style="position:absolute; bottom:30px; right:40px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <div style="font-weight:600; color:#6b7280; font-size:0.85rem;">Google Maps Route (ETA: 15 mins)</div>
+                </div>
+            </div>
+            
+            <div style="flex:1; padding:1rem; background:var(--clr-bg-app); border-radius:8px; display:flex; flex-direction:column; justify-content:center;">
+                <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Delivery Address</div>
+                <div style="font-weight:600;">${order.customer}</div>
+                <div style="font-size:0.9rem;">${order.address || 'Address not provided'}</div>
+                ${order.zone ? '<div style="font-size:0.8rem; color:var(--clr-text-secondary); margin-top:0.25rem;">Zone: '+order.zone+'</div>' : ''}
+                ${order.notes ? '<div style="font-size:0.8rem; color:var(--clr-warning); margin-top:0.5rem;">Note: '+order.notes+'</div>' : ''}
+            </div>
         </div>
         
         <div style="margin-bottom:1rem;">
@@ -413,6 +607,22 @@ window.openDispatchModal = function(orderId) {
                 ${riderOptions}
             </select>
         </div>
+        
+        ${isUnpaid ? `
+        <div style="margin-bottom:1rem; padding:0.75rem; background:var(--clr-danger-bg); border-left:3px solid var(--clr-danger); border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <strong style="color:var(--clr-danger); font-size:0.85rem; display:block;">${order.paymentMethod === 'Cash at Pickup' ? 'Cash at Pickup' : 'Cash on Delivery'}</strong>
+                <span style="font-size:0.75rem; color:var(--clr-text-primary);">${order.paymentMethod === 'Cash at Pickup' ? 'Staff must collect cash.' : 'Rider must collect cash.'}</span>
+            </div>
+            <strong style="font-size:1.1rem; color:var(--clr-danger);">Rs. ${(order.total || 0).toLocaleString()}</strong>
+        </div>` : `
+        <div style="margin-bottom:1rem; padding:0.75rem; background:var(--clr-success-bg); border-left:3px solid var(--clr-success); border-radius:4px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <strong style="color:var(--clr-success); font-size:0.85rem; display:block;">Pre-paid Order</strong>
+                <span style="font-size:0.75rem; color:var(--clr-text-primary);">Do not collect cash.</span>
+            </div>
+        </div>
+        `}
     `;
     
     document.getElementById('dispatch-actions').innerHTML = `
@@ -433,7 +643,7 @@ window.confirmDispatch = function(orderId) {
         return;
     }
     
-    window.Store.updateOrderStatus(orderId, 'Dispatched');
+    window.Store.updateOrderStatus(orderId, 'Out for Delivery');
     closeDispatchModal();
-    showNotification('Order Dispatched', 'Order #' + orderId + ' has been assigned to ' + riderSelect.options[riderSelect.selectedIndex].text.split(' (')[0], 'success');
+    showNotification('Order Dispatched', 'Order #' + orderId + ' is Out for Delivery by ' + riderSelect.options[riderSelect.selectedIndex].text.split(' (')[0], 'success');
 };
