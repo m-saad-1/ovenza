@@ -168,6 +168,16 @@ window.renderFullOrdersTable = function() {
                     d.setDate(d.getDate() - 1); // roll back one day if time is in the future
                 }
                 orderDate = d.getTime();
+            } else {
+                let parts24 = order.time.match(/^(\d{1,2}):(\d{2})$/);
+                if (parts24) {
+                    let hours = parseInt(parts24[1], 10);
+                    let minutes = parseInt(parts24[2], 10);
+                    let d = new Date();
+                    d.setHours(hours, minutes, 0, 0);
+                    if (d.getTime() > Date.now() + 60000) d.setDate(d.getDate() - 1);
+                    orderDate = d.getTime();
+                }
             }
         }
         
@@ -344,7 +354,21 @@ window.openOrderDrawer = function(orderId) {
             actions.push(`<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger);" onclick="window.Store.updateOrderStatus('${order.id}','Cancelled'); closeOrderDetailModal();">Cancel Order</button>`);
         }
     }
-    document.getElementById('order-detail-actions').innerHTML = actions.join('');
+    
+    let actionsContainer = document.getElementById('drawer-actions') || document.getElementById('order-detail-actions');
+    if (actionsContainer) {
+        actionsContainer.innerHTML = actions.join('');
+    }
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const orderDrawer = document.getElementById('order-drawer');
+    if (drawerOverlay && orderDrawer) {
+        drawerOverlay.classList.add('active');
+        orderDrawer.classList.add('active');
+    } else {
+        const orderDetailModal = document.getElementById('order-detail-modal');
+        if (orderDetailModal) orderDetailModal.classList.add('active');
+    }
+    
 };
 
 // Build timeline HTML helper
