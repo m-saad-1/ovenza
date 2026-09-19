@@ -8,12 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.Store.subscribe((state) => {
         updateKPIs(state);
         renderRecentOrders(state);
+        if (typeof renderSimpleRecentOrders === 'function') renderSimpleRecentOrders(state);
         if (typeof updateChannelChartData === 'function') updateChannelChartData(state);
     });
 
     // Initial render
     updateKPIs(window.Store.state);
     renderRecentOrders(window.Store.state);
+    if (typeof renderSimpleRecentOrders === 'function') renderSimpleRecentOrders(window.Store.state);
     setTimeout(() => { if (typeof updateChannelChartData === 'function') updateChannelChartData(window.Store.state); }, 100);
 });
 
@@ -53,6 +55,81 @@ function updateKPIs(state) {
     document.getElementById('kpi-pending').textContent = pendingCount;
     document.getElementById('kpi-active-deliveries').textContent = activeDeliveries;
     document.getElementById('kpi-new-customers').textContent = newCustomers;
+
+    // Simple Dashboard KPIs
+    const elSimpleNew = document.getElementById('simple-kpi-new');
+    if (elSimpleNew) elSimpleNew.textContent = targetOrders.filter(o => o.status === 'New').length;
+    
+    const elSimplePreparing = document.getElementById('simple-kpi-preparing');
+    if (elSimplePreparing) elSimplePreparing.textContent = targetOrders.filter(o => o.status === 'Preparing').length;
+    
+    const elSimpleOut = document.getElementById('simple-kpi-out');
+    if (elSimpleOut) elSimpleOut.textContent = activeDeliveries;
+    
+    const elSimpleSales = document.getElementById('simple-kpi-sales');
+    if (elSimpleSales) elSimpleSales.textContent = state.restaurant.currency + " " + revenue.toLocaleString();
+}
+
+function renderSimpleRecentOrders(state) {
+    const tbody = document.getElementById('simple-recent-orders-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    let targetOrders = state.orders;
+    if (state.currentBranch && state.currentBranch !== "All Branches") {
+        const branch = state.branches.find(b => b.name === state.currentBranch);
+        if (branch) targetOrders = state.orders.filter(o => o.branchId === branch.id);
+    }
+    const sorted = typeof window.sortDashboardOrders === 'function' ? window.sortDashboardOrders(targetOrders) : targetOrders.slice().reverse();
+    const recent = sorted.slice(0, 10);
+    if (recent.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--clr-text-muted);">No recent orders available.</td></tr>';
+        return;
+    }
+    
+    recent.forEach(order => {
+        const tr = document.createElement('tr');
+        let statusClass = 'badge-info';
+        if (order.status === 'Completed' || order.status === 'Delivered') statusClass = 'badge-success';
+        if (order.status === 'Cancelled' || order.status === 'Refunded') statusClass = 'badge-danger';
+        if (order.status === 'Preparing') statusClass = 'badge-warning';
+
+        let typeBadge = 'badge-info';
+        if (order.type === 'Pickup' || order.type === 'Takeaway') typeBadge = 'badge-warning';
+        if (order.type === 'Dine-in') typeBadge = 'badge-success';
+        
+        let timeDisplay = '';
+        if (order._elapsed !== undefined && !['Completed', 'Delivered', 'Cancelled', 'Refunded'].includes(order.status)) {
+             let color = order._elapsed >= 30 ? 'var(--clr-danger)' : order._elapsed >= 15 ? 'var(--clr-warning)' : 'var(--clr-text-secondary)';
+             timeDisplay = `<div style="font-size: 0.75rem; color: ${color}; font-weight: 600;">${order.time} (${order._elapsed} min ago)</div>`;
+        } else {
+             timeDisplay = `<div style="font-size: 0.75rem; color: var(--clr-text-secondary);">${order.time || ''}</div>`;
+        }
+        
+        let itemsCount = 1;
+        if (order.items && order.items.length > 0) {
+            itemsCount = order.items.reduce((sum, item) => sum + (item.qty || 1), 0);
+        }
+
+        tr.innerHTML = `
+            <td>
+                #${order.id}
+                ${timeDisplay}
+            </td>
+            <td>${order.customer}</td>
+            <td><span class="badge ${typeBadge}">${order.type}</span></td>
+            <td>${itemsCount} items</td>
+            <td>${state.restaurant.currency} ${order.total.toLocaleString()}</td>
+            <td><span class="badge ${statusClass}">${order.status}</span></td>
+        `;
+        tr.style.cursor = 'pointer';
+        tr.onclick = () => {
+            if (typeof openOrderDetailModal === 'function') {
+                openOrderDetailModal(order.id);
+            }
+        };
+        tbody.appendChild(tr);
+    });
 }
 
 function renderRecentOrders(state) {
@@ -260,3 +337,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (darkModeToggle) darkModeToggle.checked = true;
     }
 });
+
+
+

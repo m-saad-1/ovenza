@@ -9,6 +9,56 @@ window.filterOrdersByType = function(type, btn) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+
+window.sortDashboardOrders = function(ordersList) {
+    const getElapsed = (order) => {
+        let orderDate = Date.now();
+        if (order.time && typeof order.time === 'string') {
+            let parts = order.time.match(/(\d+):(\d+)\s+(AM|PM)/i);
+            if (parts) {
+                let hours = parseInt(parts[1], 10);
+                let minutes = parseInt(parts[2], 10);
+                let modifier = parts[3].toUpperCase();
+                if (hours === 12) hours = 0;
+                if (modifier === 'PM') hours += 12;
+                let d = new Date();
+                d.setHours(hours, minutes, 0, 0);
+                if (d.getTime() > Date.now() + 60000) d.setDate(d.getDate() - 1);
+                orderDate = d.getTime();
+            }
+        }
+        return Math.floor((Date.now() - orderDate) / 60000) || 1;
+    };
+
+    const weight = (o) => {
+        const isCompleted = (o.status === 'Completed' || o.status === 'Delivered' || o.status === 'Refunded');
+        const isCancelled = (o.status === 'Cancelled');
+        
+        if (isCancelled) return 5;
+        if (isCompleted) return 4;
+        
+        const el = getElapsed(o);
+        // Priority 1: Elapsed too much time (e.g. >= 15 min)
+        if (el >= 15) return 1;
+        // Priority 2: Recent Delivery and Pickup
+        if (o.type && (o.type.toLowerCase() === 'delivery' || o.type.toLowerCase() === 'pickup' || o.type.toLowerCase() === 'takeaway')) return 2;
+        // Priority 3: Other Active (e.g. Dine-in)
+        return 3;
+    };
+
+    return ordersList.slice().sort((a, b) => {
+        const wA = weight(a);
+        const wB = weight(b);
+        if (wA !== wB) return wA - wB;
+        
+        const elA = getElapsed(a);
+        const elB = getElapsed(b);
+        // For priority 1 (elapsed too much), sort descending elapsed time (oldest first). 
+        // For others, sort ascending elapsed time (newest first).
+        return wA === 1 ? elB - elA : elA - elB;
+    });
+};
+
     window.Store.subscribe((state) => {
         if(document.getElementById('view-orders').classList.contains('active')){
             renderFullOrdersTable();
@@ -81,7 +131,7 @@ window.renderFullOrdersTable = function() {
         return;
     }
 
-    filtered.slice().reverse().forEach(order => {
+    window.sortDashboardOrders(filtered).forEach(order => {
         const card = document.createElement('div');
         card.className = 'card order-card';
         let statusClass = 'badge-info';
@@ -127,17 +177,6 @@ window.renderFullOrdersTable = function() {
 
         
         let actionBtn = '<button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="openOrderDetailModal(\'' + order.id + '\')">View Details</button>';
-        
-        if (document.body.classList.contains('simple-mode')) {
-            if (order.status === 'New') {
-                actionBtn = '<button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="event.stopPropagation(); window.Store.updateOrderStatus(\'' + order.id + '\', \'Preparing\')">Accept - Preparing</button>';
-            } else if (order.status === 'Preparing') {
-                actionBtn = '<button class="btn btn-warning" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="event.stopPropagation(); window.Store.updateOrderStatus(\'' + order.id + '\', \'Out for Delivery\')">Dispatched</button>';
-            } else if (order.status === 'Out for Delivery') {
-                actionBtn = '<button class="btn btn-success" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="event.stopPropagation(); window.Store.updateOrderStatus(\'' + order.id + '\', \'Delivered\')">Delivered</button>';
-            }
-            // Customer history by default in modal is handled in the modal logic.
-        }
 
         card.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -263,199 +302,41 @@ window.openOrderDrawer = function(orderId) {
 
     // Actions based on status
     let actions = '';
-    if (order.status === 'New') {
-        actions = `<button class="btn btn-warning" style="flex:1;" onclick="updateOrderStatus('${order.id}', 'Preparing')">Send to Kitchen</button>`;
-    } else if (order.status === 'Preparing') {
-        actions = `<button class="btn btn-success" style="flex:1;" onclick="updateOrderStatus('${order.id}', 'Ready')">Mark Ready</button>`;
-    } else if (order.status === 'Ready') {
-        if(order.type === 'Delivery') {
-             actions = `<button class="btn btn-info" style="flex:1;" onclick="updateOrderStatus('${order.id}', 'Out for Delivery')">Dispatch</button>`;
-        } else {
-             actions = `<button class="btn btn-success" style="flex:1;" onclick="updateOrderStatus('${order.id}', 'Completed')">Complete Order</button>`;
+    if (document.body.classList.contains('simple-mode')) {
+        if (order.status === 'New') {
+            actions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); closeOrderDetailModal();">Accept - Preparing</button>`);
+        } else if (order.status === 'Preparing') {
+            actions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); closeOrderDetailModal();">Dispatched</button>`);
+        } else if (order.status === 'Out for Delivery') {
+            actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); closeOrderDetailModal();">Delivered</button>`);
         }
-    } else if (order.status === 'Out for Delivery') {
-        actions = `<button class="btn btn-success" style="flex:1;" onclick="updateOrderStatus('${order.id}', 'Completed')">Complete Order</button>`;
     } else {
-         actions = `<button class="btn btn-outline" style="flex:1;" onclick="closeDrawer()">Close</button>`;
-    }
-
-    document.getElementById('drawer-actions').innerHTML = actions;
-
-    document.getElementById('drawer-overlay').classList.add('active');
-    document.getElementById('order-drawer').classList.add('open');
-    document.body.style.overflow = 'hidden';
-};
-
-window.updateOrderStatus = function(id, status) {
-    window.Store.updateOrderStatus(id, status);
-    closeDrawer();
-    showToast(`Order #${id} marked as ${status}`, 'success');
-};
-
-window.closeDrawer = function() {
-    document.getElementById('drawer-overlay').classList.remove('active');
-    document.getElementById('order-drawer').classList.remove('open');
-    document.body.style.overflow = '';
-};
-
-window.openOrderDetailModal = function(orderId) {
-    const state = window.Store.state;
-    const order = state.orders.find(o => o.id === parseInt(orderId) || o.id === orderId);
-    if (!order) return;
-    document.getElementById('order-detail-modal').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    document.getElementById('order-detail-title').textContent = 'Order #' + order.id;
-    
-    const typeColor = order.type === 'Delivery' ? 'var(--clr-primary)' : order.type === 'Dine-in' ? '#8b5cf6' : 'var(--clr-warning)';
-    const statusColor = order.status === 'Completed' ? 'var(--clr-success)' : order.status === 'Cancelled' ? 'var(--clr-danger)' : ['Preparing','Sent'].includes(order.status) ? 'var(--clr-warning)' : 'var(--clr-info)';
-    document.getElementById('order-detail-badges').innerHTML = `
-        <span class="badge" style="background:${typeColor}20; color:${typeColor}; padding:0.2rem 0.6rem;">${order.type}</span>
-        <span class="badge" style="background:var(--clr-bg-app); color:var(--clr-text-secondary); padding:0.2rem 0.6rem;">${order.source || 'POS'}</span>
-        <span class="badge" style="background:${statusColor}20; color:${statusColor}; padding:0.2rem 0.6rem;">${order.status}</span>
-    `;
-    
-    // CRM Lookup
-    const crmCustomer = state.crm ? state.crm.find(c => c.name === order.customer || c.phone === order.phone) : null;
-    
-    let subtotal = 0;
-    const itemsHtml = (order.items || []).map(item => {
-        const product = state.products.find(p => p.id === item.id) || {};
-        const price = item.price || product.price || 0;
-        const qty = item.qty || item.quantity || 1;
-        const itemTotal = price * qty;
-        subtotal += itemTotal;
-        const imgSrc = item.image || product.image || '../assets/images/placeholder.avif';
-        return `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 0; border-bottom:1px solid var(--clr-border);">
-            <div style="display:flex; gap:1rem; align-items:center;">
-                <img src="${imgSrc}" alt="${item.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px; background:var(--clr-border);">
-                <div>
-                    <div style="font-weight:600; font-size:0.95rem;">${item.name}</div>
-                    ${item.variant ? `<div style="font-size:0.8rem; color:var(--clr-text-secondary); margin-top:0.15rem;">${item.variant}</div>` : ''}
-                    <div style="font-size:0.8rem; color:var(--clr-text-muted); margin-top:0.15rem;">${qty}x @ Rs. ${price.toLocaleString()}</div>
-                </div>
-            </div>
-            <div style="font-weight:600; font-size:0.95rem;">Rs. ${itemTotal.toLocaleString()}</div>
-        </div>
-        `;
-    }).join('');
-    
-    if (subtotal === 0 && order.total) subtotal = order.total;
-    const taxRate = 0.16;
-    const taxIncluded = Math.round(subtotal * taxRate / (1 + taxRate));
-    const discount = order.discount || 0;
-    const deliveryFee = order._isLocal ? (order.deliveryFee || 0) : (order.type === 'Delivery' ? 150 : 0);
-    const serviceCharge = order.serviceCharge || 0;
-    const grandTotal = order._isLocal ? order.total : (subtotal + deliveryFee);
-    
-    // Payment method badge
-    const payMethod = order.paymentMethod || order.payment || 'N/A';
-    const payStatus = order.paymentStatus || order.payment || 'Pending';
-    const payBadge = (payStatus === 'Paid' || payStatus === 'Completed') ? 'badge-success' : payStatus === 'Refunded' ? 'badge-info' : 'badge-warning';
-    
-    document.getElementById('order-detail-body').innerHTML = `
-        <!-- Customer + CRM Row -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
-            <div class="card" style="padding:1rem;">
-                <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Customer</div>
-                <div style="font-weight:600;">${order.customer || 'Walk-in'}</div>
-                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">${order.phone || ''}</div>
-                ${order.email ? `<div style="font-size:0.8rem; color:var(--clr-text-secondary);">${order.email}</div>` : ''}
-                ${crmCustomer ? `
-                <div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--clr-border);">
-                    <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.4rem;">Customer History</div>
-                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-                        <div style="background:var(--clr-bg-app); border-radius:6px; padding:0.3rem 0.6rem; text-align:center;">
-                            <div style="font-size:0.7rem; color:var(--clr-text-secondary);">Total Orders</div>
-                            <div style="font-weight:700; font-size:0.9rem;">${crmCustomer.orders}</div>
-                        </div>
-                        <div style="background:var(--clr-bg-app); border-radius:6px; padding:0.3rem 0.6rem; text-align:center;">
-                            <div style="font-size:0.7rem; color:var(--clr-text-secondary);">Lifetime Spend</div>
-                            <div style="font-weight:700; font-size:0.9rem;">Rs. ${crmCustomer.lifetimeSpend.toLocaleString()}</div>
-                        </div>
-                        <div style="background:var(--clr-bg-app); border-radius:6px; padding:0.3rem 0.6rem; text-align:center;">
-                            <div style="font-size:0.7rem; color:var(--clr-text-secondary);">Points</div>
-                            <div style="font-weight:700; font-size:0.9rem; color:var(--clr-warning);">★ ${crmCustomer.points || 0}</div>
-                        </div>
-                    </div>
-                    <div style="margin-top:0.4rem; font-size:0.78rem; color:var(--clr-text-muted);">Segment: <strong>${crmCustomer.segment}</strong> · ${crmCustomer.tier} Tier · Last: ${crmCustomer.lastOrder}</div>
-                </div>` : ''}
-            </div>
-            <div class="card" style="padding:1rem;">
-                <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.5rem;">Fulfillment</div>
-                <div style="font-weight:600;">${order.type}</div>
-                <div style="font-size:0.85rem; color:var(--clr-text-secondary);">
-                    ${order.type === 'Dine-in' ? `Table ${order.table || order.tableId || 'T-01'} · ${order.guests || 'N/A'} Guests` : 
-                      order.type === 'Pickup' ? ('Pickup At: ' + (order.customer?.city || order.city || 'Selected Outlet')) : 
-                      (order.customer?.address || order.address || 'Address not provided')}
-                </div>
-                ${order.zone ? `<div style="font-size:0.8rem; color:var(--clr-text-secondary); margin-top:0.25rem;">Zone: ${order.zone}</div>` : ''}
-                ${order.rider ? `<div style="font-size:0.8rem; color:var(--clr-info); margin-top:0.25rem;">🏍 Rider: ${order.rider}</div>` : ''}
-                <div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--clr-border);">
-                    <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.4rem;">Payment</div>
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                        <span class="badge ${payBadge}">${payStatus}</span>
-                        <span style="font-size:0.85rem; color:var(--clr-text-secondary);">${payMethod !== payStatus ? payMethod : ''}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Items -->
-        <div style="margin-bottom:1.5rem;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Items (${(order.items || []).length})</div>
-            ${itemsHtml || '<p style="color:var(--clr-text-muted);">No items</p>'}
-        </div>
-        
-        <!-- Pricing Breakdown -->
-        <div style="background:var(--clr-bg-app); border-radius:8px; padding:1rem; margin-bottom:1.5rem;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Pricing Breakdown</div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Subtotal</span><span>Rs. ${subtotal.toLocaleString()}</span></div>
-            ${discount > 0 ? `<div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Discount</span><span style="color:var(--clr-success);">-Rs. ${discount.toLocaleString()}</span></div>` : ''}
-            <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Tax (16% incl.)</span><span>Rs. ${taxIncluded.toLocaleString()}</span></div>
-            ${deliveryFee > 0 ? `<div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Delivery Fee</span><span>Rs. ${deliveryFee.toLocaleString()}</span></div>` : ''}
-            ${serviceCharge > 0 ? `<div style="display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.9rem;"><span style="color:var(--clr-text-secondary);">Service Charge</span><span>Rs. ${serviceCharge.toLocaleString()}</span></div>` : ''}
-            <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; border-top:1px solid var(--clr-border); padding-top:0.75rem; margin-top:0.5rem;"><span>Total</span><span style="color:var(--clr-primary);">Rs. ${grandTotal.toLocaleString()}</span></div>
-        </div>
-        
-        <!-- Order Timeline -->
-        <div style="padding:0.75rem; background:var(--clr-bg-app); border-radius:8px;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--clr-text-secondary); margin-bottom:0.75rem;">Order Timeline</div>
-            <div style="display:flex; flex-direction:column; gap:0.5rem;">
-                ${buildOrderTimeline(order)}
-            </div>
-        </div>
-        ${order.notes ? `<div style="margin-top:1rem; padding:0.75rem; background:rgba(245,158,11,0.08); border-radius:8px; border-left:3px solid var(--clr-warning);"><span style="font-size:0.85rem; font-weight:600;">📌 Note: </span><span style="font-size:0.85rem;">${order.notes}</span></div>` : ''}
-    `;
-    
-    // Build action buttons
-    const actions = [];
-    if (order.status === 'New') {
-        actions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); closeOrderDetailModal(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
-    } else if (order.status === 'Accepted') {
-        actions.push(`<button class="btn btn-warning" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); closeOrderDetailModal(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
-    } else if (order.status === 'Ready') {
-        if (order.type === 'Delivery') {
-             actions.push(`<button class="btn btn-info" onclick="closeOrderDetailModal(); openDispatchModal('${order.id}')">Dispatch</button>`);
-        } else {
-             actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Complete Order</button>`);
+        // Advanced actions
+        if (order.status === 'New') {
+            actions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); closeOrderDetailModal(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
+        } else if (order.status === 'Accepted') {
+            actions.push(`<button class="btn btn-warning" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); closeOrderDetailModal(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
+        } else if (order.status === 'Ready') {
+            if (order.type === 'Delivery') {
+                 actions.push(`<button class="btn btn-info" onclick="closeOrderDetailModal(); openDispatchModal('${order.id}')">Dispatch</button>`);
+            } else {
+                 actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Complete Order</button>`);
+            }
+        } else if (order.status === 'Out for Delivery') {
+            actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Mark Delivered / Complete</button>`);
         }
-    } else if (order.status === 'Out for Delivery') {
-        actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Mark Delivered / Complete</button>`);
+        
+        actions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
+        if (order.type !== 'Delivery') {
+            actions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
+        }
+        if (['Completed','Delivered'].includes(order.status)) {
+            actions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info);" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
+        }
+        if (!['Completed','Delivered','Cancelled'].includes(order.status)) {
+            actions.push(`<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger);" onclick="window.Store.updateOrderStatus('${order.id}','Cancelled'); closeOrderDetailModal();">Cancel Order</button>`);
+        }
     }
-    
-    actions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
-    if (order.type !== 'Delivery') {
-        actions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
-    }
-    if (['Completed','Delivered'].includes(order.status)) {
-        actions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info);" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
-    }
-    if (!['Completed','Delivered','Cancelled'].includes(order.status)) {
-        actions.push(`<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger);" onclick="window.Store.updateOrderStatus('${order.id}','Cancelled'); closeOrderDetailModal();">Cancel Order</button>`);
-    }
-    
     document.getElementById('order-detail-actions').innerHTML = actions.join('');
 };
 

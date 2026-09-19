@@ -285,7 +285,7 @@ const Store = {
                 let localOrders = JSON.parse(stored).map(o => ({
                     id: o.id.toString(),
                     customer: o.customer ? o.customer.name : "Walk-in",
-                    type: o.type || "Delivery",
+                    type: (o.type ? (o.type.charAt(0).toUpperCase() + o.type.slice(1).toLowerCase()) : "Delivery"),
                     source: "Website",
                     branchId: "b1",
                     total: o.total || 0,
