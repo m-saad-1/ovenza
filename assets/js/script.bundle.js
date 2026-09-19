@@ -913,9 +913,9 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         let html = '';
         
         orders.forEach(order => {
-            let STAGES = ["Accepted", "Sent for Preparing", "Preparing", "Ready", "Out for Delivery", "Delivered"];
-            if (order.type === 'Pickup') {
-                STAGES = ["Accepted", "Sent for Preparing", "Preparing", "Ready", "Delivered"];
+            let STAGES = ["Confirmed", "Preparing", "Out for Delivery", "Delivered"];
+            if (order.type === 'Pickup' || order.type === 'Takeaway') {
+                STAGES = ["Confirmed", "Preparing", "Ready", "Delivered"];
             }
             if (order.status === 'Cancelled') {
                 STAGES = ["Accepted", "Cancelled"];
@@ -925,8 +925,8 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
 
             let currentStatusIndex = STAGES.indexOf(order.status);
             if (currentStatusIndex === -1) {
-                if (order.status === 'New') {
-                    currentStatusIndex = 0;
+                if (order.status === 'New' || order.status === 'Accepted') {
+                    currentStatusIndex = STAGES.indexOf('Confirmed') !== -1 ? STAGES.indexOf('Confirmed') : 0;
                 } else if (order.status === 'Picked Up') {
                     currentStatusIndex = STAGES.indexOf('Delivered');
                 } else {

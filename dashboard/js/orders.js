@@ -170,13 +170,16 @@ window.renderFullOrdersTable = function() {
                 orderDate = d.getTime();
             }
         }
+        
         const elapsed = Math.floor((Date.now() - orderDate) / 60000) || 1;
+        order._elapsed = elapsed; // Save for dashboard
+    
         const urgencyStyle = elapsed >= 10 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-danger); background: rgba(239,68,68,0.04);' : elapsed >= 5 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-warning); background: rgba(245,158,11,0.04);' : '';
         
         card.setAttribute('style', `display: flex; flex-direction: column; gap: 1rem; ${urgencyStyle}`);
 
         
-        let actionBtn = '<button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="openOrderDetailModal(\'' + order.id + '\')">View Details</button>';
+        let actionBtn = '<button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="window.openOrderDrawer(\'' + order.id + '\')">View Details</button>';
 
         card.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -301,14 +304,18 @@ window.openOrderDrawer = function(orderId) {
     document.getElementById('drawer-content').innerHTML = content;
 
     // Actions based on status
-    let actions = '';
+    let actions = [];
     if (document.body.classList.contains('simple-mode')) {
         if (order.status === 'New') {
-            actions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); closeOrderDetailModal();">Accept - Preparing</button>`);
+            actions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Accept - Preparing</button>`);
         } else if (order.status === 'Preparing') {
-            actions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); closeOrderDetailModal();">Dispatched</button>`);
-        } else if (order.status === 'Out for Delivery') {
-            actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); closeOrderDetailModal();">Delivered</button>`);
+            if (order.type === 'Pickup' || order.type === 'Takeaway') {
+                actions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Ready</button>`);
+            } else {
+                actions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); window.closeOrderDrawer();">Dispatched</button>`);
+            }
+        } else if (order.status === 'Out for Delivery' || order.status === 'Ready') {
+            actions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}</button>`);
         }
     } else {
         // Advanced actions
@@ -542,3 +549,7 @@ window.confirmDispatch = function(orderId) {
     closeDispatchModal();
     showNotification('Order Dispatched', 'Order #' + orderId + ' is Out for Delivery by ' + riderSelect.options[riderSelect.selectedIndex].text.split(' (')[0], 'success');
 };
+
+window.openOrderDetailModal = window.openOrderDrawer;
+window.closeOrderDetailModal = window.closeOrderDrawer || function() { document.getElementById('order-detail-modal')?.classList.remove('active'); };
+window.closeOrderDrawer = window.closeOrderDetailModal;
