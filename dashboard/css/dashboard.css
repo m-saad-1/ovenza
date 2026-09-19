@@ -2521,3 +2521,10 @@ body.kiosk-mode .app-header { display: none !important; }
 body.kiosk-mode .app-layout { grid-template-columns: 1fr !important; }
 body.kiosk-mode .app-main { padding: 1rem !important; margin: 0 !important; max-width: 100vw !important; }
 
+
+.simple-mode .nav-group-label { display: none; }
+.simple-mode .advanced-only { display: none !important; }
+body:not(.simple-mode) .simple-only { display: none !important; }
+
+/* Fix for simple mode nav gap */
+.simple-mode .nav-group { margin-bottom: 0.25rem; }

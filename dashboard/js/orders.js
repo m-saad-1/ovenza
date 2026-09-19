@@ -104,7 +104,7 @@ window.renderFullOrdersTable = function() {
         }
 
         let orderDate = Date.now();
-        if (order.time) {
+        if (order.time && typeof order.time === 'string') {
             let parts = order.time.match(/(\d+):(\d+)\s+(AM|PM)/i);
             if (parts) {
                 let hours = parseInt(parts[1], 10);
@@ -124,6 +124,20 @@ window.renderFullOrdersTable = function() {
         const urgencyStyle = elapsed >= 10 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-danger); background: rgba(239,68,68,0.04);' : elapsed >= 5 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-warning); background: rgba(245,158,11,0.04);' : '';
         
         card.setAttribute('style', `display: flex; flex-direction: column; gap: 1rem; ${urgencyStyle}`);
+
+        
+        let actionBtn = '<button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="openOrderDetailModal(\'' + order.id + '\')">View Details</button>';
+        
+        if (document.body.classList.contains('simple-mode')) {
+            if (order.status === 'New') {
+                actionBtn = '<button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="event.stopPropagation(); window.Store.updateOrderStatus(\'' + order.id + '\', \'Preparing\')">Accept - Preparing</button>';
+            } else if (order.status === 'Preparing') {
+                actionBtn = '<button class="btn btn-warning" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="event.stopPropagation(); window.Store.updateOrderStatus(\'' + order.id + '\', \'Out for Delivery\')">Dispatched</button>';
+            } else if (order.status === 'Out for Delivery') {
+                actionBtn = '<button class="btn btn-success" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="event.stopPropagation(); window.Store.updateOrderStatus(\'' + order.id + '\', \'Delivered\')">Delivered</button>';
+            }
+            // Customer history by default in modal is handled in the modal logic.
+        }
 
         card.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -152,7 +166,7 @@ window.renderFullOrdersTable = function() {
             
             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--clr-border); padding-top: 1rem; margin-top: auto;">
                 <span style="font-weight: 700; font-size: 1.1rem;">${state.restaurant.currency} ${order.total.toLocaleString()}</span>
-                <button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="openOrderDetailModal('${order.id}')">View Details</button>
+                ${actionBtn}
             </div>
         `;
         tbody.appendChild(card);
