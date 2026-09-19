@@ -363,7 +363,7 @@ window.openOrderDrawer = function(orderId) {
     const orderDrawer = document.getElementById('order-drawer');
     if (drawerOverlay && orderDrawer) {
         drawerOverlay.classList.add('active');
-        orderDrawer.classList.add('active');
+        orderDrawer.classList.add('open');
     } else {
         const orderDetailModal = document.getElementById('order-detail-modal');
         if (orderDetailModal) orderDetailModal.classList.add('active');
@@ -575,5 +575,17 @@ window.confirmDispatch = function(orderId) {
 };
 
 window.openOrderDetailModal = window.openOrderDrawer;
-window.closeOrderDetailModal = window.closeOrderDrawer || function() { document.getElementById('order-detail-modal')?.classList.remove('active'); };
+window.closeOrderDetailModal = function() {
+        window.closeDrawer();
+        const orderDetailModal = document.getElementById('order-detail-modal');
+        if (orderDetailModal) orderDetailModal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
 window.closeOrderDrawer = window.closeOrderDetailModal;
+
+window.closeDrawer = function() {
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const orderDrawer = document.getElementById('order-drawer');
+    if (drawerOverlay) drawerOverlay.classList.remove('active');
+    if (orderDrawer) orderDrawer.classList.remove('open');
+};
