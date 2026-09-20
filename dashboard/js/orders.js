@@ -342,7 +342,7 @@ window.openOrderDrawer = function(orderId) {
             if (order.type === 'Pickup' || order.type === 'Takeaway') {
                 mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Ready</button>`);
             } else {
-                mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); window.closeOrderDrawer();">Dispatched</button>`);
+                mainActions.push(`<button class="btn btn-warning" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}');">Dispatched</button>`);
             }
         } else if (order.status === 'Out for Delivery' || order.status === 'Ready') {
             mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}</button>`);
@@ -362,14 +362,15 @@ window.openOrderDrawer = function(orderId) {
         } else if (order.status === 'Out for Delivery') {
             mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Mark Delivered / Complete</button>`);
         }
-        
-        utilityActions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
-        if (order.type !== 'Delivery') {
-            utilityActions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
-        }
-        if (['Completed','Delivered'].includes(order.status)) {
-            utilityActions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info);" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
-        }
+    }
+
+    // Utility actions for BOTH modes
+    utilityActions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
+    if (order.type !== 'Delivery') {
+        utilityActions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
+    }
+    if (['Completed','Delivered'].includes(order.status)) {
+        utilityActions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info);" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
     }
     
     // Cancel Action for both modes
