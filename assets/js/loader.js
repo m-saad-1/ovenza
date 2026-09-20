@@ -14,7 +14,7 @@
   <div class="container">
     <div class="nav-left" style="display: flex; align-items: center; gap: 0.5rem; max-width: calc(100% - 130px);">
       <a href="${v("index.html")}" class="logo" style="flex-shrink: 0;">
-        <img fetchpriority="high" decoding="sync" src="${r}" alt="crust Logo" class="header-logo" width="120" height="40">
+        <img decoding="async" src="${r}" alt="crust Logo" class="header-logo" width="120" height="40">
       </a>
       <div id="change-location-btn" style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; flex: 1; min-width: 0; max-width: 200px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
