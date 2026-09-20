@@ -232,6 +232,18 @@ window.openOrderDrawer = function(orderId) {
 
     document.getElementById('drawer-title').textContent = `Order #${order.id}`;
     
+    let statusClass = '';
+    switch(order.status) {
+        case 'New': statusClass = 'color: var(--clr-primary); background: rgba(233,41,14,0.1);'; break;
+        case 'Preparing': statusClass = 'color: var(--clr-warning); background: rgba(245,158,11,0.1);'; break;
+        case 'Ready': statusClass = 'color: var(--clr-success); background: rgba(16,185,129,0.1);'; break;
+        case 'Out for Delivery': statusClass = 'color: var(--clr-info); background: rgba(59,130,246,0.1);'; break;
+        case 'Delivered': statusClass = 'color: var(--clr-success); background: rgba(16,185,129,0.1);'; break;
+        case 'Completed': statusClass = 'color: var(--clr-success); background: rgba(16,185,129,0.1);'; break;
+        case 'Cancelled': statusClass = 'color: var(--clr-danger); background: rgba(239,68,68,0.1);'; break;
+        default: statusClass = 'color: var(--clr-text-secondary); background: var(--clr-bg-app);';
+    }
+
     const content = `
         <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end;">
             <div>
@@ -254,7 +266,7 @@ window.openOrderDrawer = function(orderId) {
             </div>
             <div>
                 <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Order Status</p>
-                <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">${order.status}</p>
+                <span class="badge" style="font-size: 0.85rem; padding: 0.2rem 0.5rem; margin-top: 0.2rem; ${statusClass}">${order.status}</span>
             </div>
             <div>
                 <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Payment</p>
@@ -365,15 +377,24 @@ window.openOrderDrawer = function(orderId) {
         cancelAction = `<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger);" onclick="window.openCancelConfirmModal('${order.id}')">Cancel Order</button>`;
     }
 
-    let actionsHtml = `
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; width: 100%;">
+    let actionsHtml = `<div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">`;
+    
+    if (utilityActions.length > 0) {
+        actionsHtml += `
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; width: 100%;">
             ${utilityActions.join('')}
-        </div>
+        </div>`;
+    }
+    
+    if (mainActions.length > 0 || cancelAction) {
+        actionsHtml += `
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; width: 100%;">
             ${mainActions.join('')}
             ${cancelAction}
-        </div>
-    `;
+        </div>`;
+    }
+    
+    actionsHtml += `</div>`;
     
     let actionsContainer = document.getElementById('drawer-actions') || document.getElementById('order-detail-actions');
     if (actionsContainer) {
