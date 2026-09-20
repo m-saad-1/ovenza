@@ -68,9 +68,7 @@ window.contentDeleteOffer = function(id) {
 const GALLERY_STORAGE_KEY = 'crust_gallery';
 
 let mockGallery = (function() {
-    const stored = localStorage.getItem(GALLERY_STORAGE_KEY);
-    if (stored) { try { return JSON.parse(stored); } catch(e) {} }
-    return [
+    const defaults = [
         { id: 'g1', url: '../assets/gallery/gallery-1.avif', name: 'Gallery Image 1' },
         { id: 'g2', url: '../assets/gallery/gallery-2.avif', name: 'Gallery Image 2' },
         { id: 'g3', url: '../assets/gallery/gallery-3.avif', name: 'Gallery Image 3' },
@@ -84,6 +82,22 @@ let mockGallery = (function() {
         { id: 'g11', url: '../assets/gallery/gallery-11.avif', name: 'Gallery Image 11' },
         { id: 'g12', url: '../assets/gallery/gallery-12.avif', name: 'Gallery Image 12' },
     ];
+    
+    const stored = localStorage.getItem(GALLERY_STORAGE_KEY);
+    if (stored) { 
+        try { 
+            let parsed = JSON.parse(stored);
+            // Append missing defaults to ensure new images show up for existing users
+            defaults.forEach(def => {
+                if (!parsed.find(p => p.id === def.id)) {
+                    parsed.push(def);
+                }
+            });
+            localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(parsed));
+            return parsed; 
+        } catch(e) {} 
+    }
+    return defaults;
 })();
 
 function saveGalleryToStorage() {
