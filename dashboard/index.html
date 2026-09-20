@@ -2373,6 +2373,19 @@
             </div>
         </div>
     </div>
+
+    <!-- CANCEL CONFIRM MODAL -->
+    <div class="generic-modal-overlay" id="cancel-confirm-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;" onclick="if(event.target===this) window.closeCancelConfirmModal()">
+        <div class="generic-modal" style="background:var(--clr-bg-card); padding:2rem; border-radius:12px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+            <h3 style="margin-top:0; margin-bottom:1rem; font-size:1.25rem;">Cancel Order</h3>
+            <p style="margin-bottom:1.5rem; color:var(--clr-text-secondary);">Are you sure you want to cancel this order? This action cannot be undone.</p>
+            <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+                <button class="btn btn-outline" onclick="window.closeCancelConfirmModal()">No, Keep It</button>
+                <button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger); background:var(--clr-danger-bg);" id="btn-confirm-cancel">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
 

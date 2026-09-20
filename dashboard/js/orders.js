@@ -529,7 +529,36 @@ window.openRefundModal = function(orderId) {
 };
 
 window.closeOrderDetailModal = function() {
-    document.getElementById('order-detail-modal').style.display = 'none';
+    window.closeDrawer();
+    const orderDetailModal = document.getElementById('order-detail-modal');
+    if (orderDetailModal) orderDetailModal.style.display = 'none';
+    document.body.style.overflow = '';
+};
+
+window.openCancelConfirmModal = function(orderId) {
+    const modal = document.getElementById('cancel-confirm-modal');
+    const confirmBtn = document.getElementById('btn-confirm-cancel');
+    if (modal && confirmBtn) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        confirmBtn.onclick = function() {
+            window.Store.updateOrderStatus(orderId, 'Cancelled');
+            window.closeCancelConfirmModal();
+            if (typeof window.closeOrderDrawer === 'function') {
+                window.closeOrderDrawer();
+            }
+            if (typeof window.showNotification === 'function') {
+                window.showNotification('Order Cancelled', 'Order #' + orderId + ' has been cancelled.', 'error');
+            }
+        };
+    }
+};
+
+window.closeCancelConfirmModal = function() {
+    const modal = document.getElementById('cancel-confirm-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
     document.body.style.overflow = '';
 };
 
