@@ -12,9 +12,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=swap" media="print" onload="this.media='all'" rel="stylesheet"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/></noscript>
-<link href="./assets/css/style.bundle.css?v=20" rel="stylesheet"/>
+<link rel="preload" href="./assets/css/style.bundle.css?v=20" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="./assets/css/style.bundle.css?v=20" rel="stylesheet"/></noscript>
 <link as="image" fetchpriority="high" href="./assets/images/hero.avif" rel="preload"/>
-<link as="image" fetchpriority="high" href="./assets/images/logo.avif" rel="preload"/>
 <!-- Component Loader -->
 <script defer="" src="./assets/js/config.js"></script>
 <script defer="" src="./assets/js/loader.js?v=20"></script>
@@ -130,7 +130,7 @@
 </head>
 <body>
 <div class="page-loader" id="page-loader">
-  <img class="loader-logo" id="loader-logo-img" src="./assets/images/logo.avif" alt="crust" width="80" height="80" fetchpriority="high" decoding="sync"/>
+  <img class="loader-logo" id="loader-logo-img" src="./assets/images/logo.avif" alt="crust" width="80" height="80" decoding="async"/>
   <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
   <div class="loader-spinner"></div>
 </div>
@@ -139,9 +139,9 @@
 <section class="hero refined-hero" id="home">
 <div class="hero-image-frame" id="hero-carousel-container" style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y;">
 <div class="hero-carousel-track" id="hero-carousel-track" style="display: flex; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
-<img id="hero-primary-img" alt="crust Hero 1" class="hero-full-img" decoding="sync" fetchpriority="high" height="400" src="./assets/images/hero.avif"   style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800"/>
-<img alt="crust Hero 2" class="hero-full-img" decoding="sync" height="400" fetchpriority="high" src="./assets/images/offer-1.avif"   style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800"/>
-<img alt="crust Hero 3" class="hero-full-img" decoding="sync" height="400" fetchpriority="high" src="./assets/images/offer-2.avif"   style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800"/>
+<img id="hero-primary-img" alt="crust Hero 1" class="hero-full-img" decoding="async" fetchpriority="high" loading="eager" height="400" src="./assets/images/hero.avif"   style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800"/>
+<img alt="crust Hero 2" class="hero-full-img" decoding="async" loading="lazy" height="400" src="./assets/images/offer-1.avif"   style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800"/>
+<img alt="crust Hero 3" class="hero-full-img" decoding="async" loading="lazy" height="400" src="./assets/images/offer-2.avif"   style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800"/>
 </div>
 <div class="carousel-indicators" id="hero-indicators" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
 <span class="indicator active" data-slide="0" style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 1;"></span>
@@ -157,27 +157,27 @@
 <!-- Category bar (non-sticky, flows with page) -->
 <div class="category-circles-wrapper" id="category-circles-home" style="position:static !important;">
 <a class="category-circle-btn active" href="pages/menu.html#combos" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="./assets/images/combo-1.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/combo-1.avif" width="228"/></div>
 <span class="circle-label">Combos</span>
 </a>
 <a class="category-circle-btn" href="pages/menu.html#burgers" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="./assets/images/burger-1.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/burger-1.avif" width="228"/></div>
 <span class="circle-label">Burgers</span>
 </a>
 <a class="category-circle-btn" href="pages/menu.html#pizzas" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="./assets/images/chicken-pizza.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/chicken-pizza.avif" width="228"/></div>
 <span class="circle-label">Pizzas</span>
 </a>
 <a class="category-circle-btn" href="pages/menu.html#rolls" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="./assets/images/roll-1.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/roll-1.avif" width="228"/></div>
 <span class="circle-label">Rolls</span>
 </a>
 <a class="category-circle-btn" href="pages/menu.html#fries" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="./assets/images/cheese-fries.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/cheese-fries.avif" width="228"/></div>
 <span class="circle-label">Fries</span>
 </a>
 <a class="category-circle-btn" href="pages/menu.html#drinks" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="./assets/images/mountain-dew.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="async" loading="lazy" height="228" src="./assets/images/mountain-dew.avif" width="228"/></div>
 <span class="circle-label">Drinks</span>
 </a>
 </div><!-- /.category-circles-wrapper (homepage, non-sticky) -->
@@ -189,7 +189,7 @@
 <div class="menu-grid">
 <!-- Combo 1 -->
 <div class="product-card" data-category="Combos">
-<div class="card-image"><img alt="Combo 1" decoding="sync" height="228" fetchpriority="high" src="./assets/images/combo-1.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 1" decoding="async" loading="lazy" height="228" src="./assets/images/combo-1.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Combo 1</h3></div>
 <p class="card-desc">1x Classic Beef Burger, 1x Crispy Chicken Burger, 4x Fried Chicken Pieces, 1x Fries, 1x NEXT Cola, 1x Cheese Dip</p>
@@ -201,7 +201,7 @@
 </div>
 <!-- Combo 2 -->
 <div class="product-card" data-category="Combos">
-<div class="card-image"><img alt="Combo 2" decoding="sync" height="228" fetchpriority="high" src="./assets/images/combo-2.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 2" decoding="async" loading="lazy" height="228" src="./assets/images/combo-2.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Combo 2</h3></div>
 <p class="card-desc">1x Chicken Pizza, 8x Chicken Wings, 1x 7UP, 2x Dips</p>
@@ -213,7 +213,7 @@
 </div>
 <!-- Burger 1 -->
 <div class="product-card" data-category="Burgers">
-<div class="card-image"><img alt="Tower Burger" decoding="sync" height="228" fetchpriority="high" src="./assets/images/burger-7.avif" width="228"/></div>
+<div class="card-image"><img alt="Tower Burger" decoding="async" loading="lazy" height="228" src="./assets/images/burger-7.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Tower Burger</h3></div>
 <p class="card-desc">Crispy chicken breast with cheese and sauce.</p>
@@ -225,7 +225,7 @@
 </div>
 <!-- Burger 2 -->
 <div class="product-card" data-category="Burgers">
-<div class="card-image"><img alt="Smash Burger" decoding="sync" height="228" fetchpriority="high" src="./assets/images/burger-4.avif" width="228"/></div>
+<div class="card-image"><img alt="Smash Burger" decoding="async" loading="lazy" height="228" src="./assets/images/burger-4.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Smash Burger</h3></div>
 <p class="card-desc">Thin smashed beef patty with pickles &amp; sauce.</p>
@@ -237,7 +237,7 @@
 </div>
 <!-- Burger 3 -->
 <div class="product-card" data-category="Burgers">
-<div class="card-image"><img alt="BBQ Burger" decoding="sync" height="228" fetchpriority="high" src="./assets/images/burger-5.avif" width="228"/></div>
+<div class="card-image"><img alt="BBQ Burger" decoding="async" loading="lazy" height="228" src="./assets/images/burger-5.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>BBQ Burger</h3></div>
 <p class="card-desc">Smoky BBQ sauce with caramelized onions.</p>
@@ -249,7 +249,7 @@
 </div>
 <!-- Pizza 1 -->
 <div class="product-card" data-category="Pizzas">
-<div class="card-image"><img alt="Chicken Pizza" decoding="sync" height="228" fetchpriority="high" src="./assets/images/chicken-pizza.avif" width="228"/></div>
+<div class="card-image"><img alt="Chicken Pizza" decoding="async" loading="lazy" height="228" src="./assets/images/chicken-pizza.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Chicken Pizza</h3></div>
 <p class="card-desc">Grilled chicken with golden cheese topping.</p>
@@ -261,7 +261,7 @@
 </div>
 <!-- Pizza 2 -->
 <div class="product-card" data-category="Pizzas">
-<div class="card-image"><img alt="Crown crust Pizza" decoding="sync" height="228" fetchpriority="high" src="./assets/images/crown-crust-pizza.avif" width="228"/></div>
+<div class="card-image"><img alt="Crown crust Pizza" decoding="async" loading="lazy" height="228" src="./assets/images/crown-crust-pizza.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Crown crust Pizza</h3></div>
 <p class="card-desc">Signature crown crust loaded with cheese.</p>
@@ -273,7 +273,7 @@
 </div>
 <!-- Pizza 3 -->
 <div class="product-card" data-category="Pizzas">
-<div class="card-image"><img alt="Special Pizza" decoding="sync" height="228" fetchpriority="high" src="./assets/images/special-pizza.avif" width="228"/></div>
+<div class="card-image"><img alt="Special Pizza" decoding="async" loading="lazy" height="228" src="./assets/images/special-pizza.avif" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Special Pizza</h3></div>
 <p class="card-desc">Loaded with pepperoni, chicken, and extra cheese.</p>
@@ -314,7 +314,7 @@
           </div>
         </div>
         <div class="install-app-img" style="flex: 1; display: flex; justify-content: flex-end;">
-          <img fetchpriority="high" decoding="sync" src="./assets/images/app-install.avif" alt="crust App" style="max-height: 250px; width: auto; object-fit: contain; border-radius: 12px; display: block;" onerror="this.src='./assets/images/offer-1.avif'" width="532" height="250">
+          <img loading="lazy" decoding="async" src="./assets/images/app-install.avif" alt="crust App" style="max-height: 250px; width: auto; object-fit: contain; border-radius: 12px; display: block;" onerror="this.src='./assets/images/offer-1.avif'" width="532" height="250">
         </div>
       </div>
     </div>
@@ -532,8 +532,41 @@
 </div>
 <!-- Google Map directly below Location card -->
 <div class="contact-map" style="margin-top: 1rem;">
-<iframe allowfullscreen="" height="260" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3407.412356976214!2d74.3496924754425!3d31.34758788142704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391901ab9825b293%3A0x6b6f3ff80e5ab140!2sCentral%20Park%20Housing%20Scheme%2C%20Lahore%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s" style="border:0; border-radius: 12px; min-height: 400px;" title="Map showing crust location" width="100%">
-</iframe>
+<div id="map-placeholder" style="width:100%; min-height:260px; border-radius:12px; background:var(--clr-surface,#f5f5f5); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; cursor:pointer; border:1px solid var(--clr-border,#e0e0e0);" onclick="window.__loadMap && window.__loadMap(this)" title="Click to load map">
+  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary,#c62828)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+  <span style="font-size:0.9rem;font-weight:600;color:var(--clr-text-primary);">Central Park, Lahore</span>
+  <a href="https://www.google.com/maps?q=Central+Park+Housing+Scheme+Lahore" target="_blank" rel="noopener noreferrer" style="font-size:0.8rem;color:var(--clr-primary,#c62828);text-decoration:none;" onclick="event.stopPropagation()">View on Google Maps ↗</a>
+  <span style="font-size:0.75rem;color:var(--clr-text-secondary,#888);">Tap to load interactive map</span>
+</div>
+<script>
+(function() {
+  var MAP_SRC = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3407.412356976214!2d74.3496924754425!3d31.34758788142704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391901ab9825b293%3A0x6b6f3ff80e5ab140!2sCentral%20Park%20Housing%20Scheme%2C%20Lahore%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s';
+  window.__loadMap = function(placeholder) {
+    if (window.__mapsLoaded) return;
+    window.__mapsLoaded = true;
+    var iframe = document.createElement('iframe');
+    iframe.src = MAP_SRC;
+    iframe.width = '100%';
+    iframe.height = '260';
+    iframe.style.cssText = 'border:0;border-radius:12px;min-height:260px;display:block;';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';
+    iframe.title = 'Map showing crust location';
+    placeholder.parentNode.replaceChild(iframe, placeholder);
+  };
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) {
+        var ph = document.getElementById('map-placeholder');
+        if (ph) window.__loadMap(ph);
+        obs.disconnect();
+      }
+    }, { rootMargin: '200px' });
+    var el = document.getElementById('map-placeholder');
+    if (el) obs.observe(el);
+  }
+})();
+</script>
 </div>
 </div>
 </div>
