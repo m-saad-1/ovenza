@@ -226,124 +226,141 @@ window.renderFullOrdersTable = function() {
 };
 
 window.openOrderDrawer = function(orderId) {
-    const order = window.Store.state.orders.find(o => o.id === orderId);
+    const state = window.Store.state;
+    const order = state.orders.find(o => o.id === orderId);
     if (!order) return;
 
-    let statusClass = '';
-    switch(order.status) {
-        case 'New': statusClass = 'badge-primary'; break;
-        case 'Preparing': statusClass = 'badge-warning'; break;
-        case 'Ready': statusClass = 'badge-success'; break;
-        case 'Out for Delivery': statusClass = 'badge-info'; break;
-        case 'Delivered': statusClass = 'badge-success'; break;
-        case 'Completed': statusClass = 'badge-success'; break;
-        case 'Cancelled': statusClass = 'badge-danger'; break;
-        default: statusClass = 'badge-secondary';
-    }
-
-    const modalTitle = document.getElementById('drawer-title');
-    if (modalTitle) modalTitle.innerHTML = `Order #${order.id} - <span class="badge ${statusClass}">${order.status}</span>`;
-    const oldTitle = document.getElementById('order-detail-title');
-    if (oldTitle) oldTitle.innerHTML = `Order #${order.id} - <span class="badge ${statusClass}">${order.status}</span>`;
-
-    const contentHtml = `
-        <div style="margin-bottom: 1.5rem;">
-            <div style="font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 0.5rem;">Order Type</div>
-            <div style="font-weight: 500;">${order.type}</div>
+    document.getElementById('drawer-title').textContent = `Order #${order.id}`;
+    
+    const content = `
+        <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.85rem;">Customer</p>
+                <p style="margin: 0; font-weight: 600; font-size: 1.1rem;">${order.customer}</p>
+            </div>
+            <div>
+                <span class="badge" style="background: rgba(233,41,14,0.1); color: var(--clr-primary); font-size: 0.8rem;">Source: ${order.source || 'N/A'}</span>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--clr-border);">
+            <div>
+                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Type</p>
+                <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">${order.type}</p>
+            </div>
+            <div>
+                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Time</p>
+                <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">${order.time}</p>
+            </div>
+            <div>
+                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Order Status</p>
+                <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">${order.status}</p>
+            </div>
+            <div>
+                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Payment</p>
+                <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">${order.paymentStatus || order.payment || 'Pending'}</p>
+            </div>
+            <div>
+                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Kitchen</p>
+                <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">${order.kitchenStatus || 'Pending'}</p>
+            </div>
+            <div>
+                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Delivery</p>
+                <p style="margin: 0; font-weight: 500; font-size: 0.95rem;">${order.deliveryStatus || 'N/A'}</p>
+            </div>
         </div>
         
         ${order.type === 'Delivery' ? `
-        <div style="margin-bottom: 1.5rem;">
-            <div style="font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 0.5rem;">Customer Details</div>
-            <div style="font-weight: 500;">${order.customer}</div>
-            <div style="color: var(--clr-text-muted); font-size: 0.9rem; margin-top: 0.25rem;">${order.address || '123 Main St, City'}</div>
-            <div style="color: var(--clr-text-muted); font-size: 0.9rem;">${order.phone || '+1 234 567 8900'}</div>
-            <div style="display:flex; gap: 0.5rem; margin-top: 0.5rem;">
-                <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;" onclick="window.location.href='tel:${order.phone}'">📞 Call</button>
-                <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;" onclick="window.open('https://maps.google.com/?q=${order.address}')">📍 Map</button>
-            </div>
-            <hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--clr-border);">
-            <div style="font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 0.5rem;">Order History</div>
-            <div style="font-size: 0.9rem;">Total Orders: <span style="font-weight:500;">5</span></div>
-            <div style="font-size: 0.9rem;">Lifetime Value: <span style="font-weight:500;">$145.00</span></div>
-            <div style="font-size: 0.9rem;">Last Order: <span style="font-weight:500;">2 weeks ago</span></div>
-            <div style="font-size: 0.9rem;">Preferred payment: <span style="font-weight:500;">Card</span></div>
-        </div>
-        ` : ``}
+        <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--clr-bg-app); border-radius: 8px;">
+            <p style="margin: 0 0 0.5rem 0; color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;">Delivery Details</p>
+            <p style="margin: 0; font-size: 0.9rem;">${order.customer?.address || order.address || 'No Address Provided'} (${order.customer?.city || order.zone || ''})</p>
+        </div>` : ''}
         
+        ${order.type === 'Pickup' ? `
+        <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--clr-bg-app); border-radius: 8px;">
+            <p style="margin: 0 0 0.5rem 0; color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;">Pickup Details</p>
+            <p style="margin: 0 0 0.3rem 0; font-size: 0.9rem;">Pickup At: ${order.customer?.city || order.city || 'Selected Outlet'}</p>
+            <p style="margin: 0; font-size: 0.85rem; color: var(--clr-primary); font-weight: 600;">Time: ${order.pickupTime ? (order.pickupTime === 'ASAP' ? 'ASAP (~20 mins)' : 'Scheduled for ' + (function(t){if(!t.includes(':'))return t;const[h,m]=t.split(':');const hi=parseInt(h);return (hi%12||12)+':'+m+' '+(hi>=12?'PM':'AM')})(order.pickupTime)) : 'ASAP (~20 mins)'}</p>
+        </div>` : ''}
+        
+        ${order.type === 'Dine-in' && order.tableId ? `
+        <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--clr-bg-app); border-radius: 8px;">
+            <p style="margin: 0 0 0.5rem 0; color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;">Table Details</p>
+            <p style="margin: 0; font-size: 0.9rem;">Table: ${order.tableId} | Guests: ${order.guests || 'N/A'}</p>
+        </div>` : ''}
+        
+        ${order.type === 'Takeaway' && order.pickupTime ? `
+        <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--clr-bg-app); border-radius: 8px;">
+            <p style="margin: 0 0 0.5rem 0; color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;">Takeaway Details</p>
+            <p style="margin: 0; font-size: 0.9rem;">Pickup Time: ${order.pickupTime}</p>
+        </div>` : ''}
+
         <div style="margin-bottom: 1.5rem;">
-            <div style="font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 0.5rem;">Progress</div>
+            <p style="margin: 0 0 0.5rem 0; color: var(--clr-text-secondary); font-size: 0.85rem; font-weight: 600;">Order Progress</p>
             ${buildOrderTimeline(order)}
         </div>
-        
-        <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--clr-border); padding-top: 1rem;">
-            <div style="font-size: 0.9rem; color: var(--clr-text-muted); margin-bottom: 0.5rem;">Items</div>
+
+        <h4 style="margin-bottom: 1rem;">Order Items</h4>
+        <div style="margin-bottom: 1.5rem;">
             ${(order.items || [{name: 'Demo Item', qty: 1, price: order.total}]).map(item => `
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                     <span>${item.qty}x ${item.name}</span>
-                    <span style="font-weight: 500;">${window.Store.state.restaurant.currency} ${item.price}</span>
+                    <span style="font-weight: 500;">${state.restaurant.currency} ${item.price}</span>
                 </div>
             `).join('')}
         </div>
         
         <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 700; border-top: 1px solid var(--clr-border); padding-top: 1rem;">
             <span>Total</span>
-            <span>${window.Store.state.restaurant.currency} ${order.total.toLocaleString()}</span>
+            <span>${state.restaurant.currency} ${order.total.toLocaleString()}</span>
         </div>
     `;
-    const drawerContent = document.getElementById('drawer-content');
-    if (drawerContent) drawerContent.innerHTML = contentHtml;
-    
-    const orderDetailBody = document.getElementById('order-detail-body');
-    if (orderDetailBody) orderDetailBody.innerHTML = contentHtml;
+
+    document.getElementById('drawer-content').innerHTML = content;
 
     // Actions Layout
     let utilityActions = [];
     let mainActions = [];
     let cancelAction = '';
 
-    const isSimple = document.body.classList.contains('simple-mode');
-
-    // Utility actions for both modes based on user request (Print Bill, Split Bill above main action)
-    utilityActions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
-    if (order.type !== 'Delivery') {
-        utilityActions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
-    }
-    
-    // Main Actions
-    if (isSimple) {
+    if (document.body.classList.contains('simple-mode')) {
         if (order.status === 'New') {
             mainActions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Accept - Preparing</button>`);
         } else if (order.status === 'Preparing') {
             if (order.type === 'Pickup' || order.type === 'Takeaway') {
                 mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Ready</button>`);
             } else {
-                mainActions.push(`<button class="btn btn-warning" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}');">Dispatched</button>`);
+                mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); window.closeOrderDrawer();">Dispatched</button>`);
             }
         } else if (order.status === 'Out for Delivery' || order.status === 'Ready') {
             mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}</button>`);
         }
     } else {
+        // Advanced actions
         if (order.status === 'New') {
-            mainActions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); closeOrderDetailModal(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
+            mainActions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); window.closeOrderDrawer(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
         } else if (order.status === 'Accepted') {
-            mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); closeOrderDetailModal(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
+            mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); window.closeOrderDrawer(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
         } else if (order.status === 'Ready') {
             if (order.type === 'Delivery') {
-                 mainActions.push(`<button class="btn btn-info" onclick="closeOrderDetailModal(); openDispatchModal('${order.id}')">Dispatch</button>`);
+                 mainActions.push(`<button class="btn btn-info" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}')">Dispatch</button>`);
             } else {
-                 mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Complete Order</button>`);
+                 mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Complete Order</button>`);
             }
         } else if (order.status === 'Out for Delivery') {
-            mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); closeOrderDetailModal();">Mark Delivered / Complete</button>`);
+            mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Mark Delivered / Complete</button>`);
         }
         
+        utilityActions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
+        if (order.type !== 'Delivery') {
+            utilityActions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
+        }
         if (['Completed','Delivered'].includes(order.status)) {
             utilityActions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info);" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
         }
     }
     
-    // Cancel Action
+    // Cancel Action for both modes
     if (!['Completed','Delivered','Cancelled'].includes(order.status)) {
         cancelAction = `<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger);" onclick="window.openCancelConfirmModal('${order.id}')">Cancel Order</button>`;
     }
@@ -358,62 +375,23 @@ window.openOrderDrawer = function(orderId) {
         </div>
     `;
     
-    let drawerActions = document.getElementById('drawer-actions');
-    if (drawerActions) {
-        drawerActions.innerHTML = actionsHtml;
+    let actionsContainer = document.getElementById('drawer-actions') || document.getElementById('order-detail-actions');
+    if (actionsContainer) {
+        actionsContainer.innerHTML = actionsHtml;
+    }
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const orderDrawer = document.getElementById('order-drawer');
+    if (drawerOverlay && orderDrawer) {
+        drawerOverlay.classList.add('active');
+        orderDrawer.classList.add('open');
+    } else {
+        const orderDetailModal = document.getElementById('order-detail-modal');
+        if (orderDetailModal) orderDetailModal.classList.add('active');
     }
     
-    let orderDetailActions = document.getElementById('order-detail-actions');
-    if (orderDetailActions) {
-        orderDetailActions.innerHTML = actionsHtml;
-    }
-    const orderDetailModal = document.getElementById('order-detail-modal');
-    if (orderDetailModal) {
-        orderDetailModal.classList.add('active');
-        orderDetailModal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
 };
 
-window.openCancelConfirmModal = function(orderId) {
-    window.closeDrawer();
-    let modal = document.getElementById('cancel-confirm-modal');
-    if (!modal) {
-        // Create modal if it doesn't exist
-        const modalHtml = `
-        <div class="modal-overlay" id="cancel-confirm-modal" style="display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 10005; justify-content: center; align-items: center;" onclick="if(event.target === this) window.closeCancelConfirmModal()">
-            <div class="modal-content" style="background: var(--clr-surface); padding: 2rem; border-radius: 8px; max-width: 400px; width: 90%; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
-                <h3 style="margin-top: 0; margin-bottom: 1rem; color: var(--clr-danger);">Cancel Order?</h3>
-                <p style="margin-bottom: 1.5rem; color: var(--clr-text-muted);">Are you sure you want to cancel Order #<span id="cancel-confirm-order-id"></span>? This action cannot be undone.</p>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button class="btn btn-outline" onclick="window.closeCancelConfirmModal()">No, Keep it</button>
-                    <button class="btn btn-danger" style="background: var(--clr-danger); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;" onclick="window.confirmCancelOrder()">Yes, Cancel Order</button>
-                </div>
-            </div>
-        </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-        modal = document.getElementById('cancel-confirm-modal');
-    }
-    document.getElementById('cancel-confirm-order-id').innerText = orderId;
-    modal.dataset.orderId = orderId;
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-};
-
-window.closeCancelConfirmModal = function() {
-    const modal = document.getElementById('cancel-confirm-modal');
-    if (modal) modal.style.display = 'none';
-    document.body.style.overflow = '';
-};
-
-window.confirmCancelOrder = function() {
-    const modal = document.getElementById('cancel-confirm-modal');
-    const orderId = modal.dataset.orderId;
-    window.Store.updateOrderStatus(orderId, 'Cancelled');
-    window.closeCancelConfirmModal();
-};
-
+// Build timeline HTML helper
 function buildOrderTimeline(order) {
     const steps = [
         { key: 'New', label: 'Order Received' },
@@ -528,7 +506,10 @@ window.openRefundModal = function(orderId) {
     document.getElementById('generic-modal-overlay').style.display = 'flex';
 };
 
-
+window.closeOrderDetailModal = function() {
+    document.getElementById('order-detail-modal').style.display = 'none';
+    document.body.style.overflow = '';
+};
 
 window.openDispatchModal = function(orderId) {
     const state = window.Store.state;
@@ -615,14 +596,11 @@ window.confirmDispatch = function(orderId) {
 
 window.openOrderDetailModal = window.openOrderDrawer;
 window.closeOrderDetailModal = function() {
-    window.closeDrawer();
-    const orderDetailModal = document.getElementById('order-detail-modal');
-    if (orderDetailModal) {
-        orderDetailModal.style.display = 'none';
-        orderDetailModal.classList.remove('active');
-    }
-    document.body.style.overflow = '';
-};
+        window.closeDrawer();
+        const orderDetailModal = document.getElementById('order-detail-modal');
+        if (orderDetailModal) orderDetailModal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
 window.closeOrderDrawer = window.closeOrderDetailModal;
 
 window.closeDrawer = function() {
