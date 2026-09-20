@@ -77,6 +77,12 @@ let mockGallery = (function() {
         { id: 'g4', url: '../assets/gallery/gallery-4.avif', name: 'Gallery Image 4' },
         { id: 'g5', url: '../assets/gallery/gallery-5.avif', name: 'Gallery Image 5' },
         { id: 'g6', url: '../assets/gallery/gallery-6.avif', name: 'Gallery Image 6' },
+        { id: 'g7', url: '../assets/gallery/gallery-7.avif', name: 'Gallery Image 7' },
+        { id: 'g8', url: '../assets/gallery/gallery-8.avif', name: 'Gallery Image 8' },
+        { id: 'g9', url: '../assets/gallery/gallery-9.avif', name: 'Gallery Image 9' },
+        { id: 'g10', url: '../assets/gallery/gallery-10.avif', name: 'Gallery Image 10' },
+        { id: 'g11', url: '../assets/gallery/gallery-11.avif', name: 'Gallery Image 11' },
+        { id: 'g12', url: '../assets/gallery/gallery-12.avif', name: 'Gallery Image 12' },
     ];
 })();
 
