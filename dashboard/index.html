@@ -588,10 +588,12 @@
 
                 <!-- VIEW: ORDERS -->
                 <div id="view-orders" class="view-section">
-                    <div class="page-header" style="margin-bottom: 2rem;">
-                        <h1 class="page-title">Orders Management</h1>
-                        <p class="page-subtitle">View, filter, and manage all incoming orders across branches.</p>
-                        <div style="display:flex; gap:0.75rem; margin-top:1rem; flex-wrap:wrap;">
+                    <div class="page-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h1 class="page-title">Orders Management</h1>
+                            <p class="page-subtitle">View, filter, and manage all incoming orders across branches.</p>
+                        </div>
+                        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items: center;">
                             <button class="btn btn-primary advanced-only" onclick="openGenericModal('order')">+ New Order</button>
                             <button class="btn btn-outline" onclick="showToast('Exporting orders...', 'info')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Export</button>
                             <button class="btn btn-outline" onclick="window.Store.notify(); showToast('Orders refreshed', 'success')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>Refresh</button>
@@ -1118,12 +1120,29 @@
                         <p class="page-subtitle">Manage riders, active deliveries, and geographical zones.</p>
                     </div>
 
-                    <!-- 5 KPI Cards -->
+                    <!-- Delivery KPI Cards -->
                     <div class="dashboard-grid" style="margin-bottom: 1.5rem;">
                         <div class="card kpi-card" style="grid-column: span 2 / span 2;">
-                            <div class="kpi-header"><span>Active Deliveries</span></div>
-                            <div class="kpi-value" style="color:var(--clr-primary);">0</div>
+                            <div class="kpi-header"><span>Pending</span></div>
+                            <div class="kpi-value" id="del-kpi-pending">0</div>
                         </div>
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;">
+                            <div class="kpi-header"><span>Ready for Dispatch</span></div>
+                            <div class="kpi-value" id="del-kpi-ready" style="color:var(--clr-warning);">0</div>
+                        </div>
+                        <div class="card kpi-card" style="grid-column: span 2 / span 2;">
+                            <div class="kpi-header"><span>Active Deliveries</span></div>
+                            <div class="kpi-value" id="del-kpi-active" style="color:var(--clr-primary);">0</div>
+                        </div>
+                        <div class="card kpi-card" style="grid-column: span 3 / span 3;">
+                            <div class="kpi-header"><span>Delivered Today</span></div>
+                            <div class="kpi-value" id="del-kpi-delivered" style="color:var(--clr-success);">0</div>
+                        </div>
+                        <div class="card kpi-card" style="grid-column: span 3 / span 3;">
+                            <div class="kpi-header"><span>Cancelled</span></div>
+                            <div class="kpi-value" id="del-kpi-cancelled" style="color:var(--clr-danger);">0</div>
+                        </div>
+                    </div>
                         <div class="card kpi-card" style="grid-column: span 2 / span 2;">
                             <div class="kpi-header"><span>Ready for Dispatch</span></div>
                             <div class="kpi-value" style="color:var(--clr-warning);">0</div>

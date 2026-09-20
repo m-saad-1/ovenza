@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Add active class to clicked
             item.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top when switching tabs
             const targetId = item.getAttribute('data-target');
             const targetView = document.getElementById(targetId);
             if (targetView) {

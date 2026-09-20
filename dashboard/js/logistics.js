@@ -46,6 +46,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- DELIVERY ---
 function renderDelivery(state) {
+    // Delivery KPI updates
+    const deliveryOrders = state.orders.filter(o => o.type === 'Delivery');
+    
+    let pendingCount = 0;
+    let readyCount = 0;
+    let activeCount = 0;
+    let deliveredCount = 0;
+    let cancelledCount = 0;
+
+    deliveryOrders.forEach(o => {
+        if (o.status === 'New' || o.status === 'Preparing') pendingCount++;
+        else if (o.status === 'Ready') readyCount++;
+        else if (o.status === 'Dispatched' || o.status === 'Out for Delivery') activeCount++;
+        else if (o.status === 'Delivered') deliveredCount++;
+        else if (o.status === 'Cancelled') cancelledCount++;
+    });
+
+    const pendingEl = document.getElementById('del-kpi-pending');
+    if (pendingEl) pendingEl.textContent = pendingCount;
+    
+    const readyEl = document.getElementById('del-kpi-ready');
+    if (readyEl) readyEl.textContent = readyCount;
+    
+    const activeEl = document.getElementById('del-kpi-active');
+    if (activeEl) activeEl.textContent = activeCount;
+    
+    const deliveredEl = document.getElementById('del-kpi-delivered');
+    if (deliveredEl) deliveredEl.textContent = deliveredCount;
+    
+    const cancelledEl = document.getElementById('del-kpi-cancelled');
+    if (cancelledEl) cancelledEl.textContent = cancelledCount;
+
     const ridersBody = document.getElementById('delivery-riders-body');
     const dispatchBody = document.getElementById('delivery-dispatch-body');
     if (!ridersBody || !dispatchBody) return;

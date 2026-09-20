@@ -9,10 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"></noscript>
-    <link rel="stylesheet" href="../assets/css/style.bundle.css?v=16">
+    <link rel="stylesheet" href="../assets/css/style.bundle.css?v=20">
     <!-- Component Loader -->
     <script defer src="../assets/js/config.js"></script>
-    <script defer src="../assets/js/loader.js?v=8"></script>
+    <script defer src="../assets/js/loader.js?v=20"></script>
 </head>
 <body>
 <div id="page-loader" class="page-loader">
@@ -197,7 +197,7 @@
     </main>
     <script defer src="../assets/js/menu-data.js"></script>
     <script defer src="../assets/js/search.js"></script>
-    <script defer src="../assets/js/script.bundle.js?v=8"></script>
+    <script defer src="../assets/js/script.bundle.js?v=20"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -220,7 +220,7 @@
 
             // Wallet Balance Display Logic
             const walletBalance = 2500; // Hardcoded from Profile page sync
-            window.userWalletBalance = walletBalance; // Expose for script.bundle.js
+            window.userWalletBalance = walletBalance; // Expose for script.bundle.js?v=20
             
             const walletDisplay = document.getElementById('wallet-balance-display');
             if (isLoggedIn) {

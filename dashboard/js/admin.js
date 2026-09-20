@@ -205,7 +205,7 @@ function initAnalyticsCharts() {
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-            y: { beginAtZero: true, grid: { borderDash: [2, 4], color: '#E5E9EB' } },
+            y: { beginAtZero: true, grid: { borderDash: [2, 4], color: 'rgba(150, 150, 150, 0.15)' } },
             x: { grid: { display: false } }
         }
     };

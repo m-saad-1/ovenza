@@ -1,64 +1,96 @@
-### Orders & Progress Synchronization
+### Dashboard Modifications
 
-1. **Order Sorting & Cancellation**
+1. **Orders Modal — Simple Dashboard**
 
-   * In the Admin Panel **Orders** tab, always show the **newest orders at the top**.
-   * When an order is cancelled, move it to the **Cancelled Orders** section/list.
-   * Sort Cancelled Orders with the **most recently cancelled order at the top**.
-   * Ensure sorting updates automatically whenever a new order is created, cancelled, or its status changes.
+   * Use the **same advanced order-details modal design** in Simple Dashboard mode.
+   * Keep the advanced modal's layout, information, styling, and details.
+   * However, Simple Dashboard should only expose these actions:
 
-2. **Actual Order Progress**
+     * **Accept**
+     * **Preparing**
+     * **Dispatched**
+     * **Delivered**
+     * **Cancel**
+   * Do not expose advanced actions that are unnecessary for the Simple Dashboard.
 
-   * Fix the customer-side **Orders page** so it always displays the order's **actual current progress**.
-   * Do not show hardcoded/default progress, cancellation, refund, or placeholder statuses.
-   * The displayed progress must come directly from the order's current status.
-   * Ensure the progress pipeline/line, completed steps, active step, timestamps, and status text all correspond to the actual order state.
+   **Action Layout:**
 
-3. **Order Details Modal**
+   * Place **Print Bill**, **Split Bill**, and other utility buttons in **one row above** the main action row.
+   * Place the **main action button and Cancel button in one row** below the utility buttons.
+   * Ensure the layout is clean and responsive.
 
-   * Remove all **emojis from the timeline/progress section**.
-   * Display the **time/timestamp at the beginning of each progress status**, before the progress text.
-   * Remove default/static text such as **Cancel, Refund, or other actions/statuses** when they do not apply to the actual order.
-   * Show only the **actual progress history and applicable actions** for that specific order.
-   * Ensure the timeline accurately reflects the order's real status progression.
+   **Cancel Order:**
 
-4. **Modal Layering / Z-Index**
+   * Clicking Cancel must first open a **confirmation message/modal**.
+   * Do not cancel the order immediately.
+   * Only cancel after the user confirms.
 
-   * Fix the **Split Bill modal** so it opens correctly in the foreground.
-   * Audit all other Dashboard modals for the same issue.
-   * Every modal must appear **above the correct page content, sidebar, cards, dropdowns, and other UI layers**.
-   * Ensure modal overlays and z-index values are consistent.
-   * Prevent one modal or page element from incorrectly appearing above another modal.
-   * Apply a proper global modal layering system instead of fixing only Split Bill with a one-off z-index.
+   **Order Status:**
 
-5. **Dashboard ↔ Customer Order Synchronization**
+   * Color-code the **Order Status** text/badge based on the current status.
+   * Use consistent status colors across the modal and Orders page.
 
-   * When an admin updates an order's progress/status in the Dashboard, **synchronously update the same order on the customer's Orders page**.
-   * Both sides must use the same underlying order state.
-   * Changes should be reflected without requiring a manual page refresh whenever the application's architecture supports real-time state updates.
-   * Keep the following synchronized:
+   **Dispatch:**
 
-     * Current status
-     * Progress pipeline
-     * Completed steps
-     * Active step
-     * Status text
-     * Timestamps
-     * Cancellation state
-     * Delivery/Pickup information
+   * Clicking **Dispatched** should open a detailed dispatch modal.
+   * Allow the restaurant to:
 
-### Required Order Flow
+     * Assign their own rider.
+     * Select an available/nearby rider.
+     * View relevant rider information.
+     * Confirm the rider assignment before dispatching.
+   * After confirmation, update the order to **Dispatched** and synchronize the delivery information.
 
-Ensure the actual order lifecycle is reflected consistently on both sides:
+2. **Simple Dashboard — Stuck/Locked Issue**
 
-**Accepted → Sent for Preparing → Preparing → Ready → Dispatched → Out for Delivery → Delivered**
+   * Fix the issue where the Simple Dashboard sometimes becomes **stuck, frozen, or locked** and stops responding.
+   * Investigate the actual root cause rather than adding a reload workaround.
+   * Check tab switching, modal state, loading states, overlays, scroll locking, authentication/state persistence, and event handlers.
+   * Ensure users can always navigate between tabs and interact with buttons after opening/closing modals.
+   * Do not introduce this issue into Advanced Dashboard mode.
 
-If an order is cancelled, show **Cancelled** based on the actual cancellation event rather than displaying it as a default action/status.
+3. **Analytics — Dark Mode Graph Lines**
+
+   * In Dark Mode, the straight horizontal/grid lines in **all line graphs/charts** are currently too bright/white.
+   * Make these lines softer and slightly off-white/dim so they integrate with the dark theme.
+   * Keep the actual graph data, labels, and readability unchanged.
+   * Apply this consistently across all Analytics graphs.
+
+4. **Scroll to Top When Switching Tabs**
+
+   * Whenever the user switches between Dashboard tabs/pages, automatically start the newly selected page at the **top**.
+   * Reset the scroll position when navigating to a different dashboard tab.
+   * Do not retain the previous tab's scroll position.
+   * Apply this to both Simple and Advanced Dashboard modes.
+
+5. **Delivery Tab — Functional Statistics**
+
+   * Fix the Delivery tab statistics that currently display `0`.
+   * Connect the statistics to the actual delivery/order data.
+   * Show accurate values for relevant metrics such as:
+
+     * Pending
+     * Ready for Dispatch
+     * Assigned
+     * Out for Delivery
+     * Delivered
+     * Cancelled
+   * Ensure the numbers update when delivery/order statuses change.
+   * Keep Simple and Advanced Dashboard data synchronized.
+
+6. **Orders Header Actions**
+
+   * Move the **Export**, **Refresh**, and **New Order** buttons to the **right side of the Orders heading**.
+   * Keep them aligned horizontally with the Order Management heading.
+   * Maintain proper spacing and responsive behavior.
+   * Do not change their existing functionality.
 
 ### Final Verification
 
-Test one newly placed order from start to finish:
+Test both **Simple and Advanced Dashboard** modes.
 
-**Customer places order → Admin accepts → Send for Preparing → KDS prepares → Ready → Dispatch → Out for Delivery → Delivered**
+Verify:
 
-At every step, verify that the **Admin Panel and Customer Orders page show the same current status, progress, timestamps, and order details**.
+**Orders → Open Modal → Accept → Preparing → Dispatch/Rider Assignment → Delivered**
+
+Also verify cancellation confirmation, delivery statistics, tab scroll reset, graph styling, header action alignment, and that the Simple Dashboard never becomes stuck or unresponsive.
