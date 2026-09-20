@@ -179,7 +179,7 @@ function renderRecentOrders(state) {
             <td style="color: var(--clr-text-secondary); font-size: 0.85rem;">${tableArea}</td>
             <td>${state.restaurant.currency} ${order.total.toLocaleString()}</td>
             <td><span class="badge ${statusClass}">${order.status}</span></td>
-            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="document.querySelector('.nav-item[data-target=\\'view-orders\\']').click(); setTimeout(() => openOrderDrawer('${order.id}'), 100)">View</button></td>
+            <td><button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="event.stopPropagation(); document.querySelector('.nav-item[data-target=\\'view-orders\\']').click(); setTimeout(() => openOrderDrawer('${order.id}'), 100)">View</button></td>
         `;
         tbody.appendChild(tr);
     });

@@ -337,59 +337,59 @@ window.openOrderDrawer = function(orderId) {
 
     if (document.body.classList.contains('simple-mode')) {
         if (order.status === 'New') {
-            mainActions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Accept - Preparing</button>`);
+            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Accept - Preparing</button>`);
         } else if (order.status === 'Preparing') {
             if (order.type === 'Pickup' || order.type === 'Takeaway') {
-                mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Ready</button>`);
+                mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Ready</button>`);
             } else {
-                mainActions.push(`<button class="btn btn-warning" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}');">Dispatched</button>`);
+                mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}');">Dispatched</button>`);
             }
         } else if (order.status === 'Out for Delivery' || order.status === 'Ready') {
-            mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}</button>`);
+            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}</button>`);
         }
     } else {
         // Advanced actions
         if (order.status === 'New') {
-            mainActions.push(`<button class="btn btn-primary" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); window.closeOrderDrawer(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
+            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); window.closeOrderDrawer(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
         } else if (order.status === 'Accepted') {
-            mainActions.push(`<button class="btn btn-warning" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); window.closeOrderDrawer(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
+            mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); window.closeOrderDrawer(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
         } else if (order.status === 'Ready') {
             if (order.type === 'Delivery') {
-                 mainActions.push(`<button class="btn btn-info" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}')">Dispatch</button>`);
+                 mainActions.push(`<button class="btn btn-info" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}')">Dispatch</button>`);
             } else {
-                 mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Complete Order</button>`);
+                 mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Complete Order</button>`);
             }
         } else if (order.status === 'Out for Delivery') {
-            mainActions.push(`<button class="btn btn-success" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Mark Delivered / Complete</button>`);
+            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Mark Delivered / Complete</button>`);
         }
     }
 
     // Utility actions for BOTH modes
-    utilityActions.push(`<button class="btn btn-outline" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
+    utilityActions.push(`<button class="btn btn-outline" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);
     if (order.type !== 'Delivery') {
-        utilityActions.push(`<button class="btn btn-outline" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
+        utilityActions.push(`<button class="btn btn-outline" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="openSplitBillModal('${order.id}')">⚡ Split Bill</button>`);
     }
     if (['Completed','Delivered'].includes(order.status)) {
-        utilityActions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info);" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
+        utilityActions.push(`<button class="btn btn-outline" style="color:var(--clr-info); border-color:var(--clr-info); padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="openRefundModal('${order.id}')">↩ Refund</button>`);
     }
     
     // Cancel Action for both modes
     if (!['Completed','Delivered','Cancelled'].includes(order.status)) {
-        cancelAction = `<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger);" onclick="window.openCancelConfirmModal('${order.id}')">Cancel Order</button>`;
+        cancelAction = `<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger); padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.openCancelConfirmModal('${order.id}')">Cancel Order</button>`;
     }
 
-    let actionsHtml = `<div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">`;
+    let actionsHtml = `<div style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%;">`;
     
     if (utilityActions.length > 0) {
         actionsHtml += `
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; width: 100%;">
+        <div style="display: flex; gap: 0.3rem; flex-wrap: wrap; width: 100%;">
             ${utilityActions.join('')}
         </div>`;
     }
     
     if (mainActions.length > 0 || cancelAction) {
         actionsHtml += `
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; width: 100%;">
+        <div style="display: flex; gap: 0.3rem; flex-wrap: wrap; width: 100%;">
             ${mainActions.join('')}
             ${cancelAction}
         </div>`;
