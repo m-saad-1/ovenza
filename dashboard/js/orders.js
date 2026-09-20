@@ -10,24 +10,41 @@ window.filterOrdersByType = function(type, btn) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-window.sortDashboardOrders = function(ordersList) {
-    const getElapsed = (order) => {
-        let orderDate = Date.now();
-        if (order.time && typeof order.time === 'string') {
-            let parts = order.time.match(/(\d+):(\d+)\s+(AM|PM)/i);
-            if (parts) {
-                let hours = parseInt(parts[1], 10);
-                let minutes = parseInt(parts[2], 10);
-                let modifier = parts[3].toUpperCase();
-                if (hours === 12) hours = 0;
-                if (modifier === 'PM') hours += 12;
-                let d = new Date();
-                d.setHours(hours, minutes, 0, 0);
-                if (d.getTime() > Date.now() + 60000) d.setDate(d.getDate() - 1);
-                orderDate = d.getTime();
-            }
+window.getOrderTimestamp = function(order) {
+    // Primary: use numeric Unix ms timestamp (all orders have this after data.js fix)
+    if (order.timestamp && typeof order.timestamp === 'number') return order.timestamp;
+    
+    // Fallback: parse time string (legacy / last-resort — should not normally be hit)
+    if (order.time && typeof order.time === 'string') {
+        const parts = order.time.match(/(\d+):(\d+)(?::\d+)?\s*(AM|PM)/i);
+        if (parts) {
+            let hours = parseInt(parts[1], 10);
+            const minutes = parseInt(parts[2], 10);
+            const modifier = parts[3].toUpperCase();
+            if (hours === 12) hours = 0;
+            if (modifier === 'PM') hours += 12;
+            const d = new Date();
+            d.setHours(hours, minutes, 0, 0);
+            if (d.getTime() > Date.now() + 60000) d.setDate(d.getDate() - 1);
+            return d.getTime();
         }
-        return Math.floor((Date.now() - orderDate) / 60000) || 1;
+    }
+    return Date.now();
+};
+
+window.formatElapsed = function(timestamp) {
+    const elapsedMinutes = Math.floor((Date.now() - timestamp) / 60000);
+    if (elapsedMinutes < 1) return "Just now";
+    if (elapsedMinutes < 60) return `${elapsedMinutes} min ago`;
+    const elapsedHours = Math.floor(elapsedMinutes / 60);
+    if (elapsedHours < 24) return `${elapsedHours} hour${elapsedHours > 1 ? 's' : ''} ago`;
+    if (elapsedHours < 48) return "Yesterday";
+    return `${Math.floor(elapsedHours / 24)} days ago`;
+};
+
+window.sortDashboardOrders = function(ordersList) {
+    const getElapsedMinutes = (order) => {
+        return Math.floor((Date.now() - window.getOrderTimestamp(order)) / 60000) || 0;
     };
 
     const weight = (o) => {
@@ -37,13 +54,12 @@ window.sortDashboardOrders = function(ordersList) {
         if (isCancelled) return 5;
         if (isCompleted) return 4;
         
-        const el = getElapsed(o);
+        const el = getElapsedMinutes(o);
         // Priority 1: Elapsed too much time (e.g. >= 15 min)
         if (el >= 15) return 1;
-        // Priority 2: Recent Delivery and Pickup
-        if (o.type && (o.type.toLowerCase() === 'delivery' || o.type.toLowerCase() === 'pickup' || o.type.toLowerCase() === 'takeaway')) return 2;
-        // Priority 3: Other Active (e.g. Dine-in)
-        return 3;
+        
+        // Priority 2: All other active orders (recent)
+        return 2;
     };
 
     return ordersList.slice().sort((a, b) => {
@@ -51,8 +67,8 @@ window.sortDashboardOrders = function(ordersList) {
         const wB = weight(b);
         if (wA !== wB) return wA - wB;
         
-        const elA = getElapsed(a);
-        const elB = getElapsed(b);
+        const elA = getElapsedMinutes(a);
+        const elB = getElapsedMinutes(b);
         // For priority 1 (elapsed too much), sort descending elapsed time (oldest first). 
         // For others, sort ascending elapsed time (newest first).
         return wA === 1 ? elB - elA : elA - elB;
@@ -109,7 +125,7 @@ window.renderFullOrdersTable = function() {
         }
     }
 
-    let filtered = state.orders;
+    let filtered = window.getBranchFilteredOrders(state);
     if (statusFilter !== 'All') filtered = filtered.filter(o => o.status === statusFilter);
     if (typeFilter !== 'All') filtered = filtered.filter(o => o.type === typeFilter);
     if (sourceFilter !== 'All') filtered = filtered.filter(o => o.source === sourceFilter);
@@ -121,8 +137,8 @@ window.renderFullOrdersTable = function() {
     }
     if (searchFilter) {
         filtered = filtered.filter(o => 
-            o.id.toLowerCase().includes(searchFilter) || 
-            o.customer.toLowerCase().includes(searchFilter)
+            String(o.id).toLowerCase().includes(searchFilter) || 
+            String(o.customer).toLowerCase().includes(searchFilter)
         );
     }
 
@@ -134,10 +150,17 @@ window.renderFullOrdersTable = function() {
     window.sortDashboardOrders(filtered).forEach(order => {
         const card = document.createElement('div');
         card.className = 'card order-card';
-        let statusClass = 'badge-info';
-        if (order.status === 'Completed' || order.status === 'Delivered') statusClass = 'badge-success';
-        if (order.status === 'Cancelled') statusClass = 'badge-danger';
-        if (order.status === 'Preparing') statusClass = 'badge-warning';
+        let statusClass = '';
+        switch(order.status) {
+            case 'New': statusClass = 'badge-status-new'; break;
+            case 'Preparing': statusClass = 'badge-status-preparing'; break;
+            case 'Ready': statusClass = 'badge-status-ready'; break;
+            case 'Out for Delivery': statusClass = 'badge-info'; break;
+            case 'Delivered': statusClass = 'badge-status-completed'; break;
+            case 'Completed': statusClass = 'badge-status-completed'; break;
+            case 'Cancelled': statusClass = 'badge-status-cancelled'; break;
+            default: statusClass = 'badge-info';
+        }
         
         let paymentStatus = order.paymentStatus || order.payment || 'Pending';
         let paymentBadge = paymentStatus === 'Paid' ? 'badge-success' : 'badge-warning';
@@ -153,43 +176,17 @@ window.renderFullOrdersTable = function() {
             itemCount = 1;
         }
 
-        let orderDate = Date.now();
-        if (order.time && typeof order.time === 'string') {
-            let parts = order.time.match(/(\d+):(\d+)\s+(AM|PM)/i);
-            if (parts) {
-                let hours = parseInt(parts[1], 10);
-                let minutes = parseInt(parts[2], 10);
-                let modifier = parts[3].toUpperCase();
-                if (hours === 12) hours = 0;
-                if (modifier === 'PM') hours += 12;
-                let d = new Date();
-                d.setHours(hours, minutes, 0, 0);
-                if (d.getTime() > Date.now() + 60000) {
-                    d.setDate(d.getDate() - 1); // roll back one day if time is in the future
-                }
-                orderDate = d.getTime();
-            } else {
-                let parts24 = order.time.match(/^(\d{1,2}):(\d{2})$/);
-                if (parts24) {
-                    let hours = parseInt(parts24[1], 10);
-                    let minutes = parseInt(parts24[2], 10);
-                    let d = new Date();
-                    d.setHours(hours, minutes, 0, 0);
-                    if (d.getTime() > Date.now() + 60000) d.setDate(d.getDate() - 1);
-                    orderDate = d.getTime();
-                }
-            }
-        }
-        
-        const elapsed = Math.floor((Date.now() - orderDate) / 60000) || 1;
-        order._elapsed = elapsed; // Save for dashboard
+        let orderDate = window.getOrderTimestamp(order);
+        const elapsedMinutes = Math.floor((Date.now() - orderDate) / 60000) || 0;
+        order._elapsed = elapsedMinutes; // Save for dashboard
     
-        const urgencyStyle = elapsed >= 10 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-danger); background: rgba(239,68,68,0.04);' : elapsed >= 5 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-warning); background: rgba(245,158,11,0.04);' : '';
+        const urgencyStyle = elapsedMinutes >= 10 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-danger); background: rgba(239,68,68,0.04);' : elapsedMinutes >= 5 && order.status !== 'Completed' && order.status !== 'Delivered' && order.status !== 'Cancelled' ? 'border-color: var(--clr-warning); background: rgba(245,158,11,0.04);' : '';
         
         card.setAttribute('style', `display: flex; flex-direction: column; gap: 1rem; ${urgencyStyle}`);
 
-        
         let actionBtn = '<button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="window.openOrderDrawer(\'' + order.id + '\')">View Details</button>';
+
+        const elapsedFormatted = window.formatElapsed(orderDate);
 
         card.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -197,7 +194,7 @@ window.renderFullOrdersTable = function() {
                     <h3 style="margin: 0; font-size: 1.1rem;">#${order.id}</h3>
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem;">
                         <p style="margin: 0; font-size: 0.8rem; color: var(--clr-text-secondary);">${order.time}</p>
-                        ${!['Completed', 'Delivered', 'Cancelled'].includes(order.status) ? `<span style="font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.4rem; border-radius: 4px; color: ${elapsed >= 10 ? 'var(--clr-danger)' : elapsed >= 5 ? 'var(--clr-warning)' : 'var(--clr-text-primary)'}; ${elapsed >= 10 ? 'background: var(--clr-danger-bg);' : elapsed >= 5 ? 'background: rgba(245,158,11,0.1);' : ''}">${elapsed} min ago</span>` : ''}
+                        ${!['Completed', 'Delivered', 'Cancelled'].includes(order.status) ? `<span class="time-elapsed-badge" data-timestamp="${orderDate}" style="font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.4rem; border-radius: 4px; color: ${elapsedMinutes >= 10 ? 'var(--clr-danger)' : elapsedMinutes >= 5 ? 'var(--clr-warning)' : 'var(--clr-text-primary)'}; ${elapsedMinutes >= 10 ? 'background: var(--clr-danger-bg);' : elapsedMinutes >= 5 ? 'background: rgba(245,158,11,0.1);' : ''}">${elapsedFormatted}</span>` : ''}
                     </div>
                 </div>
                 <span class="badge ${statusClass}">${order.status}</span>
@@ -234,21 +231,31 @@ window.openOrderDrawer = function(orderId) {
     
     let statusClass = '';
     switch(order.status) {
-        case 'New': statusClass = 'color: var(--clr-primary); background: rgba(233,41,14,0.1);'; break;
-        case 'Preparing': statusClass = 'color: var(--clr-warning); background: rgba(245,158,11,0.1);'; break;
-        case 'Ready': statusClass = 'color: var(--clr-success); background: rgba(16,185,129,0.1);'; break;
-        case 'Out for Delivery': statusClass = 'color: var(--clr-info); background: rgba(59,130,246,0.1);'; break;
-        case 'Delivered': statusClass = 'color: var(--clr-success); background: rgba(16,185,129,0.1);'; break;
-        case 'Completed': statusClass = 'color: var(--clr-success); background: rgba(16,185,129,0.1);'; break;
-        case 'Cancelled': statusClass = 'color: var(--clr-danger); background: rgba(239,68,68,0.1);'; break;
-        default: statusClass = 'color: var(--clr-text-secondary); background: var(--clr-bg-app);';
+        case 'New': statusClass = 'badge-status-new'; break;
+        case 'Preparing': statusClass = 'badge-status-preparing'; break;
+        case 'Ready': statusClass = 'badge-status-ready'; break;
+        case 'Out for Delivery': statusClass = 'badge-info'; break;
+        case 'Delivered': statusClass = 'badge-status-completed'; break;
+        case 'Completed': statusClass = 'badge-status-completed'; break;
+        case 'Cancelled': statusClass = 'badge-status-cancelled'; break;
+        default: statusClass = 'badge-info';
     }
 
     const content = `
         <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end;">
-            <div>
-                <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.85rem;">Customer</p>
-                <p style="margin: 0; font-weight: 600; font-size: 1.1rem;">${order.customer}</p>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div>
+                    <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.85rem;">Customer</p>
+                    <p style="margin: 0; font-weight: 600; font-size: 1.1rem;">${typeof order.customer === 'object' ? (order.customer.name || 'Unknown') : (order.customer || 'Unknown')}</p>
+                </div>
+                ${['Delivery', 'Pickup', 'Takeaway'].includes(order.type) ? `
+                <a href="tel:${order.phone || ''}" class="btn btn-outline" style="padding: 0.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;" title="Call Customer">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                </a>
+                <a href="https://maps.google.com/?q=${encodeURIComponent(order.address || order.customer?.address || 'Lahore')}" target="_blank" class="btn btn-outline" style="padding: 0.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;" title="View on Map">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </a>
+                ` : ''}
             </div>
             <div>
                 <span class="badge" style="background: rgba(233,41,14,0.1); color: var(--clr-primary); font-size: 0.8rem;">Source: ${order.source || 'N/A'}</span>
@@ -266,7 +273,7 @@ window.openOrderDrawer = function(orderId) {
             </div>
             <div>
                 <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Order Status</p>
-                <span class="badge" style="font-size: 0.85rem; padding: 0.2rem 0.5rem; margin-top: 0.2rem; ${statusClass}">${order.status}</span>
+                <span class="badge ${statusClass}" style="font-size: 0.85rem; padding: 0.2rem 0.5rem; margin-top: 0.2rem;">${order.status}</span>
             </div>
             <div>
                 <p style="margin: 0; color: var(--clr-text-secondary); font-size: 0.8rem;">Payment</p>
@@ -337,30 +344,36 @@ window.openOrderDrawer = function(orderId) {
 
     if (document.body.classList.contains('simple-mode')) {
         if (order.status === 'New') {
-            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Accept - Preparing</button>`);
+            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); window.closeOrderDrawer();">Accept</button>`);
+        } else if (order.status === 'Accepted') {
+            mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Start Preparing</button>`);
         } else if (order.status === 'Preparing') {
             if (order.type === 'Pickup' || order.type === 'Takeaway') {
                 mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Ready</button>`);
             } else {
-                mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}');">Dispatched</button>`);
+                mainActions.push(`<button class="btn btn-info" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}');">Dispatch</button>`);
             }
+        } else if (order.status === 'Dispatched') {
+            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); window.closeOrderDrawer();">Rider Picked Up</button>`);
         } else if (order.status === 'Out for Delivery' || order.status === 'Ready') {
-            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Delivered'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}</button>`);
+            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Complete Order' : 'Mark Delivered'}</button>`);
         }
     } else {
         // Advanced actions
         if (order.status === 'New') {
             mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); window.closeOrderDrawer(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
         } else if (order.status === 'Accepted') {
-            mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateKitchenStatus('${order.id}','New'); window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); window.closeOrderDrawer(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
+            mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); window.closeOrderDrawer(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
         } else if (order.status === 'Ready') {
             if (order.type === 'Delivery') {
                  mainActions.push(`<button class="btn btn-info" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}')">Dispatch</button>`);
             } else {
                  mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Complete Order</button>`);
             }
+        } else if (order.status === 'Dispatched') {
+            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); window.closeOrderDrawer();">Rider Picked Up</button>`);
         } else if (order.status === 'Out for Delivery') {
-            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed'); window.closeOrderDrawer();">Mark Delivered / Complete</button>`);
+            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Delivered'); window.closeOrderDrawer();">Mark Delivered</button>`);
         }
     }
 
@@ -378,24 +391,13 @@ window.openOrderDrawer = function(orderId) {
         cancelAction = `<button class="btn btn-outline" style="color:var(--clr-danger); border-color:var(--clr-danger); padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.openCancelConfirmModal('${order.id}')">Cancel Order</button>`;
     }
 
-    let actionsHtml = `<div style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%;">`;
-    
-    if (utilityActions.length > 0) {
-        actionsHtml += `
-        <div style="display: flex; gap: 0.3rem; flex-wrap: wrap; width: 100%;">
-            ${utilityActions.join('')}
-        </div>`;
-    }
-    
-    if (mainActions.length > 0 || cancelAction) {
-        actionsHtml += `
-        <div style="display: flex; gap: 0.3rem; flex-wrap: wrap; width: 100%;">
-            ${mainActions.join('')}
-            ${cancelAction}
-        </div>`;
-    }
-    
-    actionsHtml += `</div>`;
+    let allActions = [...utilityActions, ...mainActions];
+    if (cancelAction) allActions.push(cancelAction);
+
+    let actionsHtml = `
+    <div style="display: flex; gap: 0.3rem; flex-wrap: wrap; width: 100%;">
+        ${allActions.join('')}
+    </div>`;
     
     let actionsContainer = document.getElementById('drawer-actions') || document.getElementById('order-detail-actions');
     if (actionsContainer) {
@@ -640,9 +642,9 @@ window.confirmDispatch = function(orderId) {
         return;
     }
     
-    window.Store.updateOrderStatus(orderId, 'Out for Delivery');
+    window.Store.updateOrderStatus(orderId, 'Dispatched');
     closeDispatchModal();
-    showNotification('Order Dispatched', 'Order #' + orderId + ' is Out for Delivery by ' + riderSelect.options[riderSelect.selectedIndex].text.split(' (')[0], 'success');
+    showNotification('Order Dispatched', 'Order #' + orderId + ' is Dispatched. Waiting for rider ' + riderSelect.options[riderSelect.selectedIndex].text.split(' (')[0] + ' to pick it up.', 'success');
 };
 
 window.openOrderDetailModal = window.openOrderDrawer;
@@ -660,3 +662,26 @@ window.closeDrawer = function() {
     if (drawerOverlay) drawerOverlay.classList.remove('active');
     if (orderDrawer) orderDrawer.classList.remove('open');
 };
+
+// Auto refresh order elapsed times every minute
+setInterval(() => {
+    document.querySelectorAll('.time-elapsed-badge').forEach(badge => {
+        const timestamp = parseInt(badge.getAttribute('data-timestamp'), 10);
+        if (!timestamp) return;
+        
+        const elapsedMinutes = Math.floor((Date.now() - timestamp) / 60000) || 0;
+        badge.textContent = window.formatElapsed(timestamp);
+        
+        // Update colors dynamically
+        if (elapsedMinutes >= 10) {
+            badge.style.color = 'var(--clr-danger)';
+            badge.style.background = 'var(--clr-danger-bg)';
+        } else if (elapsedMinutes >= 5) {
+            badge.style.color = 'var(--clr-warning)';
+            badge.style.background = 'rgba(245,158,11,0.1)';
+        } else {
+            badge.style.color = 'var(--clr-text-primary)';
+            badge.style.background = '';
+        }
+    });
+}, 60000);

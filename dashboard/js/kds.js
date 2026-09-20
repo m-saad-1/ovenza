@@ -40,14 +40,12 @@ function renderKDSBoard(state) {
     let readyCount = 0;
     let compCount = 0;
 
-    const kdsOrders = state.orders.filter(o => ['New', 'Preparing', 'Ready', 'Completed', 'Dispatched', 'Out for Delivery', 'Delivered'].includes(o.kitchenStatus) || ['New', 'Preparing', 'Ready', 'Completed'].includes(o.status));
+    const kdsOrders = window.getBranchFilteredOrders(state).filter(o => ['New', 'Preparing', 'Ready', 'Completed'].includes(window.Store.getKitchenStatus(o)));
 
     kdsOrders.forEach(order => {
         const card = document.createElement('div');
         
-        let kStatus = order.kitchenStatus || 'New';
-        if (order.status === 'Sent for Preparing') kStatus = 'New';
-        if (['Completed', 'Dispatched', 'Out for Delivery', 'Delivered'].includes(order.status)) kStatus = 'Completed';
+        let kStatus = window.Store.getKitchenStatus(order);
         
         let statusClass = '';
         let nextAction = '';
@@ -56,17 +54,17 @@ function renderKDSBoard(state) {
             statusClass = 'new';
             nextAction = `
                 <div style="display:flex; gap:0.25rem; margin-top: 0.5rem;">
-                    <button class="btn btn-warning" style="flex:1; font-size: 0.75rem; padding: 0.25rem 0.4rem;" onclick="window.Store.updateKitchenStatus('${order.id}', 'Preparing')">Start</button>
+                    <button class="btn btn-warning" style="flex:1; font-size: 0.75rem; padding: 0.25rem 0.4rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Preparing')">Start</button>
                 </div>
             `;
             newCount++;
         } else if (kStatus === 'Preparing') {
             statusClass = 'preparing';
-            nextAction = `<button class="btn btn-success" style="width:100%; font-size: 0.75rem; padding: 0.25rem 0.4rem; margin-top: 0.5rem;" onclick="window.Store.updateKitchenStatus('${order.id}', 'Ready')">Mark Ready</button>`;
+            nextAction = `<button class="btn btn-success" style="width:100%; font-size: 0.75rem; padding: 0.25rem 0.4rem; margin-top: 0.5rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Ready')">Mark Ready</button>`;
             prepCount++;
         } else if (kStatus === 'Ready') {
             statusClass = 'ready';
-            nextAction = `<button class="btn btn-outline" style="width:100%; font-size: 0.75rem; padding: 0.25rem 0.4rem; margin-top: 0.5rem;" onclick="window.Store.updateKitchenStatus('${order.id}', 'Completed')">Clear</button>`;
+            nextAction = `<button class="btn btn-outline" style="width:100%; font-size: 0.75rem; padding: 0.25rem 0.4rem; margin-top: 0.5rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed')">Clear</button>`;
             readyCount++;
         } else if (kStatus === 'Completed') {
             statusClass = 'completed';

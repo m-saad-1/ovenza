@@ -118,8 +118,9 @@ function renderDelivery(state) {
                 <td>Ali Raza</td>
                 <td><span class="badge badge-info">${o.status}</span></td>
                 <td>12 mins</td>
+                <td>${o.status === 'Dispatched' ? `<button class="btn btn-primary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="window.Store.updateOrderStatus('${o.id}', 'Out for Delivery')">Rider Picked Up</button>` : ''}</td>
             </tr>
-        `).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--clr-text-muted);">No active deliveries on the road.</td></tr>';
+        `).join('') || '<tr><td colspan="7" style="text-align: center; color: var(--clr-text-muted);">No active deliveries on the road.</td></tr>';
     }
 
     // Populate Dispatch List Tab

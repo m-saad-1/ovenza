@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRecentOrders(window.Store.state);
     if (typeof renderSimpleRecentOrders === 'function') renderSimpleRecentOrders(window.Store.state);
     setTimeout(() => { if (typeof updateChannelChartData === 'function') updateChannelChartData(window.Store.state); }, 100);
+
+    // Note: elapsed time badges are updated by orders.js setInterval + app.js Store.notify() every 60s.
+    // No separate interval needed here.
 });
 
 function updateKPIs(state) {
@@ -25,13 +28,7 @@ function updateKPIs(state) {
     let pendingCount = 0;
     let activeDeliveries = 0;
 
-    let targetOrders = state.orders;
-    if (state.currentBranch && state.currentBranch !== "All Branches") {
-        const branch = state.branches.find(b => b.name === state.currentBranch);
-        if (branch) {
-            targetOrders = state.orders.filter(o => o.branchId === branch.id);
-        }
-    }
+    let targetOrders = window.getBranchFilteredOrders(state);
 
     targetOrders.forEach(o => {
         revenue += o.total;
@@ -75,11 +72,7 @@ function renderSimpleRecentOrders(state) {
     if (!tbody) return;
     
     tbody.innerHTML = '';
-    let targetOrders = state.orders;
-    if (state.currentBranch && state.currentBranch !== "All Branches") {
-        const branch = state.branches.find(b => b.name === state.currentBranch);
-        if (branch) targetOrders = state.orders.filter(o => o.branchId === branch.id);
-    }
+    let targetOrders = window.getBranchFilteredOrders(state);
     const sorted = typeof window.sortDashboardOrders === 'function' ? window.sortDashboardOrders(targetOrders) : targetOrders.slice().reverse();
     const recent = sorted.slice(0, 10);
     if (recent.length === 0) {
@@ -138,13 +131,7 @@ function renderRecentOrders(state) {
     
     tbody.innerHTML = '';
 
-    let targetOrders = state.orders;
-    if (state.currentBranch && state.currentBranch !== "All Branches") {
-        const branch = state.branches.find(b => b.name === state.currentBranch);
-        if (branch) {
-            targetOrders = state.orders.filter(o => o.branchId === branch.id);
-        }
-    }
+    let targetOrders = window.getBranchFilteredOrders(state);
 
     const recent = targetOrders.slice().reverse().slice(0, 5);
     
@@ -156,10 +143,17 @@ function renderRecentOrders(state) {
     recent.forEach(order => {
         const tr = document.createElement('tr');
         
-        let statusClass = 'badge-info';
-        if (order.status === 'Completed' || order.status === 'Delivered') statusClass = 'badge-success';
-        if (order.status === 'Cancelled') statusClass = 'badge-danger';
-        if (order.status === 'Preparing') statusClass = 'badge-warning';
+        let statusClass = '';
+        switch(order.status) {
+            case 'New': statusClass = 'badge-status-new'; break;
+            case 'Preparing': statusClass = 'badge-status-preparing'; break;
+            case 'Ready': statusClass = 'badge-status-ready'; break;
+            case 'Out for Delivery': statusClass = 'badge-info'; break;
+            case 'Delivered': statusClass = 'badge-status-completed'; break;
+            case 'Completed': statusClass = 'badge-status-completed'; break;
+            case 'Cancelled': statusClass = 'badge-status-cancelled'; break;
+            default: statusClass = 'badge-info';
+        }
 
         // Determine table/area label based on order type
         let tableArea = '—';
@@ -257,13 +251,7 @@ function initChannelChart() {
 function updateChannelChartData(state) {
     if (!channelChartInstance) return;
     
-    let targetOrders = state.orders;
-    if (state.currentBranch && state.currentBranch !== "All Branches") {
-        const branch = state.branches.find(b => b.name === state.currentBranch);
-        if (branch) {
-            targetOrders = state.orders.filter(o => o.branchId === branch.id);
-        }
-    }
+    let targetOrders = window.getBranchFilteredOrders(state);
     
     let website = 0, pos = 0, whatsapp = 0, app = 0;
     targetOrders.forEach(o => {
@@ -310,31 +298,34 @@ window.updateSalesChart = function(duration) {
 
 // Dark Mode Toggle Logic
 document.addEventListener('DOMContentLoaded', () => {
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    if (darkModeToggle) {
-        // Initialize state
-        const isDarkMode = document.documentElement.classList.contains('dark-mode');
-        darkModeToggle.checked = isDarkMode;
-
-        darkModeToggle.addEventListener('change', (e) => {
-            if (e.target.checked) {
+    const darkModeToggles = document.querySelectorAll('.dark-mode-toggle');
+    const isDarkMode = document.documentElement.classList.contains('dark-mode');
+    
+    darkModeToggles.forEach(toggle => {
+        toggle.checked = isDarkMode;
+        
+        toggle.addEventListener('change', (e) => {
+            const shouldBeDark = e.target.checked;
+            if (shouldBeDark) {
                 document.documentElement.classList.add('dark-mode');
                 localStorage.setItem('crust_theme', 'dark');
             } else {
                 document.documentElement.classList.remove('dark-mode');
                 localStorage.setItem('crust_theme', 'light');
             }
+            // Sync all toggles
+            darkModeToggles.forEach(t => { t.checked = shouldBeDark; });
         });
-    }
+    });
 
     // Apply theme on load if it was set
     const savedTheme = localStorage.getItem('crust_theme');
     if (savedTheme === 'light') {
         document.documentElement.classList.remove('dark-mode');
-        if (darkModeToggle) darkModeToggle.checked = false;
+        darkModeToggles.forEach(t => t.checked = false);
     } else if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark-mode');
-        if (darkModeToggle) darkModeToggle.checked = true;
+        darkModeToggles.forEach(t => t.checked = true);
     }
 });
 

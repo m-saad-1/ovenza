@@ -65,7 +65,7 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                     <span>Out for Delivery</span>
                 </div>
             </div>
-        </div>`}),e.innerHTML=o;let i=document.querySelector(".empty-orders-state");i&&(i.style.display="none")}document.addEventListener("DOMContentLoaded",()=>{console.log("Hotbox - Script Loaded"),window.CartManager=O,V(),G(),K(),ee(),O.init(),te();let e=Z(),t=document.getElementById("lightbox-img");re(),oe(),ne(),le(e,t),ie(),document.querySelectorAll(".category-btn").forEach(r=>{r.addEventListener("click",()=>{document.querySelectorAll(".category-btn").forEach(n=>n.classList.remove("active")),r.classList.add("active")})});let o=document.getElementById("reservationForm");o&&o.addEventListener("submit",r=>{r.preventDefault(),alert("Your reservation has been submitted! We will get in touch soon."),o.reset()}),window.addEventListener("resize",()=>O.updateUI());let i=document.getElementById("checkout-form");i&&i.addEventListener("submit",function(r){r.preventDefault(),window.isOrdering=!0;let n=document.getElementById("cust-name").value,d=document.getElementById("cust-phone").value,s=document.getElementById("cust-address").value,y=document.getElementById("cust-city").value,l=document.querySelector('input[name="payment_method"]:checked').value,cO=(localStorage.getItem("tl_location_type")==="outlet")?"Pickup":"Delivery",v=window.CartManager.getSubtotal()+(cO==="Delivery"?12:0);if(l==="Wallet"){if(!(localStorage.getItem("isLoggedIn")==="true")){alert("Please login to use your Wallet balance.");return}if(typeof window.userWalletBalance>"u"||v>window.userWalletBalance){alert("Insufficient Wallet balance to complete this order. Your total is Rs "+v+", but your balance is Rs "+(window.userWalletBalance||0)+".");return}}let u={id:Math.floor(1e5+Math.random()*9e5),date:new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString(),total:v,status:"Pending",paymentMethod:l,type:cO,customer:{name:n,phone:d,address:s,city:y,notes:document.getElementById("cust-notes").value},items:window.CartManager.state.items},E=document.getElementById("order-confirm-modal");E&&E.remove();let b=`
+        </div>`}),e.innerHTML=o;let i=document.querySelector(".empty-orders-state");i&&(i.style.display="none")}document.addEventListener("DOMContentLoaded",()=>{console.log("Hotbox - Script Loaded"),window.CartManager=O,V(),G(),K(),ee(),O.init(),te();let e=Z(),t=document.getElementById("lightbox-img");re(),oe(),ne(),le(e,t),ie(),document.querySelectorAll(".category-btn").forEach(r=>{r.addEventListener("click",()=>{document.querySelectorAll(".category-btn").forEach(n=>n.classList.remove("active")),r.classList.add("active")})});let o=document.getElementById("reservationForm");o&&o.addEventListener("submit",r=>{r.preventDefault(),alert("Your reservation has been submitted! We will get in touch soon."),o.reset()}),window.addEventListener("resize",()=>O.updateUI());let i=document.getElementById("checkout-form");i&&i.addEventListener("submit",function(r){r.preventDefault(),window.isOrdering=!0;let n=document.getElementById("cust-name").value,d=document.getElementById("cust-phone").value,s=document.getElementById("cust-address").value,y=document.getElementById("cust-city").value,l=document.querySelector('input[name="payment_method"]:checked').value,cO=(localStorage.getItem("tl_location_type")==="outlet")?"Pickup":"Delivery",v=window.CartManager.getSubtotal()+(cO==="Delivery"?12:0);if(l==="Wallet"){if(!(localStorage.getItem("isLoggedIn")==="true")){alert("Please login to use your Wallet balance.");return}if(typeof window.userWalletBalance>"u"||v>window.userWalletBalance){alert("Insufficient Wallet balance to complete this order. Your total is Rs "+v+", but your balance is Rs "+(window.userWalletBalance||0)+".");return}}let u={id:Math.floor(1e5+Math.random()*9e5),date:new Date().toLocaleDateString()+" "+new Date().toLocaleTimeString(),timestamp:Date.now(),total:v,status:"Pending",paymentMethod:l,type:cO,customer:{name:n,phone:d,address:s,city:y,notes:document.getElementById("cust-notes").value},items:window.CartManager.state.items},E=document.getElementById("order-confirm-modal");E&&E.remove();let b=`
           <div class="modal-overlay active" id="order-confirm-modal" style="z-index:10002; display:flex; padding: 1rem; align-items:center; justify-content:center;">
             <div class="modal-sheet" style="max-width:850px; width:100%; max-height:90vh; padding:0; display:flex; flex-direction:column; background:var(--clr-surface, #fff); overflow:hidden; border-radius:24px;">
               
@@ -644,7 +644,9 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         
         const newOrder = {
             id: orderId,
+            timestamp: Date.now(),
             date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString(),
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
             total: total,
             status: "Pending",
             paymentMethod: payment,
@@ -892,6 +894,28 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
         return (statusIndex / (STAGES.length - 1)) * 100;
     }
     
+    function handleReorder(orderId) {
+        let orders = JSON.parse(localStorage.getItem('hdm_orders')) || [];
+        let orderToClone = orders.find(o => o.id == orderId);
+        if (!orderToClone) return;
+        
+        let newOrder = JSON.parse(JSON.stringify(orderToClone)); // Deep clone
+        newOrder.id = Math.floor(100000 + Math.random() * 900000);
+        newOrder.date = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString();
+        newOrder.timestamp = Date.now();
+        newOrder.status = "Pending";
+        delete newOrder.lastUpdated;
+        delete newOrder.statusTimestamps;
+        delete newOrder._elapsed;
+        
+        orders.unshift(newOrder);
+        localStorage.setItem('hdm_orders', JSON.stringify(orders));
+        
+        // Show success and reload
+        alert("Order #" + orderId + " reordered successfully!");
+        window.location.reload();
+    }
+
     function renderFullOrders() {
         const wrapper = document.querySelector('.dynamic-orders-wrapper');
         const emptyState = document.querySelector('.empty-orders-state');
@@ -918,9 +942,9 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 STAGES = ["Confirmed", "Preparing", "Ready", "Delivered"];
             }
             if (order.status === 'Cancelled') {
-                STAGES = ["Accepted", "Cancelled"];
+                STAGES.push("Cancelled");
             } else if (order.status === 'Refunded') {
-                STAGES = ["Accepted", "Cancelled", "Refunded"];
+                STAGES.push("Refunded");
             }
 
             let currentStatusIndex = STAGES.indexOf(order.status);
@@ -952,8 +976,14 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 else if (idx === currentStatusIndex && isDelivered) cls += ' completed';
                 
                 let displayStage = stage;
-                if (order.type === 'Pickup' && stage === 'Delivered') displayStage = 'Picked Up';
-                if (order.type === 'Pickup' && stage === 'Out for Delivery') displayStage = 'Ready for Pickup';
+                if (order.type === 'Pickup' || order.type === 'Takeaway') {
+                    if (stage === 'Confirmed') displayStage = 'Confirm';
+                    else if (stage === 'Ready') displayStage = 'Ready for Pickup';
+                    else if (stage === 'Delivered') displayStage = 'Picked Up';
+                } else {
+                    if (stage === 'Confirmed') displayStage = 'Accept';
+                }
+                if (stage === 'Cancelled') displayStage = 'Cancel';
                 
                 let colorOverrides = '';
                 if (stage === 'Cancelled') colorOverrides = 'color: var(--clr-danger); border-color: var(--clr-danger);';
@@ -1076,13 +1106,20 @@ const href = o.getAttribute("href")||"";if(href.includes("contact.html")&&!href.
                 
                 <!-- Actions -->
                 <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
-                    <a href="${window.location.pathname.includes('/pages/') ? 'menu.html' : 'pages/menu.html'}" class="btn btn-primary" style="border-radius:50px;padding:0.6rem 1.25rem;font-size:0.85rem;font-weight:600;text-decoration:none;">Reorder</a>
+                    <a href="javascript:void(0)" class="btn btn-primary reorder-btn" data-order-id="${order.id}" style="border-radius:50px;padding:0.6rem 1.25rem;font-size:0.85rem;font-weight:600;text-decoration:none;">Reorder</a>
                 </div>
             </div>`;
         });
         
         if (wrapper.innerHTML !== html) {
             wrapper.innerHTML = html;
+            // Bind reorder buttons
+            wrapper.querySelectorAll('.reorder-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const orderId = e.target.getAttribute('data-order-id');
+                    handleReorder(orderId);
+                });
+            });
         }
         
         if (needsUpdate) {
@@ -1160,3 +1197,215 @@ document.body.addEventListener('click', function(e) {
 }, true); // Use capture phase to guarantee we beat other inline or attached listeners
 
 
+// ============================================================
+// CUSTOMER ORDERS PAGE — Enhanced Renderer (replaces old ie())
+// ============================================================
+(function() {
+    'use strict';
+    if (!window.location.pathname.includes('orders.html')) return;
+
+    function fmt(n) { return 'Rs ' + Number(n || 0).toLocaleString(); }
+
+    var DELIVERY_STEPS = [
+        { key: 'Pending',          label: 'Confirmed' },
+        { key: 'Accepted',         label: 'Accepted' },
+        { key: 'Preparing',        label: 'Preparing' },
+        { key: 'Out for Delivery', label: 'Out for Delivery' },
+        { key: 'Delivered',        label: 'Delivered' }
+    ];
+    var PICKUP_STEPS = [
+        { key: 'Pending',   label: 'Confirmed' },
+        { key: 'Accepted',  label: 'Accepted' },
+        { key: 'Preparing', label: 'Preparing' },
+        { key: 'Ready',     label: 'Ready for Pickup' },
+        { key: 'Completed', label: 'Picked Up' }
+    ];
+    var STATUS_RANK = {
+        'Pending':0,'New':0,'Accepted':1,'Sent for Preparing':1,
+        'Preparing':2,'Out for Delivery':3,'Dispatched':3,'Ready':3,'Delivered':4,'Completed':4
+    };
+
+    function isPickup(o) {
+        var t = (o.type || '').toLowerCase();
+        return t === 'pickup' || t === 'takeaway';
+    }
+    function getActiveIdx(o) {
+        if (o.status === 'Cancelled') return -1;
+        return STATUS_RANK[o.status] !== undefined ? STATUS_RANK[o.status] : 0;
+    }
+    function statusStyle(s) {
+        var sl = (s || '').toLowerCase();
+        if (sl === 'delivered' || sl === 'completed' || sl === 'ready')
+            return 'background:#e8f5e9;color:#2e7d32;';
+        if (sl === 'cancelled') return 'background:#ffebee;color:#c62828;';
+        if (sl === 'preparing' || sl === 'out for delivery')
+            return 'background:#fff3e0;color:#e65100;';
+        return 'background:#e3f2fd;color:#0d47a1;';
+    }
+
+    function buildTimeline(order) {
+        var steps = isPickup(order) ? PICKUP_STEPS : DELIVERY_STEPS;
+        var ai = getActiveIdx(order);
+        var isCancelled = order.status === 'Cancelled';
+        var pct = (ai < 0 || steps.length < 2) ? 0 : Math.min(100, Math.round((ai / (steps.length - 1)) * 100));
+
+        var stepsHtml = steps.map(function(step, i) {
+            var cls = (!isCancelled && i < ai) ? 'completed' : (!isCancelled && i === ai) ? 'pulsing' : '';
+            return '<div class="timeline-step ' + cls + '"><div class="step-icon"></div><span>' + step.label + '</span></div>';
+        }).join('');
+
+        var etaMsg = '';
+        if (!isCancelled) {
+            if (order.status === 'Out for Delivery') etaMsg = 'Arriving soon — please be available.';
+            else if (order.status === 'Delivered') etaMsg = 'Order delivered. Enjoy your meal!';
+            else if (order.status === 'Ready') etaMsg = 'Your order is ready for pickup!';
+            else if (order.status === 'Completed') etaMsg = isPickup(order) ? 'Order picked up!' : 'Order completed!';
+            else etaMsg = isPickup(order) ? 'Est. pickup: 15–25 mins' : 'Est. delivery: 30–45 mins';
+        }
+
+        return '<div style="background:var(--clr-bg-app,#f9f9f9);padding:1.25rem;border-radius:12px;margin-top:1rem;">' +
+            (etaMsg ? '<p style="font-size:0.88rem;font-weight:600;color:var(--clr-text-primary);margin:0 0 0.75rem 0;">' + etaMsg + '</p>' : '') +
+            '<div class="order-timeline"><div class="timeline-track"><div class="timeline-progress" style="width:' + pct + '%;"></div></div>' + stepsHtml + '</div>' +
+            (isCancelled ? '<p style="color:#c62828;font-size:0.82rem;margin-top:0.5rem;text-align:center;">This order was cancelled.</p>' : '') +
+        '</div>';
+    }
+
+    function buildCard(order) {
+        var itemsHtml = (order.items || []).map(function(item) {
+            var name = item.title || item.name || '';
+            var ex = [];
+            if (item.size) ex.push(item.size);
+            if (item.extras && item.extras.length) ex = ex.concat(item.extras);
+            return '<div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:0.25rem;">' +
+                '<span><strong>' + (item.qty||1) + 'x</strong> ' + name +
+                    (ex.length ? ' <span style="color:var(--clr-text-secondary,#888);font-size:0.8em;">(' + ex.join(', ') + ')</span>' : '') +
+                '</span>' +
+            '</div>';
+        }).join('');
+
+        var delivBox = '';
+        if (!isPickup(order) && order.customer) {
+            delivBox = '<div style="margin:0.6rem 0;font-size:0.83rem;color:var(--clr-text-secondary,#666);border-left:3px solid var(--clr-primary);padding-left:0.75rem;">' +
+                '<p style="margin:0 0 0.1rem 0;"><strong>Deliver to:</strong> ' + (order.customer.name||'') + (order.customer.phone ? ' · ' + order.customer.phone : '') + '</p>' +
+                (order.customer.address ? '<p style="margin:0;">' + order.customer.address + (order.customer.city ? ', ' + order.customer.city : '') + '</p>' : '') +
+            '</div>';
+        }
+
+        var isActive = order.status !== 'Delivered' && order.status !== 'Completed' && order.status !== 'Cancelled';
+        var border = isActive ? 'var(--clr-primary,#a70201)' : 'var(--clr-border,#eee)';
+
+        var dateStr = '';
+        if (order.timestamp) {
+            var d = new Date(order.timestamp);
+            dateStr = d.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) + ' · ' +
+                      d.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+        } else if (order.date) { dateStr = order.date; }
+
+        return '<div class="order-card" style="background:var(--clr-surface,#fff);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.06);border:2px solid ' + border + ';">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--clr-border,#eee);padding-bottom:0.75rem;margin-bottom:0.75rem;">' +
+                '<div>' +
+                    '<div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.35rem;">' +
+                        '<span style="' + statusStyle(order.status) + 'padding:0.2rem 0.65rem;border-radius:50px;font-size:0.73rem;font-weight:700;">' + (order.status||'Pending') + '</span>' +
+                        '<span style="font-size:0.73rem;color:var(--clr-text-secondary,#888);">' + (isPickup(order)?'🏪 Pickup':'🛵 Delivery') + '</span>' +
+                    '</div>' +
+                    '<h3 style="margin:0 0 0.1rem 0;font-size:1.05rem;color:var(--clr-text-primary);">Order #' + order.id + '</h3>' +
+                    '<span style="color:var(--clr-text-secondary,#888);font-size:0.78rem;">' + dateStr + '</span>' +
+                '</div>' +
+                '<div style="text-align:right;">' +
+                    '<span style="font-weight:700;font-size:1.1rem;color:var(--clr-text-primary);display:block;">' + fmt(order.total) + '</span>' +
+                    '<span style="font-size:0.76rem;color:var(--clr-text-secondary,#888);">' + (order.items||[]).reduce(function(s,i){return s+(i.qty||1);},0) + ' items</span>' +
+                '</div>' +
+            '</div>' +
+            '<div style="margin-bottom:0.5rem;">' + itemsHtml + '</div>' +
+            delivBox +
+            buildTimeline(order) +
+            '<div style="margin-top:0.9rem;display:flex;justify-content:flex-end;">' +
+                '<button class="btn btn-outline reorder-btn" data-order-id="' + order.id + '" style="font-size:0.8rem;padding:0.35rem 0.9rem;border-radius:50px;cursor:pointer;font-weight:600;">↩ Reorder</button>' +
+            '</div>' +
+        '</div>';
+    }
+
+    function renderOrders() {
+        var wrapper = document.querySelector('.dynamic-orders-wrapper');
+        if (!wrapper) return;
+        var orders = [];
+        try { orders = JSON.parse(localStorage.getItem('hdm_orders')) || []; } catch(e) {}
+        var emptyState = document.querySelector('.empty-orders-state');
+        if (orders.length === 0) {
+            wrapper.innerHTML = '';
+            if (emptyState) emptyState.style.display = 'block';
+            return;
+        }
+        if (emptyState) emptyState.style.display = 'none';
+        wrapper.innerHTML = orders.map(buildCard).join('');
+        attachReorderHandlers(orders);
+    }
+
+    function attachReorderHandlers(orders) {
+        document.querySelectorAll('.reorder-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var id = btn.getAttribute('data-order-id');
+                var orig = orders.find(function(o) { return String(o.id) === String(id); });
+                if (orig) showReorderModal(orig);
+            });
+        });
+    }
+
+    function showReorderModal(orig) {
+        var prev = document.getElementById('reorder-confirm-modal');
+        if (prev) prev.remove();
+
+        var itemsHtml = (orig.items || []).map(function(i) {
+            return '<div style="font-size:0.88rem;padding:0.25rem 0;">' +
+                '<strong>' + (i.qty||1) + 'x</strong> ' + (i.title||i.name||'') + '</div>';
+        }).join('');
+
+        var modal = document.createElement('div');
+        modal.id = 'reorder-confirm-modal';
+        modal.style.cssText = 'position:fixed;inset:0;z-index:100010;display:flex;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,0.55);';
+        modal.innerHTML =
+            '<div style="background:var(--clr-surface,#fff);border-radius:20px;max-width:400px;width:100%;padding:2rem;box-shadow:0 20px 60px rgba(0,0,0,0.3);">' +
+                '<h3 style="margin:0 0 0.4rem 0;font-size:1.25rem;color:var(--clr-text-primary);">Reorder #' + orig.id + '</h3>' +
+                '<p style="color:var(--clr-text-secondary,#666);font-size:0.88rem;margin:0 0 1rem 0;">Add these items to your cart?</p>' +
+                '<div style="background:var(--clr-bg-app,#f9f9f9);border-radius:10px;padding:1rem;margin-bottom:1.5rem;">' + itemsHtml + '</div>' +
+                '<div style="display:flex;gap:0.75rem;">' +
+                    '<button id="reorder-cancel-btn" class="btn" style="flex:1;border-radius:50px;padding:0.75rem;background:#888;color:#fff;border:none;cursor:pointer;font-weight:600;">Cancel</button>' +
+                    '<button id="reorder-confirm-btn" class="btn btn-primary" style="flex:2;border-radius:50px;padding:0.75rem;cursor:pointer;font-weight:700;">Yes, Reorder</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(modal);
+
+        document.getElementById('reorder-cancel-btn').onclick = function() { modal.remove(); };
+        modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+        document.getElementById('reorder-confirm-btn').onclick = function() {
+            if (window.CartManager) {
+                (orig.items || []).forEach(function(item) {
+                    window.CartManager.addItem({
+                        title: item.title || item.name || '',
+                        image: item.image || '',
+                        basePrice: item.basePrice || 0,
+                        size: item.size || null,
+                        extras: item.extras || [],
+                        addonsTotal: item.addonsTotal || 0,
+                        qty: item.qty || 1
+                    });
+                });
+            }
+            modal.remove();
+            window.location.href = 'cart.html';
+        };
+    }
+
+    // Live updates: storage event (instant) + 30s polling
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'hdm_orders') renderOrders();
+    });
+    setInterval(renderOrders, 30000);
+
+    // Boot after DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderOrders);
+    } else {
+        renderOrders();
+    }
+})();

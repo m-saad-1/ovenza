@@ -360,6 +360,7 @@ window.submitPOSOrder = function() {
 
     const newOrder = {
         id: (10500 + state.orders.length).toString(),
+        timestamp: Date.now(),
         customer: dynamicData.customer,
         type: currentPOSOrderType,
         source: 'POS',
