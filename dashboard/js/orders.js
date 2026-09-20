@@ -291,8 +291,11 @@ window.openOrderDrawer = function(orderId) {
             <span>${window.Store.state.restaurant.currency} ${order.total.toLocaleString()}</span>
         </div>
     `;
-
-    document.getElementById('drawer-content').innerHTML = contentHtml;
+    const drawerContent = document.getElementById('drawer-content');
+    if (drawerContent) drawerContent.innerHTML = contentHtml;
+    
+    const orderDetailBody = document.getElementById('order-detail-body');
+    if (orderDetailBody) orderDetailBody.innerHTML = contentHtml;
 
     // Actions Layout
     let utilityActions = [];
@@ -355,22 +358,20 @@ window.openOrderDrawer = function(orderId) {
         </div>
     `;
     
-    let actionsContainer = document.getElementById('drawer-actions') || document.getElementById('order-detail-actions');
-    if (actionsContainer) {
-        actionsContainer.innerHTML = actionsHtml;
+    let drawerActions = document.getElementById('drawer-actions');
+    if (drawerActions) {
+        drawerActions.innerHTML = actionsHtml;
     }
-    const drawerOverlay = document.getElementById('drawer-overlay');
-    const orderDrawer = document.getElementById('order-drawer');
-    if (drawerOverlay && orderDrawer) {
-        drawerOverlay.classList.add('active');
-        orderDrawer.classList.add('open');
+    
+    let orderDetailActions = document.getElementById('order-detail-actions');
+    if (orderDetailActions) {
+        orderDetailActions.innerHTML = actionsHtml;
+    }
+    const orderDetailModal = document.getElementById('order-detail-modal');
+    if (orderDetailModal) {
+        orderDetailModal.classList.add('active');
+        orderDetailModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-    } else {
-        const orderDetailModal = document.getElementById('order-detail-modal');
-        if (orderDetailModal) {
-            orderDetailModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
     }
 };
 
@@ -527,10 +528,7 @@ window.openRefundModal = function(orderId) {
     document.getElementById('generic-modal-overlay').style.display = 'flex';
 };
 
-window.closeOrderDetailModal = function() {
-    document.getElementById('order-detail-modal').style.display = 'none';
-    document.body.style.overflow = '';
-};
+
 
 window.openDispatchModal = function(orderId) {
     const state = window.Store.state;
@@ -617,11 +615,14 @@ window.confirmDispatch = function(orderId) {
 
 window.openOrderDetailModal = window.openOrderDrawer;
 window.closeOrderDetailModal = function() {
-        window.closeDrawer();
-        const orderDetailModal = document.getElementById('order-detail-modal');
-        if (orderDetailModal) orderDetailModal.style.display = 'none';
-        document.body.style.overflow = '';
-    };
+    window.closeDrawer();
+    const orderDetailModal = document.getElementById('order-detail-modal');
+    if (orderDetailModal) {
+        orderDetailModal.style.display = 'none';
+        orderDetailModal.classList.remove('active');
+    }
+    document.body.style.overflow = '';
+};
 window.closeOrderDrawer = window.closeOrderDetailModal;
 
 window.closeDrawer = function() {
