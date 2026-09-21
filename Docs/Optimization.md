@@ -1,135 +1,105 @@
-# Agent Task: crustpk.vercel.app Performance — Round 2
+# Agent Task: crustpk.vercel.app Performance — Round 3 (Desktop)
 
-Round 1 fixed LCP and image weight successfully. This round has one critical regression to fix (CLS) plus cleanup items that were flagged but not actually resolved last time. Work in priority order.
+FCP, LCP, TBT and SI are now excellent on desktop (0.2s / 0.4s / 0ms / 1.4s). The only real problem left is CLS (0.554, target < 0.1), and this report finally names the exact elements responsible — fix these in order.
 
-## Progress since round 1
+## Status check
 
-| Metric | Round 1 | Round 2 (now) | Target | Status |
-|---|---|---|---|---|
-| Performance score | 67 | 66 | ≥ 90 | ⚠️ flat — CLS is masking real gains |
-| Accessibility | 91 | 95 | ≥ 95 | ✅ met |
-| Best Practices | 96 | 96 | 100 | — |
-| SEO | 100 | 100 | 100 | ✅ |
-| FCP | 2.6s | 0.8s | < 1.8s | ✅ met |
-| LCP | 14.6s | 3.5s | < 2.5s | ⚠️ close, needs one more pass |
-| TBT | 80ms | 30ms | < 200ms | ✅ met |
-| **CLS** | **0.068** | **1.000** | **< 0.1** | **🔴 severe new regression** |
-| SI | 4.6s | 2.7s | < 3.4s | ✅ met |
-| Image waste | 1,832.5 KiB | 11 KiB | — | ✅ essentially solved |
-
-Do not touch image sizing/fetchpriority again — that work is done. Focus entirely on the items below.
+| Metric (Desktop) | Value | Target | Status |
+|---|---|---|---|
+| Performance | 77 | ≥ 90 | CLS is the only thing holding this back |
+| FCP | 0.2s | < 1.8s | ✅ |
+| LCP | 0.4s | < 2.5s | ✅ |
+| TBT | 0ms | < 200ms | ✅ |
+| **CLS** | **0.554** | **< 0.1** | **🔴 still the blocker** |
+| SI | 1.4s | < 3.4s | ✅ |
 
 ---
 
-## Phase 0 — Fix the CLS regression (blocking everything else, do this first)
+## Phase 0 — Confirm the body-scroll-lock fix actually shipped (0.200 of the CLS total)
 
-The report's entire layout-shift score (1.000 — the max) is attributed to a single element:
-```
-body
-<body style="overflow: hidden;">
-```
+`<body style="overflow: hidden;">` is still causing a 0.200 shift — this is the exact same signature flagged in round 2. Before doing anything new:
 
-This is the textbook cause: some JS sets `document.body.style.overflow = 'hidden'`, which removes the vertical scrollbar. Removing the scrollbar shifts every element on the page rightward to fill the space it used to occupy — Lighthouse sees that as a single catastrophic shift affecting ~100% of the viewport.
+- [ ] Verify `scrollbar-gutter: stable` was actually added to `html` in the deployed CSS (check the live site's computed styles, not just the source — it's possible this got lost in a merge, or the minified CSS build ran from a branch that didn't have it).
+- [ ] This site has **three separate modals** — Special Offer, Delivery & Pickup Info, and Contact Us. Confirm all three use the *same* scroll-lock/unlock function. It's common for a modal added later (e.g. Delivery Info or Contact Us) to have its own inline `overflow: hidden` that bypasses whatever fix was applied to the main modal. Grep the whole codebase for `overflow` + `hidden` again, specifically inside modal open/close handlers — there are likely 2-3 separate implementations that need the same fix, not one.
+- [ ] Re-confirm with DevTools Rendering → "Layout Shift Regions" while opening each of the three modals individually.
 
-- [ ] Find every place in the codebase that sets `body.style.overflow = 'hidden'` or toggles a class that does the same (grep for `overflow: hidden` in JS files, and for `overflow:hidden`/`overflow: hidden` applied to `body`/`html` in CSS classes). The prime suspect is whatever opens the **offer modal** (`#offer-modal-img`'s parent modal) — check if it auto-opens on page load or on a timer.
-- [ ] Fix it with `scrollbar-gutter`, which reserves the scrollbar's space permanently so hiding/showing the scrollbar never shifts layout:
+## Phase 1 — Fix the `<main>` menu grid shift (0.314 — the single biggest culprit, new this round)
+
+This is the largest chunk of CLS and wasn't visible in earlier reports. The shifting element is described as `Combos Burgers Pizzas Rolls Fries Drinks Top Picks View All › Combo 1 1x Class…` — i.e. the category tab bar plus the menu grid underneath it moves after initial render. Two likely causes, check both:
+
+- [ ] **Web font swap reflowing text.** Two `.woff2` fonts are flagged as layout-shift culprits in this same report. If the fallback font's character widths differ meaningfully from the real font, every card title/price in the grid re-wraps and re-sizes when the real font finishes loading, which cascades into the whole grid shifting. Fix:
+  ```html
+  <link rel="preload" href="/fonts/your-font.woff2" as="font" type="font/woff2" crossorigin>
+  ```
   ```css
-  html {
-    scrollbar-gutter: stable;
+  @font-face {
+    font-family: 'YourFont';
+    src: url('/fonts/your-font.woff2') format('woff2');
+    font-display: optional; /* prevents a visible swap entirely — falls back if not cached in time */
+    /* or font-display: swap combined with size-adjust/ascent-override tuned to match the fallback metrics, if you need the custom font to always eventually show */
   }
   ```
-  This is the cleanest fix and needs no JS changes — add it once, globally, and the shift disappears regardless of how many places toggle `overflow: hidden`.
-- [ ] If broader browser support is a concern, the fallback is to measure the scrollbar width once and compensate with padding when locking scroll:
-  ```js
-  function lockScroll() {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.paddingRight = `${scrollbarWidth}px`;
-    document.body.style.overflow = 'hidden';
-  }
-  function unlockScroll() {
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
-  }
+  `font-display: optional` is the safer choice here since it guarantees zero layout shift from font swap (it just won't show the custom font on a slow load), at the cost of occasionally using the fallback font.
+
+- [ ] **JS re-rendering/re-sorting the grid after first paint.** If any script filters, sorts, or re-injects the menu items on `DOMContentLoaded` (e.g. a "category" filter running client-side after the initial HTML renders), that will shift the entire grid downward/upward once it runs. Check for this specifically — if present, either:
+  - Do the filtering/sorting server-side or at build time so the HTML is already in final order on first paint, or
+  - Reserve the grid's final height up front (skeleton/placeholder cards sized to the real card dimensions) so the swap-in doesn't change total page height.
+
+- [ ] Check that menu **card containers** (not just the `<img>` tags inside them) have explicit dimensions or `aspect-ratio` set. Round 1 fixed image `width`/`height`, but if the card text (title, price, description) wraps differently before/after font load, the card height itself changes even with the image locked — audit the `.category-circle-btn`/menu-card CSS for this.
+
+## Phase 2 — Modal-open shifts (0.040 combined, all 3 modals)
+
+Each `.modal-sheet` (Offer, Delivery Info, Contact Us) shifts slightly when it opens — likely because its content (image, text) finishes loading/rendering after the modal is already positioned, changing its height.
+
+- [ ] Give each modal-sheet a fixed or `min-height` matching its expected final content size, or use `aspect-ratio` on the image slot inside it, so the modal doesn't resize once its content is in.
+- [ ] If the modal animates in (slide/fade), make sure that animation only uses `transform`/`opacity` (ties into Phase 4 below) rather than animating `height`.
+
+## Phase 3 — Finish the responsive-image work (still ~199 KiB of waste)
+
+Round 1's fix used a single fixed "safe" size (640×640) for the burger/combo/pizza images. That was right for the mobile breakpoint (display ~319px) but this desktop breakpoint displays them at **298px**, and the category icons display at **66px on desktop vs ~116px on mobile** — one fixed image can't be correct for both. This is why the same images are still flagged as oversized here even though they were "fixed" in round 1.
+
+- [ ] Replace the single fixed-size images with real `srcset`/`sizes`, so each breakpoint pulls the right file:
+  ```html
+  <img
+    src="combo-2-600.avif"
+    srcset="combo-2-300.avif 300w, combo-2-600.avif 600w"
+    sizes="(max-width: 640px) 319px, 298px"
+    width="298" height="298"
+    loading="lazy" decoding="async"
+    alt="Combo 2">
   ```
-  Prefer `scrollbar-gutter: stable` if your browser support matrix allows it (all evergreen browsers support it) — it's one line and can't be forgotten in a future modal.
-- [ ] After the fix, manually trigger whatever opens the modal and confirm in DevTools (Rendering tab → "Layout Shift Regions") that no shift occurs.
-- [ ] Re-run Lighthouse and confirm CLS is back under 0.1.
+- [ ] Apply the same treatment to the category-circle icons (`cheese-fries.avif` etc.) — they need a smaller desktop variant (~132px for 66px @2x) separate from the mobile variant (~232px for 116px @2x).
+- [ ] `whatsapp.png` still hasn't been touched since round 2 — convert to AVIF/WebP and size it correctly per breakpoint (120×120 shipped for a 60×60 desktop display). Small in isolation (~12 KiB) but easy and still outstanding.
 
----
+## Phase 4 — Non-composited animations: 112 elements now (was 55, was 5)
 
-## Phase 1 — Actually fix the forced reflow (round 1 did not resolve this)
+This count keeps climbing in proportion to how many elements are visible/loaded on a given run, which strongly points to one global rule rather than 112 individual problems — almost certainly the `.is-loaded` class (present on nearly every image/element across every report so far) or a similar broad hover/fade rule.
 
-Same magnitude as before (131ms vs. 133ms), now at slightly different line numbers because the bundle changed — meaning either the previous fix targeted the wrong code, or the refactor didn't remove the read-after-write pattern. Re-investigate from scratch:
-
-- [ ] `script.bundle.js?v=20:69:158` — 131ms
-- [ ] `script.bundle.js?v=20:2:3663` — 131ms (this exact line number, `2:3663`, also appeared in the round-1 report — this specific code path was never actually fixed)
-- [ ] `loader.js?v=20:586:1297` — 27ms
-
-For each: open the un-minified source, find where a geometric read (`offsetWidth`, `offsetHeight`, `getBoundingClientRect()`, `scrollHeight`, `clientWidth`, etc.) happens right after a style/class/DOM mutation, and reorder to read-before-write:
-```js
-// BAD — write then read forces a synchronous layout recalculation
-el.classList.add('is-loaded');
-const height = el.offsetHeight;
-
-// GOOD — read first, write after
-const height = el.offsetHeight;
-el.classList.add('is-loaded');
-```
-If this is happening inside a loop (likely, given `script.bundle.js:2:3663` keeps recurring and the site has many `.is-loaded` image elements), batch all reads into an array first, then apply all writes in a second pass — never interleave them per-element in a loop.
-
-- [ ] Verify with DevTools Performance panel (record a trace, look for "Forced reflow" purple warnings) that this is actually gone this time, not just moved.
-
----
-
-## Phase 2 — Finish off LCP (3.5s → target < 2.5s)
-
-Small remaining items:
-- [ ] `hero.avif` is now 801×400 shipped for a 736×347 display — resize to match display size (or 2x for retina, ~1472×694) and re-encode. Est. savings: 5 KiB, plus it removes one more render dependency from the LCP path.
-- [ ] `whatsapp.png` — still a PNG (7.4 KiB). Convert to AVIF/WebP and compress. Est. savings: 5.6 KiB.
-- [ ] These two are small in isolation, but combined with Phase 0 (removing the CLS-driven repaint) they should be enough to pull LCP under 2.5s. Re-measure after Phase 0 before doing more LCP work — the modal-driven layout shift may itself be delaying LCP by repainting the hero image's position.
-
----
-
-## Phase 3 — Build pipeline: minification isn't running
-
-Both bundles are shipping unminified in production:
-- [ ] `style.bundle.css?v=20` — 29.2 KiB, minifiable to ~24 KiB (5 KiB savings). Check whether your CSS build step (PostCSS/cssnano, or your bundler's CSS minifier) is actually enabled for the production build — right now it looks like it isn't running at all.
-- [ ] `script.bundle.js?v=20` — 27.0 KiB, minifiable to ~24 KiB (3.1 KiB savings). Same check: confirm your bundler is running in production mode (e.g. Webpack `mode: 'production'`, or Terser/esbuild minify step enabled) rather than a dev/unminified build being deployed.
-- [ ] This is likely a one-line config fix (build mode or a missing minifier plugin), not a code change — check your build script / `vercel.json` / bundler config first before touching source.
-
----
-
-## Phase 4 — Unused CSS and JS (still unresolved from round 1)
-
-- [ ] `style.bundle.css` — 16.9 KiB of 28.6 KiB (59%) unused. Run it through PurgeCSS (or your bundler's unused-CSS elimination) against the actual rendered HTML to strip dead rules. Combine with Phase 3 minification.
-- [ ] `script.bundle.js` — **20.3 KiB of 27 KiB (75%) unused.** This is a lot of dead code for a 27 KiB file. Use DevTools → Sources → Coverage (record while loading the page) to see exactly which functions never execute. Likely candidates: leftover code paths for features not used on this page, or code that only runs after an interaction that never happens during the initial-load trace. Code-split anything not needed for first paint (dynamic `import()` on interaction) rather than shipping it all in the initial bundle.
-
----
-
-## Phase 5 — Non-composited animations (55 elements — up from 5 in round 1)
-
-This jump is suspicious and worth checking as one root cause rather than 55 separate ones: every image on the page gets an `is-loaded` class added after load (visible throughout both reports — `class="is-loaded"` is on nearly every `<img>`). If the CSS transition tied to `.is-loaded` (or its parent) animates a non-composited property — `box-shadow`, `top`/`left`, `margin`, `filter`, `width`/`height`, or a bare `transition: all` — every one of those images/elements gets flagged individually, which would explain a count in the 50s matching roughly the number of images on the page.
-
-- [ ] Find the `.is-loaded` CSS rule (and any other global fade-in/hover transition rules) and check what properties it transitions.
-- [ ] Replace `transition: all …` with an explicit property list.
-- [ ] Ensure only `transform` and `opacity` are animated — these are the only properties the compositor can handle without triggering layout/paint on the main thread.
+- [ ] Find the CSS rule tied to `.is-loaded` (and any other transition applied broadly — search for `transition: all`).
+- [ ] Constrain it to `transform`/`opacity` only, as covered in round 2 — this was flagged then too and the count has since gotten worse, so it still hasn't been fixed:
   ```css
-  /* BAD */
-  .is-loaded { transition: all 0.3s ease; }
-
-  /* GOOD */
   .is-loaded { transition: opacity 0.3s ease, transform 0.3s ease; }
   ```
-- [ ] Re-run Lighthouse's "Avoid non-composited animations" insight and confirm the count drops close to 0.
+- [ ] Re-run the "Avoid non-composited animations" insight and confirm the count drops sharply — if it doesn't, the rule you found isn't the actual source; keep searching rather than assuming it's fixed.
+
+## Phase 5 — Forced reflow (still present, now in `loader.min.js`)
+
+- [ ] `loader.min.js?v=20` lines `2:67072` and `1:67142`, ~50ms each, plus 92ms unattributed. Since this is minified, pull the source map (or the unminified `loader.js` source) to identify the actual read-after-write pattern rather than debugging the minified output directly.
+- [ ] Same fix pattern as before: batch all `offsetWidth`/`offsetHeight`/`getBoundingClientRect()` reads before any DOM/style writes; if it's in a loop over the menu grid items, that's very likely connected to Phase 1's grid-shift investigation — worth checking whether this reflow and the `<main>` shift share a root cause (e.g. the same script that measures-then-repositions grid items on load).
+
+## Phase 6 — Unused CSS (still open, smaller now)
+
+- [ ] `style.bundle.min.css` — 11.9 KiB of 21.3 KiB (56%) still unused. Continue the PurgeCSS work from round 2 against this desktop render specifically (desktop and mobile may use different class sets, so purge against both viewport renders, not just one).
 
 ---
 
-## Definition of done (round 2)
+## Definition of done (round 3)
 
-- [ ] CLS < 0.1 (currently 1.000 — this is the priority)
-- [ ] LCP < 2.5s (currently 3.5s)
-- [ ] No forced-reflow entries in DevTools Performance panel
-- [ ] CSS and JS bundles confirmed minified in the deployed build
-- [ ] Unused CSS < 5 KiB, unused JS < 5 KiB
-- [ ] Non-composited animation count near 0
-- [ ] Performance score ≥ 90 on re-run (Slow 4G, Moto G Power, matching original test conditions)
+- [ ] CLS < 0.1 on desktop (currently 0.554)
+- [ ] `body overflow:hidden` shift confirmed fixed across **all three** modals, not just one
+- [ ] `<main>` grid shift resolved (font-display fix and/or grid re-render fix)
+- [ ] Responsive `srcset`/`sizes` in place so mobile and desktop each get correctly-sized images — no more single fixed-size "safe" masters
+- [ ] Non-composited animation count near 0 (currently 112 — same root cause flagged twice before and still not fixed)
+- [ ] Forced reflow resolved (verify via source map, not the minified file)
+- [ ] Unused CSS < 5 KiB
+- [ ] Performance score ≥ 90 on desktop re-run

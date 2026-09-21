@@ -18,7 +18,7 @@ html {
   --ff-body: "Inter", sans-serif;
   --border-radius: 12px;
   --border-radius-lg: 24px;
-  --transition: 0.3s ease;
+  --transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   --max-width: 1400px;
 }
 html.dark-mode {
@@ -7554,4 +7554,17 @@ html.dark-mode .info-details-card strong,
 html.dark-mode .about-section-title,
 html.dark-mode .about-section-subtitle {
   color: #ffffff !important;
+}
+
+.product-card .card-image {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+.circle-img {
+  aspect-ratio: 1 / 1;
+}
+#offer-modal .modal-img-wrap,
+#delivery-info-modal .modal-img-wrap,
+#contact-modal .modal-img-wrap {
+  aspect-ratio: 1 / 1;
 }

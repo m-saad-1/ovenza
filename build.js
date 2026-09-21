@@ -14,7 +14,7 @@ async function build() {
   const purgeResult = await new PurgeCSS().purge({
     content: ['d:/WEB_DEVELOPMENT/crust/index.html', 'd:/WEB_DEVELOPMENT/crust/pages/**/*.html', 'd:/WEB_DEVELOPMENT/crust/assets/js/**/*.js'],
     css: ['d:/WEB_DEVELOPMENT/crust/assets/css/style.bundle.css'],
-    safelist: [/^is-loaded$/, /^active$/, /^show$/, /^open$/, /^mobile-force-show$/, /^dark-mode$/, /bounce/, /spinner-mode/, /complete/, /fade-out/, /loaded/, /visible/]
+    safelist: ['html', 'body', /^is-loaded$/, /^active$/, /^show$/, /^open$/, /^mobile-force-show$/, /^dark-mode$/, /bounce/, /spinner-mode/, /complete/, /fade-out/, /loaded/, /visible/]
   });
   
   if (!purgeResult || purgeResult.length === 0) {
@@ -23,7 +23,8 @@ async function build() {
   }
   let purgedCss = purgeResult[0].css;
   console.log(`Purged CSS. Minifying...`);
-  const minifiedCss = new CleanCSS({}).minify(purgedCss).styles;
+  let minifiedCss = new CleanCSS({}).minify(purgedCss).styles;
+  minifiedCss += "\nhtml { scrollbar-gutter: stable !important; }\n";
   fs.writeFileSync(path.join(__dirname, 'assets', 'css', 'style.bundle.min.css'), minifiedCss);
   console.log(`CSS minified: ${minifiedCss.length} bytes`);
   

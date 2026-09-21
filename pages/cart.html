@@ -7,8 +7,8 @@
     <link rel="icon" type="image/avif" href="../assets/images/logo.avif">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=optional"></noscript>
     <link rel="stylesheet" href="../assets/css/style.bundle.min.css?v=20">
     <!-- Component Loader -->
     <script defer src="../assets/js/config.js"></script>
@@ -123,7 +123,7 @@ html.dark-mode .loader-bar-track {
                     <!-- Cart Items -->
                     <div class="cart-items-wrapper">
                         <div class="cart-item">
-                            <img loading="lazy" decoding="async" src="../assets/images/combo-1.avif" class="cart-item-img lightbox-trigger" alt="Combo 1" width="228" height="228">
+                            <img loading="lazy" decoding="async" src="../assets/images/combo-1.avif" srcset="../assets/images/combo-1-300.avif 300w, ../assets/images/combo-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" class="cart-item-img lightbox-trigger" alt="Combo 1" width="228" height="228">
                             <div class="cart-item-details">
                                 <h4 class="cart-item-title">Combo 1</h4>
                                 <span class="cart-item-price">Rs 459</span>
@@ -141,7 +141,7 @@ html.dark-mode .loader-bar-track {
                         </div>
                         
                         <div class="cart-item">
-                            <img loading="lazy" decoding="async" src="../assets/images/combo-3.avif" class="cart-item-img lightbox-trigger" alt="Combo 3" width="228" height="228">
+                            <img loading="lazy" decoding="async" src="../assets/images/combo-3.avif" srcset="../assets/images/combo-3-300.avif 300w, ../assets/images/combo-3-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" class="cart-item-img lightbox-trigger" alt="Combo 3" width="228" height="228">
                             <div class="cart-item-details">
                                 <h4 class="cart-item-title">Combo 3</h4>
                                 <span class="cart-item-price">Rs 1299</span>

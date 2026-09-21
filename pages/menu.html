@@ -6,8 +6,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Menu - crust</title>
 <link href="../assets/images/logo.avif" rel="icon" type="image/avif"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=swap" media="print" onload="this.media='all'" rel="stylesheet"/>
-<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet"/></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=optional" media="print" onload="this.media='all'" rel="stylesheet"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@600;700&amp;display=optional" rel="stylesheet"/></noscript>
 <link rel="preload" href="../assets/css/style.bundle.min.css?v=20" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="../assets/css/style.bundle.min.css?v=20" rel="stylesheet"/></noscript>
 <!-- Component Loader -->
@@ -111,8 +111,8 @@ html.dark-mode .loader-bar-track {
 <!-- Menu Offers Carousel -->
 <div class="hero-image-frame" id="menu-carousel-container" style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y; margin-bottom: 1.5rem; border-radius: 14px;">
 <div class="hero-carousel-track" id="menu-carousel-track" style="display: flex; transition: transform 0.5s ease-in-out; width: 200%; cursor: grab;">
-<img alt="crust Offer 1" class="hero-full-img" decoding="async" fetchpriority="high" loading="eager" width="800" height="326" src="../assets/images/offer-1.avif"   style="width: 50%; flex-shrink: 0; pointer-events: none; user-select: none;" />
-<img alt="crust Offer 2" class="hero-full-img" decoding="async" loading="lazy" width="800" height="326" src="../assets/images/offer-2.avif"   style="width: 50%; flex-shrink: 0; pointer-events: none; user-select: none;" />
+<img alt="crust Offer 1" class="hero-full-img" decoding="async" fetchpriority="high" loading="eager" width="800" height="326" src="../assets/images/offer-1.avif" srcset="../assets/images/offer-1-300.avif 300w, ../assets/images/offer-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px"   style="width: 50%; flex-shrink: 0; pointer-events: none; user-select: none;" />
+<img alt="crust Offer 2" class="hero-full-img" decoding="async" loading="lazy" width="800" height="326" src="../assets/images/offer-2.avif" srcset="../assets/images/offer-2-300.avif 300w, ../assets/images/offer-2-600.avif 600w" sizes="(max-width: 640px) 319px, 298px"   style="width: 50%; flex-shrink: 0; pointer-events: none; user-select: none;" />
 </div>
 <div class="carousel-indicators" id="menu-indicators" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10;">
 <span class="indicator active" data-slide="0" style="width: 10px; height: 10px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 1;"></span>
@@ -122,11 +122,11 @@ html.dark-mode .loader-bar-track {
 <div class="category-sticky-wrapper" id="category-sticky-wrapper">
 <div class="category-circles-wrapper" id="category-circles">
 <a class="category-circle-btn active" href="#combos" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-1.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-1.avif" srcset="../assets/images/combo-1-300.avif 300w, ../assets/images/combo-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <span class="circle-label">Combos</span>
 </a>
 <a class="category-circle-btn" href="#burgers" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-1.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-1.avif" srcset="../assets/images/burger-1-300.avif 300w, ../assets/images/burger-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <span class="circle-label">Burgers</span>
 </a>
 <a class="category-circle-btn" href="#pizzas" style="text-decoration:none;">
@@ -134,15 +134,15 @@ html.dark-mode .loader-bar-track {
 <span class="circle-label">Pizzas</span>
 </a>
 <a class="category-circle-btn" href="#rolls" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-1.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-1.avif" srcset="../assets/images/roll-1-300.avif 300w, ../assets/images/roll-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <span class="circle-label">Rolls</span>
 </a>
 <a class="category-circle-btn" href="#fries" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/cheese-fries.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/cheese-fries.avif" srcset="../assets/images/cheese-fries-300.avif 300w, ../assets/images/cheese-fries-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <span class="circle-label">Fries</span>
 </a>
 <a class="category-circle-btn" href="#drinks" style="text-decoration:none;">
-<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/mountain-dew.avif" width="228"/></div>
+<div class="circle-img"><img alt="" decoding="sync" height="228" fetchpriority="high" src="../assets/images/mountain-dew.avif" srcset="../assets/images/mountain-dew-300.avif 300w, ../assets/images/mountain-dew-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <span class="circle-label">Drinks</span>
 </a>
 
@@ -153,7 +153,7 @@ html.dark-mode .loader-bar-track {
 </div>
 <div class="menu-grid">
 <div class="product-card">
-<div class="card-image"><img alt="Combo 1" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-1.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 1" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-1.avif" srcset="../assets/images/combo-1-300.avif 300w, ../assets/images/combo-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Combo 1</h3></div>
 <p class="card-desc">1x Classic Beef Burger, 1x Crispy Chicken Burger, 4x Fried Chicken Pieces, 1x Fries, 1x NEXT Cola, 1x Cheese Dip</p>
@@ -164,7 +164,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Combo 2" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-2.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 2" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-2.avif" srcset="../assets/images/combo-2-300.avif 300w, ../assets/images/combo-2-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Combo 2</h3></div>
 <p class="card-desc">1x Chicken Pizza, 8x Chicken Wings, 1x 7UP, 2x Dips</p>
@@ -175,7 +175,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Combo 3" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-3.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 3" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-3.avif" srcset="../assets/images/combo-3-300.avif 300w, ../assets/images/combo-3-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Combo 3</h3></div>
 <p class="card-desc">1x Cheeseburger, 6x Chicken Nuggets, 1x Fries, 1x Cheese Dip, 1x Small NEXT Cola</p>
@@ -186,7 +186,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Combo 4" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-4.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 4" decoding="sync" height="228" fetchpriority="high" src="../assets/images/combo-4.avif" srcset="../assets/images/combo-4-300.avif 300w, ../assets/images/combo-4-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Combo 4</h3></div>
 <p class="card-desc">2x Chicken Pizzas, 6x Chicken Wings, 1x Pepsi, 2x Dips</p>
@@ -203,7 +203,7 @@ html.dark-mode .loader-bar-track {
 </div>
 <div class="menu-grid">
 <div class="product-card">
-<div class="card-image"><img alt="Classic Beef Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-1.avif" width="228"/></div>
+<div class="card-image"><img alt="Classic Beef Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-1.avif" srcset="../assets/images/burger-1-300.avif 300w, ../assets/images/burger-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Classic Beef Burger</h3></div>
 <p class="card-desc">Juicy beef patty with fresh greens.</p>
@@ -215,7 +215,7 @@ html.dark-mode .loader-bar-track {
 </div>
 
 <div class="product-card">
-<div class="card-image"><img alt="Double Beef Smash" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-2.avif" width="228"/></div>
+<div class="card-image"><img alt="Double Beef Smash" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-2.avif" srcset="../assets/images/burger-2-300.avif 300w, ../assets/images/burger-2-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Double Beef Smash</h3></div>
 <p class="card-desc">Double smashed patties, double cheese.</p>
@@ -226,7 +226,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Spicy Jalapeno Chicken" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-3.avif" width="228"/></div>
+<div class="card-image"><img alt="Spicy Jalapeno Chicken" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-3.avif" srcset="../assets/images/burger-3-300.avif 300w, ../assets/images/burger-3-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Spicy Jalapeno Chicken</h3></div>
 <p class="card-desc">Spicy chicken patty with jalapenos.</p>
@@ -237,7 +237,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Smash Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-4.avif" width="228"/></div>
+<div class="card-image"><img alt="Smash Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-4.avif" srcset="../assets/images/burger-4-300.avif 300w, ../assets/images/burger-4-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Smash Burger</h3></div>
 <p class="card-desc">Thin smashed beef patty with pickles &amp; sauce.</p>
@@ -248,7 +248,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="BBQ Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-5.avif" width="228"/></div>
+<div class="card-image"><img alt="BBQ Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-5.avif" srcset="../assets/images/burger-5-300.avif 300w, ../assets/images/burger-5-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>BBQ Burger</h3></div>
 <p class="card-desc">Smoky BBQ sauce with caramelized onions.</p>
@@ -259,7 +259,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Mushroom &amp; Cheese Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-6.avif" width="228"/></div>
+<div class="card-image"><img alt="Mushroom &amp; Cheese Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-6.avif" srcset="../assets/images/burger-6-300.avif 300w, ../assets/images/burger-6-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Mushroom &amp; Cheese Burger</h3></div>
 <p class="card-desc">Sautéed mushrooms with melted cheese.</p>
@@ -270,7 +270,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Tower Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-7.avif" width="228"/></div>
+<div class="card-image"><img alt="Tower Burger" decoding="sync" height="228" fetchpriority="high" src="../assets/images/burger-7.avif" srcset="../assets/images/burger-7-300.avif 300w, ../assets/images/burger-7-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Tower Burger</h3></div>
 <p class="card-desc">Triple-stacked patties with all the toppings.</p>
@@ -297,7 +297,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Crown crust Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/crown-crust-pizza.avif" width="228"/></div>
+<div class="card-image"><img alt="Crown crust Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/crown-crust-pizza.avif" srcset="../assets/images/crown-crust-pizza-300.avif 300w, ../assets/images/crown-crust-pizza-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Crown crust Pizza</h3></div>
 <p class="card-desc">Signature crown crust loaded with cheese.</p>
@@ -319,7 +319,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Special Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/special-pizza.avif" width="228"/></div>
+<div class="card-image"><img alt="Special Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/special-pizza.avif" srcset="../assets/images/special-pizza-300.avif 300w, ../assets/images/special-pizza-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Special Pizza</h3></div>
 <p class="card-desc">Our chef's special with premium toppings.</p>
@@ -352,7 +352,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Chicken Fajita Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-1.avif" width="228"/></div>
+<div class="card-image"><img alt="Chicken Fajita Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-1.avif" srcset="../assets/images/pizza-1-300.avif 300w, ../assets/images/pizza-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Chicken Fajita Pizza</h3></div>
 <p class="card-desc">Spiced fajita chicken with fresh veggies.</p>
@@ -363,7 +363,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Tikka Sensation Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-2.avif" width="228"/></div>
+<div class="card-image"><img alt="Tikka Sensation Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-2.avif" srcset="../assets/images/pizza-2-300.avif 300w, ../assets/images/pizza-2-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Tikka Sensation Pizza</h3></div>
 <p class="card-desc">Spicy chicken tikka chunks on a rich base.</p>
@@ -374,7 +374,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Pepperoni Classic Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-3.avif" width="228"/></div>
+<div class="card-image"><img alt="Pepperoni Classic Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-3.avif" srcset="../assets/images/pizza-3-300.avif 300w, ../assets/images/pizza-3-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Pepperoni Classic Pizza</h3></div>
 <p class="card-desc">Loaded with premium pepperoni slices.</p>
@@ -385,7 +385,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Cheese Lovers Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-4.avif" width="228"/></div>
+<div class="card-image"><img alt="Cheese Lovers Pizza" decoding="sync" height="228" fetchpriority="high" src="../assets/images/pizza-4.avif" srcset="../assets/images/pizza-4-300.avif 300w, ../assets/images/pizza-4-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Cheese Lovers Pizza</h3></div>
 <p class="card-desc">Blend of 100% real mozzarella cheese.</p>
@@ -401,7 +401,7 @@ html.dark-mode .loader-bar-track {
 </div>
 <div class="menu-grid">
 <div class="product-card">
-<div class="card-image"><img alt="Chicken Roll" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-1.avif" width="228"/></div>
+<div class="card-image"><img alt="Chicken Roll" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-1.avif" srcset="../assets/images/roll-1-300.avif 300w, ../assets/images/roll-1-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Chicken Roll</h3></div>
 <p class="card-desc">Crispy chicken wrapped in a soft roll.</p>
@@ -412,7 +412,7 @@ html.dark-mode .loader-bar-track {
 </div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Special Roll" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-2.avif" width="228"/></div>
+<div class="card-image"><img alt="Special Roll" decoding="sync" height="228" fetchpriority="high" src="../assets/images/roll-2.avif" srcset="../assets/images/roll-2-300.avif 300w, ../assets/images/roll-2-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Special Roll</h3></div>
 <p class="card-desc">Loaded special roll with sauce &amp; veggies.</p>
@@ -428,7 +428,7 @@ html.dark-mode .loader-bar-track {
 </div>
 <div class="menu-grid">
 <div class="product-card">
-<div class="card-image"><img alt="Cheese Fries" decoding="sync" height="228" fetchpriority="high" src="../assets/images/cheese-fries.avif" width="228"/></div>
+<div class="card-image"><img alt="Cheese Fries" decoding="sync" height="228" fetchpriority="high" src="../assets/images/cheese-fries.avif" srcset="../assets/images/cheese-fries-300.avif 300w, ../assets/images/cheese-fries-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Cheese Fries</h3></div>
 <p class="card-desc">Golden fries topped with melted cheese.</p>
@@ -465,7 +465,7 @@ html.dark-mode .loader-bar-track {
 </div>
 <div class="menu-grid">
 <div class="product-card">
-<div class="card-image"><img alt="Mountain Dew" decoding="sync" height="228" fetchpriority="high" src="../assets/images/mountain-dew.avif" width="228"/></div>
+<div class="card-image"><img alt="Mountain Dew" decoding="sync" height="228" fetchpriority="high" src="../assets/images/mountain-dew.avif" srcset="../assets/images/mountain-dew-300.avif 300w, ../assets/images/mountain-dew-600.avif 600w" sizes="(max-width: 640px) 319px, 298px" width="228"/></div>
 <div class="card-content">
 <div class="card-header"><h3>Mountain Dew</h3></div>
 <p class="card-desc">Refreshing soda.</p>
