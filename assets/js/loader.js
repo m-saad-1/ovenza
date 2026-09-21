@@ -1,14 +1,115 @@
-(function(){document.addEventListener('load',function(e){if(e.target.tagName==='IMG'){e.target.classList.add('is-loaded');}},true);document.addEventListener('error',function(e){if(e.target.tagName==='IMG'){e.target.classList.add('is-loaded');}},true);document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('img').forEach(function(img){if(img.complete)img.classList.add('is-loaded');});});})();
-(function(){"use strict";localStorage.getItem("tl_theme")!=="light"?document.documentElement.classList.add("dark-mode"):document.documentElement.classList.remove("dark-mode");function v(e){const n=window.location.pathname.split("/").length-2;return(n>0?"../".repeat(n):"./")+e}function q(){return window.location.pathname.split("/").pop()||"index.html"}function E(e,n,r){const i=document.querySelector(n);i&&i.insertAdjacentHTML(e,r)}function F(){const e=window.BB_CONFIG,n=q(),r=v(e.images.logo),s=[{href:"pages/reservations.html",label:"Reservations",cls:"",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>'},{href:"pages/gallery.html",label:"Gallery",cls:"",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>'},{href:"pages/about.html",label:"About",cls:"",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'},{href:"pages/reviews.html",label:"Reviews",cls:"",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>'},{href:"pages/contact.html#localizacao",label:"Location",cls:"",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"></circle><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>'},{href:"pages/contact.html",label:"Contact",cls:"",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"></path></svg>'},{href:"#",label:"About Demo",cls:"",icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>',onclick:"event.preventDefault(); document.querySelector('.nav-center').classList.remove('active'); document.querySelector('.mobile-menu-btn').classList.remove('active'); if(typeof window._tl_openModal==='function'){window._tl_openModal(document.getElementById('about-demo-modal'), 'about-demo-modal');}else{document.getElementById('about-demo-modal').classList.add('active'); document.body.style.overflow='hidden';}"}].map(t=>{const p=t.href==="#"?"#":v(t.href),d=n===t.href.split("/").pop()?' class="active"':"",h=t.onclick?` onclick="${t.onclick}"`:"";return`<li${t.cls?` class="${t.cls}"`:""}>
+(function () {
+  document.addEventListener(
+    "load",
+    function (e) {
+      if (e.target.tagName === "IMG") {
+        e.target.classList.add("is-loaded");
+      }
+    },
+    true,
+  );
+  document.addEventListener(
+    "error",
+    function (e) {
+      if (e.target.tagName === "IMG") {
+        e.target.classList.add("is-loaded");
+      }
+    },
+    true,
+  );
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("img").forEach(function (img) {
+      if (img.complete) img.classList.add("is-loaded");
+    });
+  });
+})();
+(function () {
+  "use strict";
+  localStorage.getItem("tl_theme") !== "light"
+    ? document.documentElement.classList.add("dark-mode")
+    : document.documentElement.classList.remove("dark-mode");
+  function v(e) {
+    const n = window.location.pathname.split("/").length - 2;
+    return (n > 0 ? "../".repeat(n) : "./") + e;
+  }
+  function q() {
+    return window.location.pathname.split("/").pop() || "index.html";
+  }
+  function E(e, n, r) {
+    const i = document.querySelector(n);
+    i && i.insertAdjacentHTML(e, r);
+  }
+  function F() {
+    const e = window.BB_CONFIG,
+      n = q(),
+      r = v(e.images.logo),
+      s = [
+        {
+          href: "pages/reservations.html",
+          label: "Reservations",
+          cls: "",
+          icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+        },
+        {
+          href: "pages/gallery.html",
+          label: "Gallery",
+          cls: "",
+          icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>',
+        },
+        {
+          href: "pages/about.html",
+          label: "About",
+          cls: "",
+          icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
+        },
+        {
+          href: "pages/reviews.html",
+          label: "Reviews",
+          cls: "",
+          icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>',
+        },
+        {
+          href: "pages/contact.html#localizacao",
+          label: "Location",
+          cls: "",
+          icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"></circle><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>',
+        },
+        {
+          href: "pages/contact.html",
+          label: "Contact",
+          cls: "",
+          icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"></path></svg>',
+        },
+        {
+          href: "#",
+          label: "About Demo",
+          cls: "",
+          icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>',
+          onclick:
+            "event.preventDefault(); document.querySelector('.nav-center').classList.remove('active'); document.querySelector('.mobile-menu-btn').classList.remove('active'); if(typeof window._tl_openModal==='function'){window._tl_openModal(document.getElementById('about-demo-modal'), 'about-demo-modal');}else{document.getElementById('about-demo-modal').classList.add('active'); document.body.style.overflow='hidden';}",
+        },
+      ].map((t) => {
+        const p = t.href === "#" ? "#" : v(t.href),
+          d = n === t.href.split("/").pop() ? ' class="active"' : "",
+          h = t.onclick ? ` onclick="${t.onclick}"` : "";
+        return `<li${t.cls ? ` class="${t.cls}"` : ""}>
         <a href="${p}"${d}${h} style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            ${t.icon?`<span class="desktop-hide" style="display:flex;align-items:center;">${t.icon}</span>`:""}
-            <span style="position:relative; display:inline-block; padding-right:10px;">${t.label}${t.label==="Offers"?'<span class="offer-blink-dot" style="right:0px; top:-2px;"></span>':""}</span>
+            ${t.icon ? `<span class="desktop-hide" style="display:flex;align-items:center;">${t.icon}</span>` : ""}
+            <span style="position:relative; display:inline-block; padding-right:10px;">${t.label}${t.label === "Offers" ? '<span class="offer-blink-dot" style="right:0px; top:-2px;"></span>' : ""}</span>
           </div>
           <svg class="nav-arrow desktop-hide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: auto;"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </a>
-      </li>`}).join(`
-`),a=v("pages/cart.html"),c=v("pages/profile.html"),o=v("pages/contact.html");E("afterbegin","body",`
+      </li>`;
+      }).join(`
+`),
+      a = v("pages/cart.html"),
+      c = v("pages/profile.html"),
+      o = v("pages/contact.html");
+    E(
+      "afterbegin",
+      "body",
+      `
 <header class="navbar">
 <style>@media(min-width:769px){#change-location-btn{max-width:220px!important;}}</style>
   <div class="container">
@@ -76,7 +177,7 @@
     </nav>
 
     <div class="nav-right">
-      <a href="tel:${e.brand.phone.replace(/\s+/g,"")}" class="desktop-call-bar mobile-hide">
+      <a href="tel:${e.brand.phone.replace(/\s+/g, "")}" class="desktop-call-bar mobile-hide">
         <div class="call-icon-box">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"></path></svg>
         </div>
@@ -99,12 +200,12 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.05z"></path></svg>
       </button>
 
-      <a href="${a}" class="icon-btn cart-icon-link${n==="cart.html"?" active":""}" aria-label="Cart">
+      <a href="${a}" class="icon-btn cart-icon-link${n === "cart.html" ? " active" : ""}" aria-label="Cart">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
         <span class="badge" style="display:none;">0</span>
       </a>
 
-      <a href="${c}" class="icon-btn${n==="profile.html"?" active":""}" aria-label="Profile">
+      <a href="${c}" class="icon-btn${n === "profile.html" ? " active" : ""}" aria-label="Profile">
         <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
       </a>
 
@@ -117,7 +218,16 @@
       </button>
     </div>
   </div>
-</header>`)}function R(){const e=window.BB_CONFIG,n=v(e.images.logo);E("beforeend","body",`
+</header>`,
+    );
+  }
+  function R() {
+    const e = window.BB_CONFIG,
+      n = v(e.images.logo);
+    E(
+      "beforeend",
+      "body",
+      `
 <footer class="footer" id="footer">
   <div class="container">
     <div class="footer-grid">
@@ -194,22 +304,70 @@
       </div>
     </div>
   </div>
-</footer>`)}function N(){const e=q(),i=`<nav class="mobile-tab-bar">${[{href:"index.html",label:"Home",icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>'},{href:"pages/menu.html",label:"Menu",icon:'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="12" y2="16"></line>'},{href:"pages/offers.html",label:"Offers",icon:'<polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>'},{href:"pages/orders.html",label:"Orders",icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>'},{href:"pages/profile.html",label:"Profile",icon:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>'}].map(a=>{const c=e===a.href.split("/").pop()?" active":"";return`<a href="${a.href==="#"?"#":v(a.href)}" class="tab-item${c}"${a.id?` id="${a.id}"`:""}>
+</footer>`,
+    );
+  }
+  function N() {
+    const e = q(),
+      i = `<nav class="mobile-tab-bar">${[
+        {
+          href: "index.html",
+          label: "Home",
+          icon: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>',
+        },
+        {
+          href: "pages/menu.html",
+          label: "Menu",
+          icon: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="12" y2="16"></line>',
+        },
+        {
+          href: "pages/offers.html",
+          label: "Offers",
+          icon: '<polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>',
+        },
+        {
+          href: "pages/orders.html",
+          label: "Orders",
+          icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>',
+        },
+        {
+          href: "pages/profile.html",
+          label: "Profile",
+          icon: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>',
+        },
+      ].map((a) => {
+        const c = e === a.href.split("/").pop() ? " active" : "";
+        return `<a href="${a.href === "#" ? "#" : v(a.href)}" class="tab-item${c}"${a.id ? ` id="${a.id}"` : ""}>
         <div style="position:relative; display:inline-block; width:24px; height:24px; margin:0 auto;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:100%; height:100%; display:block;">${a.icon}</svg>
-          ${a.label==="Offers"?'<span class="offer-blink-dot" style="right:-4px; top:-2px;"></span>':""}
+          ${a.label === "Offers" ? '<span class="offer-blink-dot" style="right:-4px; top:-2px;"></span>' : ""}
         </div>
         <span>${a.label}</span>
-      </a>`}).join(`
-`)}</nav>`,s=`<div class="floating-cart-bar">
+      </a>`;
+      }).join(`
+`)}</nav>`,
+      s = `<div class="floating-cart-bar">
   <div class="cart-info">
     <span class="cart-count">0 items</span>
     <span class="cart-total">Rs 0</span>
   </div>
   <a href="${v("pages/cart.html")}" class="btn btn-primary cart-view-btn">View Cart</a>
-</div>`;(i||s)&&E("beforeend","body",`
+</div>`;
+    (i || s) &&
+      E(
+        "beforeend",
+        "body",
+        `
 ${i}
-${s}`)}function Y(){const e=window.BB_CONFIG;E("beforeend","body",`
+${s}`,
+      );
+  }
+  function Y() {
+    const e = window.BB_CONFIG;
+    E(
+      "beforeend",
+      "body",
+      `
 <div class="modal-overlay" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" aria-labelledby="modal-generic-title">
   <div class="modal-sheet">
     <div class="modal-drag-handle"></div>
@@ -248,7 +406,14 @@ ${s}`)}function Y(){const e=window.BB_CONFIG;E("beforeend","body",`
       </a>
     </div>
   </div>
-</div>`)}function G(){E("beforeend","body",`
+</div>`,
+    );
+  }
+  function G() {
+    E(
+      "beforeend",
+      "body",
+      `
 <div class="modal-overlay" id="item-modal" role="dialog" aria-modal="true" aria-labelledby="modal-item-name" aria-labelledby="modal-generic-title">
   <div class="modal-sheet">
     <div class="modal-drag-handle"></div>
@@ -301,7 +466,51 @@ ${s}`)}function Y(){const e=window.BB_CONFIG;E("beforeend","body",`
       </div>
     </div>
   </div>
-</div>`)}function V(){const e=["F-6 Markaz, Islamabad","Blue Area, Islamabad","G-9 Markaz, Islamabad","E-7, Islamabad","DHA Phase 1, Lahore","Gulberg III, Lahore","Model Town, Lahore","Johar Town, Lahore","Clifton Block 5, Karachi","Defence Phase 6, Karachi","Hospital Road Central Park, Lahore, Karachi","8A Commercial, Pak Arab, Lahore, Karachi","Saddar, Rawalpindi","Bahria Town Phase 4, Rawalpindi","Westridge, Rawalpindi","Cantt Area, Peshawar","Hayatabad Phase 3, Peshawar","Satellite Town, Gujranwala","DC Colony, Gujranwala","Civil Lines, Faisalabad"],n=["crust \u2013 Hospital Road Central Park, Lahore","crust \u2013 8A Commercial, Pak Arab, Lahore"],r=(c,o)=>c.map((t,p)=>`<div class="loc-option-item" data-value="${o}-${p}" data-label="${t}">${t}</div>`).join(""),i=new Date;i.setSeconds(0,0),i.setMinutes(Math.ceil(i.getMinutes()/15)*15);const s=i.getHours().toString().padStart(2,"0"),a=i.getMinutes().toString().padStart(2,"0");E("beforeend","body",`
+</div>`,
+    );
+  }
+  function V() {
+    const e = [
+        "F-6 Markaz, Islamabad",
+        "Blue Area, Islamabad",
+        "G-9 Markaz, Islamabad",
+        "E-7, Islamabad",
+        "DHA Phase 1, Lahore",
+        "Gulberg III, Lahore",
+        "Model Town, Lahore",
+        "Johar Town, Lahore",
+        "Clifton Block 5, Karachi",
+        "Defence Phase 6, Karachi",
+        "Hospital Road Central Park, Lahore, Karachi",
+        "8A Commercial, Pak Arab, Lahore, Karachi",
+        "Saddar, Rawalpindi",
+        "Bahria Town Phase 4, Rawalpindi",
+        "Westridge, Rawalpindi",
+        "Cantt Area, Peshawar",
+        "Hayatabad Phase 3, Peshawar",
+        "Satellite Town, Gujranwala",
+        "DC Colony, Gujranwala",
+        "Civil Lines, Faisalabad",
+      ],
+      n = [
+        "crust \u2013 Hospital Road Central Park, Lahore",
+        "crust \u2013 8A Commercial, Pak Arab, Lahore",
+      ],
+      r = (c, o) =>
+        c
+          .map(
+            (t, p) =>
+              `<div class="loc-option-item" data-value="${o}-${p}" data-label="${t}">${t}</div>`,
+          )
+          .join(""),
+      i = new Date();
+    (i.setSeconds(0, 0), i.setMinutes(Math.ceil(i.getMinutes() / 15) * 15));
+    const s = i.getHours().toString().padStart(2, "0"),
+      a = i.getMinutes().toString().padStart(2, "0");
+    E(
+      "beforeend",
+      "body",
+      `
 <div class="modal-overlay" id="location-modal" role="dialog" aria-modal="true" aria-labelledby="location-modal-title" style="z-index:100005;" aria-labelledby="modal-generic-title">
   <div class="modal-sheet">
     <div class="modal-drag-handle"></div>
@@ -376,16 +585,330 @@ ${s}`)}function Y(){const e=window.BB_CONFIG;E("beforeend","body",`
       <button id="loc-picker-search-clear" aria-label="Clear">&times;</button>
     </div>
     <div id="loc-picker-list">
-      <div id="loc-delivery-items">${r(e,"dl")}</div>
-      <div id="loc-outlet-items" style="display:none;">${r(n,"ol")}</div>
+      <div id="loc-delivery-items">${r(e, "dl")}</div>
+      <div id="loc-outlet-items" style="display:none;">${r(n, "ol")}</div>
       <div id="loc-picker-empty" class="loc-empty-msg" style="display:none;">No results found.</div>
     </div>
   </div>
-</div>`)}function W(){const e=document.getElementById("location-modal"),n=document.getElementById("change-location-btn"),r=document.getElementById("current-location-text"),i=document.getElementById("location-modal-title"),s=document.getElementById("location-modal-close"),a=document.getElementById("btn-use-location"),c=document.getElementById("loc-picker-overlay"),o=document.getElementById("loc-picker-sheet"),t=document.getElementById("loc-picker-search"),p=document.getElementById("loc-picker-search-clear"),d=document.getElementById("loc-picker-back"),h=document.getElementById("loc-delivery-items"),b=document.getElementById("loc-outlet-items"),C=document.getElementById("loc-picker-empty");if(!e)return;const x="tl_location_name",y="tl_location_type";let T="delivery";
-function _locUpdateStatus(){var mode=localStorage.getItem(y)||"delivery";var labelEl=document.getElementById("loc-mode-label");var statusEl=document.getElementById("loc-status-dot");var locName=localStorage.getItem(x);if(labelEl){if(locName){labelEl.textContent=(mode==="pickup"||mode==="outlet")?"Pickup at":"Deliver to";labelEl.style.display="block";}else{labelEl.style.display="none";}}
-if(statusEl){var now=new Date();var h=now.getHours();var m=now.getMinutes();var totalMins=h*60+m;var openMins=11*60;var closeMins=24*60;var isOpen=totalMins>=openMins&&totalMins<closeMins;statusEl.textContent=isOpen?"● Open":"● Closed";statusEl.style.color=isOpen?"#22c55e":"#ef4444";statusEl.style.display="block";}}
-_locUpdateStatus();setInterval(_locUpdateStatus,60000);
-window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";document.getElementById("loc-tab-delivery").classList.toggle("loc-tab-active",m),document.getElementById("loc-tab-pickup").classList.toggle("loc-tab-active",!m),document.getElementById("loc-delivery-panel").style.display=m?"":"none",document.getElementById("loc-pickup-panel").style.display=m?"none":"",i&&(i.textContent=m?"Your Location":"Select Location"),_locUpdateStatus(),window.dispatchEvent(new CustomEvent("tl_location_changed",{detail:{type:l}}));};function B(){e.classList.add("active"),document.body.style.overflow="hidden",window._locSetMode(localStorage.getItem(y)||"delivery");const l=localStorage.getItem(x);l&&A(l)}function I(){e.classList.remove("active"),document.body.style.overflow=""}function _(l){localStorage.setItem(y,T);localStorage.setItem(x,l);r&&(r.textContent=l);_locUpdateStatus();M();I();window.dispatchEvent(new CustomEvent("tl_location_changed",{detail:{location:l}}))}window._tl_openLocationModal=B;function A(l){document.querySelectorAll(".loc-option-item").forEach(m=>m.classList.toggle("loc-option-selected",m.dataset.label===l))}n&&n.addEventListener("click",B),s&&s.addEventListener("click",I),e.addEventListener("click",l=>{l.target===e&&I()});const L=e.querySelector(".modal-sheet");if(L){let l=0,m=0,g=!1;L.addEventListener("touchstart",k=>{(L.querySelector(".modal-body")||L).scrollTop<=0&&(l=k.touches[0].clientY,g=!0,L.style.transition="none")},{passive:!0}),L.addEventListener("touchmove",k=>{if(!g)return;if((L.querySelector(".modal-body")||L).scrollTop>0){g=!1;return}m=k.touches[0].clientY;const H=m-l;H>0&&(k.preventDefault(),L.style.transform=`translateY(${H}px)`)},{passive:!1}),L.addEventListener("touchend",()=>{g&&(g=!1,L.style.transition="",m-l>80&&I(),L.style.transform="",m=0)})}function z(l){T=l;const m=l==="outlet";h&&(h.style.display=m?"none":""),b&&(b.style.display=m?"":"none"),document.getElementById("loc-picker-title").textContent=m?"Select Outlet":"Select Location",t&&(t.value=""),C&&(C.style.display="none"),document.querySelectorAll(".loc-option-item").forEach(g=>g.style.display=""),c.style.display="flex",requestAnimationFrame(()=>{c.style.opacity="1",c.style.pointerEvents="all",c.classList.add("active")})}function M(){c.classList.remove("active"),c.style.opacity="0",c.style.pointerEvents="none",setTimeout(()=>{c.style.display="none"},350)}const P=document.getElementById("loc-delivery-trigger"),$=document.getElementById("loc-outlet-trigger");if(P&&P.addEventListener("click",()=>z("delivery")),$&&$.addEventListener("click",()=>z("outlet")),d&&d.addEventListener("click",M),c.addEventListener("click",l=>{l.target===c&&M()}),t&&t.addEventListener("input",()=>{const l=t.value.toLowerCase().trim(),m=T==="outlet"?b:h;if(!m)return;let g=!1;m.querySelectorAll(".loc-option-item").forEach(k=>{const D=!l||k.dataset.label.toLowerCase().includes(l);k.style.display=D?"":"none",D&&(g=!0)}),C&&(C.style.display=g?"none":""),p&&(p.style.display=t.value?"":"none")}),p&&(p.style.display="none",p.addEventListener("click",()=>{t.value="",t.dispatchEvent(new Event("input"))})),document.querySelectorAll(".loc-option-item").forEach(l=>{l.addEventListener("click",()=>{document.querySelectorAll(".loc-option-item").forEach(g=>g.classList.remove("loc-option-selected")),l.classList.add("loc-option-selected");const m=T==="outlet"?document.getElementById("loc-outlet-trigger-text"):document.getElementById("loc-delivery-trigger-text");m&&(m.textContent=l.dataset.label),_(l.dataset.label)})}),o){let l=0,m=0,g=!1;o.addEventListener("touchstart",k=>{(o.querySelector(".modal-body")||o).scrollTop<=0&&(l=k.touches[0].clientY,g=!0,o.style.transition="none")},{passive:!0}),o.addEventListener("touchmove",k=>{if(!g)return;if((o.querySelector(".modal-body")||o).scrollTop>0){g=!1;return}m=k.touches[0].clientY;const H=m-l;H>0&&(k.preventDefault(),o.style.transform=`translateY(${H}px)`)},{passive:!1}),o.addEventListener("touchend",()=>{g&&(g=!1,o.style.transition="",m-l>80&&M(),o.style.transform="",m=0)})}const u=document.getElementById("loc-asap-btn"),f=document.getElementById("loc-later-btn"),w=document.getElementById("loc-time-input-wrap");u&&f&&w&&(u.addEventListener("click",()=>{u.classList.add("loc-time-btn-active"),f.classList.remove("loc-time-btn-active"),w.style.display="none"}),f.addEventListener("click",()=>{f.classList.add("loc-time-btn-active"),u.classList.remove("loc-time-btn-active"),w.style.display=""})),a&&a.addEventListener("click",()=>{const l=a.innerHTML;if(a.innerHTML="Detecting...",a.disabled=!0,!navigator.geolocation){alert("Geolocation not supported."),a.innerHTML=l,a.disabled=!1;return}navigator.geolocation.getCurrentPosition(m=>{const g=`Near (${m.coords.latitude.toFixed(3)}, ${m.coords.longitude.toFixed(3)})`,k=document.getElementById("loc-delivery-trigger-text");k&&(k.textContent=g),_(g),a.innerHTML=l,a.disabled=!1},()=>{alert("Unable to detect location."),a.innerHTML=l,a.disabled=!1},{timeout:1e4})});const S=localStorage.getItem(x),te=localStorage.getItem("tl_location_prompted");if(S){r&&(r.textContent=S);const currMode = localStorage.getItem(y) || "delivery";if (currMode === 'outlet') {const outl = document.getElementById("loc-outlet-trigger-text");if(outl && outl.textContent==="Select an outlet...") outl.textContent=S;} else {const l=document.getElementById("loc-delivery-trigger-text");if(l && l.textContent==="Select delivery area...") l.textContent=S;}A(S)}else te||(localStorage.setItem("tl_location_prompted","true"),B())}function X(){E("beforeend","body",`
+</div>`,
+    );
+  }
+  function W() {
+    const e = document.getElementById("location-modal"),
+      n = document.getElementById("change-location-btn"),
+      r = document.getElementById("current-location-text"),
+      i = document.getElementById("location-modal-title"),
+      s = document.getElementById("location-modal-close"),
+      a = document.getElementById("btn-use-location"),
+      c = document.getElementById("loc-picker-overlay"),
+      o = document.getElementById("loc-picker-sheet"),
+      t = document.getElementById("loc-picker-search"),
+      p = document.getElementById("loc-picker-search-clear"),
+      d = document.getElementById("loc-picker-back"),
+      h = document.getElementById("loc-delivery-items"),
+      b = document.getElementById("loc-outlet-items"),
+      C = document.getElementById("loc-picker-empty");
+    if (!e) return;
+    const x = "tl_location_name",
+      y = "tl_location_type";
+    let T = "delivery";
+    function _locUpdateStatus() {
+      var mode = localStorage.getItem(y) || "delivery";
+      var labelEl = document.getElementById("loc-mode-label");
+      var statusEl = document.getElementById("loc-status-dot");
+      var locName = localStorage.getItem(x);
+      if (labelEl) {
+        if (locName) {
+          labelEl.textContent =
+            mode === "pickup" || mode === "outlet" ? "Pickup at" : "Deliver to";
+          labelEl.style.display = "block";
+        } else {
+          labelEl.style.display = "none";
+        }
+      }
+      if (statusEl) {
+        var now = new Date();
+        var h = now.getHours();
+        var m = now.getMinutes();
+        var totalMins = h * 60 + m;
+        var openMins = 11 * 60;
+        var closeMins = 24 * 60;
+        var isOpen = totalMins >= openMins && totalMins < closeMins;
+        statusEl.textContent = isOpen ? "● Open" : "● Closed";
+        statusEl.style.color = isOpen ? "#22c55e" : "#ef4444";
+        statusEl.style.display = "block";
+      }
+    }
+    _locUpdateStatus();
+    setInterval(_locUpdateStatus, 60000);
+    window._locSetMode = function (l) {
+      localStorage.setItem(y, l);
+      const m = l === "delivery";
+      (document
+        .getElementById("loc-tab-delivery")
+        .classList.toggle("loc-tab-active", m),
+        document
+          .getElementById("loc-tab-pickup")
+          .classList.toggle("loc-tab-active", !m),
+        (document.getElementById("loc-delivery-panel").style.display = m
+          ? ""
+          : "none"),
+        (document.getElementById("loc-pickup-panel").style.display = m
+          ? "none"
+          : ""),
+        i && (i.textContent = m ? "Your Location" : "Select Location"),
+        _locUpdateStatus(),
+        window.dispatchEvent(
+          new CustomEvent("tl_location_changed", { detail: { type: l } }),
+        ));
+    };
+    function B() {
+      (e.classList.add("active"),
+        (document.body.style.overflow = "hidden"),
+        window._locSetMode(localStorage.getItem(y) || "delivery"));
+      const l = localStorage.getItem(x);
+      l && A(l);
+    }
+    function I() {
+      (e.classList.remove("active"), (document.body.style.overflow = ""));
+    }
+    function _(l) {
+      localStorage.setItem(y, T);
+      localStorage.setItem(x, l);
+      r && (r.textContent = l);
+      _locUpdateStatus();
+      M();
+      I();
+      window.dispatchEvent(
+        new CustomEvent("tl_location_changed", { detail: { location: l } }),
+      );
+    }
+    window._tl_openLocationModal = B;
+    function A(l) {
+      document
+        .querySelectorAll(".loc-option-item")
+        .forEach((m) =>
+          m.classList.toggle("loc-option-selected", m.dataset.label === l),
+        );
+    }
+    (n && n.addEventListener("click", B),
+      s && s.addEventListener("click", I),
+      e.addEventListener("click", (l) => {
+        l.target === e && I();
+      }));
+    const L = e.querySelector(".modal-sheet");
+    if (L) {
+      let l = 0,
+        m = 0,
+        g = !1;
+      (L.addEventListener(
+        "touchstart",
+        (k) => {
+          (L.querySelector(".modal-body") || L).scrollTop <= 0 &&
+            ((l = k.touches[0].clientY),
+            (g = !0),
+            (L.style.transition = "none"));
+        },
+        { passive: !0 },
+      ),
+        L.addEventListener(
+          "touchmove",
+          (k) => {
+            if (!g) return;
+            if ((L.querySelector(".modal-body") || L).scrollTop > 0) {
+              g = !1;
+              return;
+            }
+            m = k.touches[0].clientY;
+            const H = m - l;
+            H > 0 &&
+              (k.preventDefault(), (L.style.transform = `translateY(${H}px)`));
+          },
+          { passive: !1 },
+        ),
+        L.addEventListener("touchend", () => {
+          g &&
+            ((g = !1),
+            (L.style.transition = ""),
+            m - l > 80 && I(),
+            (L.style.transform = ""),
+            (m = 0));
+        }));
+    }
+    function z(l) {
+      T = l;
+      const m = l === "outlet";
+      (h && (h.style.display = m ? "none" : ""),
+        b && (b.style.display = m ? "" : "none"),
+        (document.getElementById("loc-picker-title").textContent = m
+          ? "Select Outlet"
+          : "Select Location"),
+        t && (t.value = ""),
+        C && (C.style.display = "none"),
+        document
+          .querySelectorAll(".loc-option-item")
+          .forEach((g) => (g.style.display = "")),
+        (c.style.display = "flex"),
+        requestAnimationFrame(() => {
+          ((c.style.opacity = "1"),
+            (c.style.pointerEvents = "all"),
+            c.classList.add("active"));
+        }));
+    }
+    function M() {
+      (c.classList.remove("active"),
+        (c.style.opacity = "0"),
+        (c.style.pointerEvents = "none"),
+        setTimeout(() => {
+          c.style.display = "none";
+        }, 350));
+    }
+    const P = document.getElementById("loc-delivery-trigger"),
+      $ = document.getElementById("loc-outlet-trigger");
+    if (
+      (P && P.addEventListener("click", () => z("delivery")),
+      $ && $.addEventListener("click", () => z("outlet")),
+      d && d.addEventListener("click", M),
+      c.addEventListener("click", (l) => {
+        l.target === c && M();
+      }),
+      t &&
+        t.addEventListener("input", () => {
+          const l = t.value.toLowerCase().trim(),
+            m = T === "outlet" ? b : h;
+          if (!m) return;
+          let g = !1;
+          (m.querySelectorAll(".loc-option-item").forEach((k) => {
+            const D = !l || k.dataset.label.toLowerCase().includes(l);
+            ((k.style.display = D ? "" : "none"), D && (g = !0));
+          }),
+            C && (C.style.display = g ? "none" : ""),
+            p && (p.style.display = t.value ? "" : "none"));
+        }),
+      p &&
+        ((p.style.display = "none"),
+        p.addEventListener("click", () => {
+          ((t.value = ""), t.dispatchEvent(new Event("input")));
+        })),
+      document.querySelectorAll(".loc-option-item").forEach((l) => {
+        l.addEventListener("click", () => {
+          (document
+            .querySelectorAll(".loc-option-item")
+            .forEach((g) => g.classList.remove("loc-option-selected")),
+            l.classList.add("loc-option-selected"));
+          const m =
+            T === "outlet"
+              ? document.getElementById("loc-outlet-trigger-text")
+              : document.getElementById("loc-delivery-trigger-text");
+          (m && (m.textContent = l.dataset.label), _(l.dataset.label));
+        });
+      }),
+      o)
+    ) {
+      let l = 0,
+        m = 0,
+        g = !1;
+      (o.addEventListener(
+        "touchstart",
+        (k) => {
+          (o.querySelector(".modal-body") || o).scrollTop <= 0 &&
+            ((l = k.touches[0].clientY),
+            (g = !0),
+            (o.style.transition = "none"));
+        },
+        { passive: !0 },
+      ),
+        o.addEventListener(
+          "touchmove",
+          (k) => {
+            if (!g) return;
+            if ((o.querySelector(".modal-body") || o).scrollTop > 0) {
+              g = !1;
+              return;
+            }
+            m = k.touches[0].clientY;
+            const H = m - l;
+            H > 0 &&
+              (k.preventDefault(), (o.style.transform = `translateY(${H}px)`));
+          },
+          { passive: !1 },
+        ),
+        o.addEventListener("touchend", () => {
+          g &&
+            ((g = !1),
+            (o.style.transition = ""),
+            m - l > 80 && M(),
+            (o.style.transform = ""),
+            (m = 0));
+        }));
+    }
+    const u = document.getElementById("loc-asap-btn"),
+      f = document.getElementById("loc-later-btn"),
+      w = document.getElementById("loc-time-input-wrap");
+    (u &&
+      f &&
+      w &&
+      (u.addEventListener("click", () => {
+        (u.classList.add("loc-time-btn-active"),
+          f.classList.remove("loc-time-btn-active"),
+          (w.style.display = "none"));
+      }),
+      f.addEventListener("click", () => {
+        (f.classList.add("loc-time-btn-active"),
+          u.classList.remove("loc-time-btn-active"),
+          (w.style.display = ""));
+      })),
+      a &&
+        a.addEventListener("click", () => {
+          const l = a.innerHTML;
+          if (
+            ((a.innerHTML = "Detecting..."),
+            (a.disabled = !0),
+            !navigator.geolocation)
+          ) {
+            (alert("Geolocation not supported."),
+              (a.innerHTML = l),
+              (a.disabled = !1));
+            return;
+          }
+          navigator.geolocation.getCurrentPosition(
+            (m) => {
+              const g = `Near (${m.coords.latitude.toFixed(3)}, ${m.coords.longitude.toFixed(3)})`,
+                k = document.getElementById("loc-delivery-trigger-text");
+              (k && (k.textContent = g),
+                _(g),
+                (a.innerHTML = l),
+                (a.disabled = !1));
+            },
+            () => {
+              (alert("Unable to detect location."),
+                (a.innerHTML = l),
+                (a.disabled = !1));
+            },
+            { timeout: 1e4 },
+          );
+        }));
+    const S = localStorage.getItem(x),
+      te = localStorage.getItem("tl_location_prompted");
+    if (S) {
+      r && (r.textContent = S);
+      const currMode = localStorage.getItem(y) || "delivery";
+      if (currMode === "outlet") {
+        const outl = document.getElementById("loc-outlet-trigger-text");
+        if (outl && outl.textContent === "Select an outlet...")
+          outl.textContent = S;
+      } else {
+        const l = document.getElementById("loc-delivery-trigger-text");
+        if (l && l.textContent === "Select delivery area...") l.textContent = S;
+      }
+      A(S);
+    } else te || (localStorage.setItem("tl_location_prompted", "true"), B());
+  }
+  function X() {
+    E(
+      "beforeend",
+      "body",
+      `
 <div class="modal-overlay" id="delivery-info-modal" role="dialog" aria-modal="true" aria-labelledby="delivery-info-title" style="z-index: 10001;" aria-labelledby="modal-generic-title">
   <div class="modal-sheet">
     <div class="modal-drag-handle"></div>
@@ -410,7 +933,14 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
       </ul>
     </div>
   </div>
-</div>`)}function U(){E("beforeend","body",`
+</div>`,
+    );
+  }
+  function U() {
+    E(
+      "beforeend",
+      "body",
+      `
 <div class="chatbot-widget">
   <button class="mobile-floating-search-btn desktop-hide" aria-label="Search Menu" onclick="if(window.openSearchModal) window.openSearchModal(); else window.location.href='${v("pages/menu.html")}';" style="position: absolute; bottom: 70px; right: 0; width: 44px; height: 44px; border-radius: 50%; background: var(--clr-primary); border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); color: #fff; cursor: pointer; z-index: 10;">
     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -453,11 +983,25 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
       </button>
     </div>
   </div>
-</div>`)}function K(){E("beforeend","body",`
+</div>`,
+    );
+  }
+  function K() {
+    E(
+      "beforeend",
+      "body",
+      `
 <div id="lightbox" class="lightbox" style="z-index: 100005;">
   <span class="lightbox-close">&times;</span>
   <img loading="lazy" decoding="async" class="lightbox-content" id="lightbox-img">
-</div>`)}function Q(){E("beforeend","body",`
+</div>`,
+    );
+  }
+  function Q() {
+    E(
+      "beforeend",
+      "body",
+      `
 <div id="demo-fab-container" class="demo-fab-container">
   <div class="demo-tap-badge-wrapper"><span class="demo-tap-badge">Tap this</span></div>
   <button id="demo-info-trigger" class="demo-info-trigger bounce" aria-label="Demo Information">
@@ -481,7 +1025,57 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
     </button>
   </div>
 </div>
-`);const e=document.getElementById("demo-fab-container"),n=document.getElementById("demo-info-trigger");if(n&&e){let r=null,i=null,s=!1,a=!1;const c=()=>{!e.classList.contains("is-expanded")&&!a&&(e.classList.add("is-expanded"),s=!0,i=setTimeout(()=>{s&&!a&&(e.classList.remove("is-expanded"),s=!1)},5e3))},o=()=>{r=setInterval(c,3e4)},t=()=>{clearInterval(r),o()};n.addEventListener("click",()=>{e.classList.toggle("is-expanded"),s=!1,t()});const p=()=>{a=!0,clearTimeout(i)},d=()=>{a=!1,s&&e.classList.contains("is-expanded")&&(i=setTimeout(()=>{a||(e.classList.remove("is-expanded"),s=!1)},2e3)),t()};e.addEventListener("mouseenter",p),e.addEventListener("mouseleave",d),e.addEventListener("touchstart",p,{passive:!0}),e.addEventListener("touchend",d,{passive:!0}),o()}}function J(){E("beforeend","body",`
+`,
+    );
+    const e = document.getElementById("demo-fab-container"),
+      n = document.getElementById("demo-info-trigger");
+    if (n && e) {
+      let r = null,
+        i = null,
+        s = !1,
+        a = !1;
+      const c = () => {
+          !e.classList.contains("is-expanded") &&
+            !a &&
+            (e.classList.add("is-expanded"),
+            (s = !0),
+            (i = setTimeout(() => {
+              s && !a && (e.classList.remove("is-expanded"), (s = !1));
+            }, 5e3)));
+        },
+        o = () => {
+          r = setInterval(c, 3e4);
+        },
+        t = () => {
+          (clearInterval(r), o());
+        };
+      n.addEventListener("click", () => {
+        (e.classList.toggle("is-expanded"), (s = !1), t());
+      });
+      const p = () => {
+          ((a = !0), clearTimeout(i));
+        },
+        d = () => {
+          ((a = !1),
+            s &&
+              e.classList.contains("is-expanded") &&
+              (i = setTimeout(() => {
+                a || (e.classList.remove("is-expanded"), (s = !1));
+              }, 2e3)),
+            t());
+        };
+      (e.addEventListener("mouseenter", p),
+        e.addEventListener("mouseleave", d),
+        e.addEventListener("touchstart", p, { passive: !0 }),
+        e.addEventListener("touchend", d, { passive: !0 }),
+        o());
+    }
+  }
+  function J() {
+    E(
+      "beforeend",
+      "body",
+      `
 <div class="modal-overlay" id="demo-modal" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title" style="z-index: 10001;">
   <div class="modal-sheet demo-modal-sheet" style="max-width: 500px; padding: 0;">
     <div class="modal-drag-handle"></div>
@@ -518,7 +1112,48 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
     </div>
   </div>
 </div>
-`);const e=document.getElementById("demo-modal"),n=document.getElementById("demo-trigger-btn"),r=document.getElementById("demo-modal-close-btn");if(!e||!n||!r)return;const i=()=>{typeof window._tl_openModal=="function"?window._tl_openModal(e,"demo-modal"):(e.classList.add("active"),document.body.style.overflow="hidden")},s=()=>{e.classList.remove("active"),document.body.style.overflow="";const a=e.querySelector(".modal-sheet");if(!a){n.classList.add("bounce");return}const c=a.getBoundingClientRect(),o=n.getBoundingClientRect(),t=document.createElement("div");t.className="demo-btn-fly-effect",t.style.left=c.left+c.width/2-10+"px",t.style.top=c.top+c.height/2-10+"px",document.body.appendChild(t),t.offsetHeight,t.style.left=o.left+o.width/2-10+"px",t.style.top=o.top+o.height/2-10+"px",t.style.transform="scale(0.2)",t.style.opacity="0",setTimeout(()=>{t.remove(),n.classList.add("bounce")},700)};n.addEventListener("click",i),r.addEventListener("click",s)}function Z(){E("beforeend","body",`
+`,
+    );
+    const e = document.getElementById("demo-modal"),
+      n = document.getElementById("demo-trigger-btn"),
+      r = document.getElementById("demo-modal-close-btn");
+    if (!e || !n || !r) return;
+    const i = () => {
+        typeof window._tl_openModal == "function"
+          ? window._tl_openModal(e, "demo-modal")
+          : (e.classList.add("active"),
+            (document.body.style.overflow = "hidden"));
+      },
+      s = () => {
+        (e.classList.remove("active"), (document.body.style.overflow = ""));
+        const a = e.querySelector(".modal-sheet");
+        if (!a) {
+          n.classList.add("bounce");
+          return;
+        }
+        const c = a.getBoundingClientRect(),
+          o = n.getBoundingClientRect(),
+          t = document.createElement("div");
+        ((t.className = "demo-btn-fly-effect"),
+          (t.style.left = c.left + c.width / 2 - 10 + "px"),
+          (t.style.top = c.top + c.height / 2 - 10 + "px"),
+          document.body.appendChild(t),
+          t.offsetHeight,
+          (t.style.left = o.left + o.width / 2 - 10 + "px"),
+          (t.style.top = o.top + o.height / 2 - 10 + "px"),
+          (t.style.transform = "scale(0.2)"),
+          (t.style.opacity = "0"),
+          setTimeout(() => {
+            (t.remove(), n.classList.add("bounce"));
+          }, 700));
+      };
+    (n.addEventListener("click", i), r.addEventListener("click", s));
+  }
+  function Z() {
+    E(
+      "beforeend",
+      "body",
+      `
 <div class="modal-overlay" id="about-demo-modal" role="dialog" aria-modal="true" aria-labelledby="about-demo-title" style="z-index: 10001;">
   <div class="modal-sheet adm-sheet" style="max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
     <div class="modal-drag-handle" style="flex-shrink: 0; margin-top: 10px;"></div>
@@ -577,16 +1212,360 @@ window._locSetMode=function(l){localStorage.setItem(y,l);const m=l==="delivery";
     </div>
   </div>
 </div>
-`);const e=document.getElementById("about-demo-modal"),n=document.getElementById("about-demo-trigger-btn"),r=document.getElementById("about-demo-close-btn"),i=document.getElementById("about-demo-continue-btn");if(!e||!n)return;const s=()=>{typeof window._tl_openModal=="function"?window._tl_openModal(e,"about-demo-modal"):(e.classList.add("active"),document.body.style.overflow="hidden")},a=()=>{typeof window._tl_closeModal=="function"?window._tl_closeModal(e):(e.classList.remove("active"),document.body.style.overflow=""),n.classList.add("bounce")};n.addEventListener("click",s),r&&r.addEventListener("click",a),i&&i.addEventListener("click",a),e.addEventListener("click",c=>{c.target===e&&a()})}function j(){F(),R(),N(),Y(),G(),V(),X(),U(),K(),Q(),J(),Z(),W();const e=document.getElementById("page-loader");if(e){const o=document.getElementById("hero-primary-img"),t=document.getElementById("loader-logo-img");if(!o)e.classList.add("spinner-mode"),requestAnimationFrame(()=>{e.classList.add("complete","fade-out"),setTimeout(()=>e.remove(),500)});else{let h=function(){if(!p||!d)return;e.classList.add("complete");const b=o.closest(".hero-image-frame");b&&b.classList.add("loaded"),setTimeout(()=>{e.classList.add("fade-out"),setTimeout(()=>e.remove(),500)},200)},p=!1,d=!1;t?(t.classList.add("visible"),t.complete&&t.naturalWidth>0?p=!0:(t.addEventListener("load",()=>{p=!0,h()},{once:!0}),t.addEventListener("error",()=>{p=!0,h()},{once:!0}))):p=!0,o.complete&&o.naturalWidth>0?d=!0:(o.addEventListener("load",()=>{d=!0,h()},{once:!0}),o.addEventListener("error",()=>{d=!0,h()},{once:!0})),setTimeout(()=>{e.classList.contains("fade-out")||(p=d=!0,h())},2500),h()}}const n=document.getElementById("footer");if(n){const o=p=>{const d=p[0].intersectionRatio>0,h=document.querySelector(".floating-cart-bar"),b=document.querySelector(".chatbot-widget"),C=[],x=d?"opacity 0.3s ease, visibility 0.3s ease":"";h&&(h.style.transition=x,h.style.opacity=d?"0":"",h.style.visibility=d?"hidden":"",h.style.pointerEvents=d?"none":""),b&&(b.style.transition=x,b.style.opacity=d?"0":"",b.style.visibility=d?"hidden":"",b.style.pointerEvents=d?"none":""),C.forEach(y=>{y.style.opacity=d?"0":"",y.style.visibility=d?"hidden":"",y.style.pointerEvents=d?"none":""})};new IntersectionObserver(o,{threshold:0,rootMargin:"-50px 0px 0px 0px"}).observe(n)}const r=document.querySelector(".chatbot-toggle"),i=document.querySelector(".chatbot-badge");r&&i&&r.addEventListener("click",()=>{i.style.display="none"},{once:!0});function s(){const o=document.documentElement.classList.contains("dark-mode");document.querySelectorAll(".theme-toggle-btn, .mobile-theme-toggle").forEach(t=>{const p=t.querySelector(".sun-icon"),d=t.querySelector(".moon-icon");p&&(p.style.display=o?"none":"block"),d&&(d.style.display=o?"block":"none")})}s();const a=()=>{document.documentElement.style.setProperty("transition","background-color 0.4s ease, color 0.4s ease");const o=document.documentElement.classList.toggle("dark-mode");localStorage.setItem("tl_theme",o?"dark":"light"),s(),setTimeout(()=>{document.documentElement.style.removeProperty("transition")},400)};window.addEventListener("storage",o=>{o.key==="tl_theme"&&(o.newValue==="dark"?document.documentElement.classList.add("dark-mode"):document.documentElement.classList.remove("dark-mode"),s())}),document.querySelectorAll(".theme-toggle-btn, .mobile-theme-toggle").forEach(o=>{o.addEventListener("click",a)});const c="tl_firstvisit_hinted";if(!localStorage.getItem(c)){localStorage.setItem(c,"1");const o=document.querySelector(".mobile-menu-btn");o&&(o.style.animation="tl-firstvisit-pulse 1.5s ease 0.8s 3");const t=document.querySelector(".desktop-theme-toggle");t&&(t.style.animation="tl-firstvisit-pulse 1.5s ease 0.8s 3"),o&&o.addEventListener("click",function p(){o.removeEventListener("click",p),setTimeout(()=>{const d=document.querySelector(".mobile-theme-toggle");d&&(d.style.animation="tl-firstvisit-pulse 1.5s ease 0s 3")},400)})}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",j):j();function O(e,n,r){const i=document.getElementById(e),s=document.getElementById(n),a=document.getElementById(r);if(!i||!s||!a)return;const c=Array.from(i.children);if(c.length<=1)return;const o=Array.from(a.querySelectorAll(".indicator")),t=c.length;let p=0,d,h=!1;const b=c[0].cloneNode(!0),C=c[t-1].cloneNode(!0);b.classList.add("clone"),C.classList.add("clone"),i.appendChild(b),i.insertBefore(C,c[0]);const x=i.children.length;i.style.width=`${x*100}%`,Array.from(i.children).forEach(u=>{u.style.width=`${100/x}%`});let y=1;i.style.transition="none",i.style.transform=`translateX(-${y*(100/x)}%)`;function T(u){o.length&&o.forEach((f,w)=>{const S=w===u;f.classList.toggle("active",S),f.style.opacity=S?"1":"0.5"})}function B(u,f=!1){if(h&&!f)return;h=!f,y=u,i.style.transition=f?"none":"transform 0.5s ease-in-out",i.style.transform=`translateX(-${y*(100/x)}%)`;let w=y-1;y===0&&(w=t-1),y===x-1&&(w=0),T(w),p=w}function I(){B(y+1)}function _(){B(y-1)}i.addEventListener("transitionend",()=>{h=!1,y===x-1?B(1,!0):y===0&&B(x-2,!0)});function A(){clearInterval(d),d=setInterval(I,3500)}function L(){clearInterval(d)}o.forEach((u,f)=>{u.addEventListener("click",w=>{w.stopPropagation(),f!==p&&(B(f+1),A())})});let z=0,M=!1;function P(u){M=!0,z=u.type.includes("touch")?u.touches[0].clientX:u.pageX,L()}function $(u){if(!M)return;M=!1;const w=(u.type.includes("touch")?u.changedTouches[0]?.clientX??z:u.pageX)-z;Math.abs(w)>40&&(w<0?I():_()),A()}s.addEventListener("mousedown",P),s.addEventListener("touchstart",P,{passive:!0}),s.addEventListener("mouseup",$),s.addEventListener("touchend",$,{passive:!0}),s.addEventListener("mouseleave",u=>{M&&$(u)}),i.querySelectorAll("img").forEach(u=>{u.addEventListener("dragstart",f=>f.preventDefault())}),A(),T(p)}function ee(){E("beforeend","body",`
+`,
+    );
+    const e = document.getElementById("about-demo-modal"),
+      n = document.getElementById("about-demo-trigger-btn"),
+      r = document.getElementById("about-demo-close-btn"),
+      i = document.getElementById("about-demo-continue-btn");
+    if (!e || !n) return;
+    const s = () => {
+        typeof window._tl_openModal == "function"
+          ? window._tl_openModal(e, "about-demo-modal")
+          : (e.classList.add("active"),
+            (document.body.style.overflow = "hidden"));
+      },
+      a = () => {
+        (typeof window._tl_closeModal == "function"
+          ? window._tl_closeModal(e)
+          : (e.classList.remove("active"), (document.body.style.overflow = "")),
+          n.classList.add("bounce"));
+      };
+    (n.addEventListener("click", s),
+      r && r.addEventListener("click", a),
+      i && i.addEventListener("click", a),
+      e.addEventListener("click", (c) => {
+        c.target === e && a();
+      }));
+  }
+  function j() {
+    (F(), R(), N(), Y(), G(), V(), X(), U(), K(), Q(), J(), Z(), W());
+    const e = document.getElementById("page-loader");
+    if (e) {
+      const o = document.getElementById("hero-primary-img"),
+        t = document.getElementById("loader-logo-img");
+      if (!o)
+        (e.classList.add("spinner-mode"),
+          requestAnimationFrame(() => {
+            (e.classList.add("complete", "fade-out"),
+              setTimeout(() => e.remove(), 500));
+          }));
+      else {
+        let h = function () {
+            if (!p || !d) return;
+            e.classList.add("complete");
+            const b = o.closest(".hero-image-frame");
+            (b && b.classList.add("loaded"),
+              setTimeout(() => {
+                (e.classList.add("fade-out"),
+                  setTimeout(() => e.remove(), 500));
+              }, 200));
+          },
+          p = !1,
+          d = !1;
+        (t
+          ? (t.classList.add("visible"),
+            t.complete && t.naturalWidth > 0
+              ? (p = !0)
+              : (t.addEventListener(
+                  "load",
+                  () => {
+                    ((p = !0), h());
+                  },
+                  { once: !0 },
+                ),
+                t.addEventListener(
+                  "error",
+                  () => {
+                    ((p = !0), h());
+                  },
+                  { once: !0 },
+                )))
+          : (p = !0),
+          o.complete && o.naturalWidth > 0
+            ? (d = !0)
+            : (o.addEventListener(
+                "load",
+                () => {
+                  ((d = !0), h());
+                },
+                { once: !0 },
+              ),
+              o.addEventListener(
+                "error",
+                () => {
+                  ((d = !0), h());
+                },
+                { once: !0 },
+              )),
+          setTimeout(() => {
+            e.classList.contains("fade-out") || ((p = d = !0), h());
+          }, 2500),
+          h());
+      }
+    }
+    const n = document.getElementById("footer");
+    if (n) {
+      const o = (p) => {
+        const d = p[0].intersectionRatio > 0,
+          h = document.querySelector(".floating-cart-bar"),
+          b = document.querySelector(".chatbot-widget"),
+          C = [],
+          x = d ? "opacity 0.3s ease, visibility 0.3s ease" : "";
+        (h &&
+          ((h.style.transition = x),
+          (h.style.opacity = d ? "0" : ""),
+          (h.style.visibility = d ? "hidden" : ""),
+          (h.style.pointerEvents = d ? "none" : "")),
+          b &&
+            ((b.style.transition = x),
+            (b.style.opacity = d ? "0" : ""),
+            (b.style.visibility = d ? "hidden" : ""),
+            (b.style.pointerEvents = d ? "none" : "")),
+          C.forEach((y) => {
+            ((y.style.opacity = d ? "0" : ""),
+              (y.style.visibility = d ? "hidden" : ""),
+              (y.style.pointerEvents = d ? "none" : ""));
+          }));
+      };
+      new IntersectionObserver(o, {
+        threshold: 0,
+        rootMargin: "-50px 0px 0px 0px",
+      }).observe(n);
+    }
+    const r = document.querySelector(".chatbot-toggle"),
+      i = document.querySelector(".chatbot-badge");
+    r &&
+      i &&
+      r.addEventListener(
+        "click",
+        () => {
+          i.style.display = "none";
+        },
+        { once: !0 },
+      );
+    function s() {
+      const o = document.documentElement.classList.contains("dark-mode");
+      document
+        .querySelectorAll(".theme-toggle-btn, .mobile-theme-toggle")
+        .forEach((t) => {
+          const p = t.querySelector(".sun-icon"),
+            d = t.querySelector(".moon-icon");
+          (p && (p.style.display = o ? "none" : "block"),
+            d && (d.style.display = o ? "block" : "none"));
+        });
+    }
+    s();
+    const a = () => {
+      document.documentElement.style.setProperty(
+        "transition",
+        "background-color 0.4s ease, color 0.4s ease",
+      );
+      const o = document.documentElement.classList.toggle("dark-mode");
+      (localStorage.setItem("tl_theme", o ? "dark" : "light"),
+        s(),
+        setTimeout(() => {
+          document.documentElement.style.removeProperty("transition");
+        }, 400));
+    };
+    (window.addEventListener("storage", (o) => {
+      o.key === "tl_theme" &&
+        (o.newValue === "dark"
+          ? document.documentElement.classList.add("dark-mode")
+          : document.documentElement.classList.remove("dark-mode"),
+        s());
+    }),
+      document
+        .querySelectorAll(".theme-toggle-btn, .mobile-theme-toggle")
+        .forEach((o) => {
+          o.addEventListener("click", a);
+        }));
+    const c = "tl_firstvisit_hinted";
+    if (!localStorage.getItem(c)) {
+      localStorage.setItem(c, "1");
+      const o = document.querySelector(".mobile-menu-btn");
+      o && (o.style.animation = "tl-firstvisit-pulse 1.5s ease 0.8s 3");
+      const t = document.querySelector(".desktop-theme-toggle");
+      (t && (t.style.animation = "tl-firstvisit-pulse 1.5s ease 0.8s 3"),
+        o &&
+          o.addEventListener("click", function p() {
+            (o.removeEventListener("click", p),
+              setTimeout(() => {
+                const d = document.querySelector(".mobile-theme-toggle");
+                d && (d.style.animation = "tl-firstvisit-pulse 1.5s ease 0s 3");
+              }, 400));
+          }));
+    }
+  }
+  document.readyState === "loading"
+    ? document.addEventListener("DOMContentLoaded", j)
+    : j();
+  function O(e, n, r) {
+    const i = document.getElementById(e),
+      s = document.getElementById(n),
+      a = document.getElementById(r);
+    if (!i || !s || !a) return;
+    const c = Array.from(i.children);
+    if (c.length <= 1) return;
+    const o = Array.from(a.querySelectorAll(".indicator")),
+      t = c.length;
+    let p = 0,
+      d,
+      h = !1;
+    const b = c[0].cloneNode(!0),
+      C = c[t - 1].cloneNode(!0);
+    (b.classList.add("clone"),
+      C.classList.add("clone"),
+      i.appendChild(b),
+      i.insertBefore(C, c[0]));
+    const x = i.children.length;
+    ((i.style.width = `${x * 100}%`),
+      Array.from(i.children).forEach((u) => {
+        u.style.width = `${100 / x}%`;
+      }));
+    let y = 1;
+    ((i.style.transition = "none"),
+      (i.style.transform = `translateX(-${y * (100 / x)}%)`));
+    function T(u) {
+      o.length &&
+        o.forEach((f, w) => {
+          const S = w === u;
+          (f.classList.toggle("active", S),
+            (f.style.opacity = S ? "1" : "0.5"));
+        });
+    }
+    function B(u, f = !1) {
+      if (h && !f) return;
+      ((h = !f),
+        (y = u),
+        (i.style.transition = f ? "none" : "transform 0.5s ease-in-out"),
+        (i.style.transform = `translateX(-${y * (100 / x)}%)`));
+      let w = y - 1;
+      (y === 0 && (w = t - 1), y === x - 1 && (w = 0), T(w), (p = w));
+    }
+    function I() {
+      B(y + 1);
+    }
+    function _() {
+      B(y - 1);
+    }
+    i.addEventListener("transitionend", () => {
+      ((h = !1), y === x - 1 ? B(1, !0) : y === 0 && B(x - 2, !0));
+    });
+    function A() {
+      (clearInterval(d), (d = setInterval(I, 3500)));
+    }
+    function L() {
+      clearInterval(d);
+    }
+    o.forEach((u, f) => {
+      u.addEventListener("click", (w) => {
+        (w.stopPropagation(), f !== p && (B(f + 1), A()));
+      });
+    });
+    let z = 0,
+      M = !1;
+    function P(u) {
+      ((M = !0),
+        (z = u.type.includes("touch") ? u.touches[0].clientX : u.pageX),
+        L());
+    }
+    function $(u) {
+      if (!M) return;
+      M = !1;
+      const w =
+        (u.type.includes("touch")
+          ? (u.changedTouches[0]?.clientX ?? z)
+          : u.pageX) - z;
+      (Math.abs(w) > 40 && (w < 0 ? I() : _()), A());
+    }
+    (s.addEventListener("mousedown", P),
+      s.addEventListener("touchstart", P, { passive: !0 }),
+      s.addEventListener("mouseup", $),
+      s.addEventListener("touchend", $, { passive: !0 }),
+      s.addEventListener("mouseleave", (u) => {
+        M && $(u);
+      }),
+      i.querySelectorAll("img").forEach((u) => {
+        u.addEventListener("dragstart", (f) => f.preventDefault());
+      }),
+      A(),
+      T(p));
+  }
+  function ee() {
+    E(
+      "beforeend",
+      "body",
+      `
     <div class="social-proof-toast" id="socialProofToast">
         <div class="toast-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
         </div>
         <div class="toast-text" id="socialProofText">Someone just ordered the Tower Burger!</div>
-    </div>`);const e=["Awais just bought the Crispy Combo!","Izhar just got 20% off on the Mega Feast Combo.","Hurry! Only 2 'Ultimate Duo Combo' deals left in stock.","Someone just ordered the Tower Burger!","Ali just saved Rs 600 on the Family Feast Combo!","Hot deal! 3 people are viewing the Crown crust Pizza.","Ayesha just ordered a Double Beef Smash.","Usman just claimed the Crispy Combo deal!","Only 1 Mega Feast Combo remaining at this price!","Someone just bought the Chicken Fajita Pizza."],n=document.getElementById("socialProofToast"),r=document.getElementById("socialProofText");if(!n||!r)return;const i=()=>{const s=e[Math.floor(Math.random()*e.length)];r.textContent=s,n.classList.add("show"),setTimeout(()=>{n.classList.remove("show")},3e3)};setTimeout(()=>{i(),setInterval(i,8e3)},2e3)}document.addEventListener("DOMContentLoaded",()=>{const e=q(),n=()=>{if((e==="offers.html"||e==="menu.html")&&(ee(),e==="menu.html"&&window.innerWidth<=768)){const s=document.getElementById("socialProofToast");s&&s.classList.add("menu-mobile-toast")}};"requestIdleCallback"in window?requestIdleCallback(n,{timeout:3e3}):setTimeout(n,2e3);const r=()=>{const s=document.querySelector(".navbar");if(s){requestAnimationFrame(()=>{document.documentElement.style.setProperty("--header-height",`${s.offsetHeight}px`)})}};window.addEventListener("resize",r,{passive:!0}),requestAnimationFrame(r),setTimeout(r,300);const i=()=>{O("hero-carousel-track","hero-carousel-container","hero-indicators"),O("menu-carousel-track","menu-carousel-container","menu-indicators")};"requestIdleCallback"in window?requestIdleCallback(i,{timeout:500}):setTimeout(i,100)})})();
-
-
-
-
-
-
+    </div>`,
+    );
+    const e = [
+        "Awais just bought the Crispy Combo!",
+        "Izhar just got 20% off on the Mega Feast Combo.",
+        "Hurry! Only 2 'Ultimate Duo Combo' deals left in stock.",
+        "Someone just ordered the Tower Burger!",
+        "Ali just saved Rs 600 on the Family Feast Combo!",
+        "Hot deal! 3 people are viewing the Crown crust Pizza.",
+        "Ayesha just ordered a Double Beef Smash.",
+        "Usman just claimed the Crispy Combo deal!",
+        "Only 1 Mega Feast Combo remaining at this price!",
+        "Someone just bought the Chicken Fajita Pizza.",
+      ],
+      n = document.getElementById("socialProofToast"),
+      r = document.getElementById("socialProofText");
+    if (!n || !r) return;
+    const i = () => {
+      const s = e[Math.floor(Math.random() * e.length)];
+      ((r.textContent = s),
+        n.classList.add("show"),
+        setTimeout(() => {
+          n.classList.remove("show");
+        }, 3e3));
+    };
+    setTimeout(() => {
+      (i(), setInterval(i, 8e3));
+    }, 2e3);
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const e = q(),
+      n = () => {
+        if (
+          (e === "offers.html" || e === "menu.html") &&
+          (ee(), e === "menu.html" && window.innerWidth <= 768)
+        ) {
+          const s = document.getElementById("socialProofToast");
+          s && s.classList.add("menu-mobile-toast");
+        }
+      };
+    "requestIdleCallback" in window
+      ? requestIdleCallback(n, { timeout: 3e3 })
+      : setTimeout(n, 2e3);
+    const r = () => {
+      const s = document.querySelector(".navbar");
+      if (s) {
+        const h = s.offsetHeight;
+        requestAnimationFrame(() => {
+          document.documentElement.style.setProperty(
+            "--header-height",
+            `${h}px`,
+          );
+        });
+      }
+    };
+    (window.addEventListener("resize", r, { passive: !0 }),
+      requestAnimationFrame(r),
+      setTimeout(r, 300));
+    const i = () => {
+      (O("hero-carousel-track", "hero-carousel-container", "hero-indicators"),
+        O("menu-carousel-track", "menu-carousel-container", "menu-indicators"));
+    };
+    "requestIdleCallback" in window
+      ? requestIdleCallback(i, { timeout: 500 })
+      : setTimeout(i, 100);
+  });
+})();

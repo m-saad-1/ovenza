@@ -1,196 +1,135 @@
-# Agent Task: Fix crustpk.vercel.app Performance (Mobile + Desktop)
+# Agent Task: crustpk.vercel.app Performance — Round 2
 
-You are a senior front-end/performance engineer. Your job is to take this Lighthouse report analysis and implement every fix below in the codebase for **crustpk.vercel.app**. Work top-to-bottom by priority. After each phase, note the estimated KB/ms saved. At the end, re-run Lighthouse (mobile, Slow 4G, Moto G Power emulation) and confirm the target metrics are met.
+Round 1 fixed LCP and image weight successfully. This round has one critical regression to fix (CLS) plus cleanup items that were flagged but not actually resolved last time. Work in priority order.
 
-## Baseline (current state)
+## Progress since round 1
 
-| Metric | Current | Target |
-|---|---|---|
-| Performance score | 67 | ≥ 90 |
-| Accessibility | 91 | ≥ 95 |
-| Best Practices | 96 | 100 |
-| SEO | 100 | 100 (maintain) |
-| First Contentful Paint (FCP) | 2.6 s | < 1.8 s |
-| **Largest Contentful Paint (LCP)** | **14.6 s** | **< 2.5 s** |
-| Total Blocking Time (TBT) | 80 ms | < 200 ms (already OK) |
-| Cumulative Layout Shift (CLS) | 0.068 | < 0.1 (already OK) |
-| Speed Index (SI) | 4.6 s | < 3.4 s |
-| Total page weight | ~3,008 KiB | < 1,500 KiB |
-
-LCP at 14.6s is the single biggest problem and the main reason the score is 67. TBT and CLS are already healthy — do not spend time there.
-
----
-
-## Root cause analysis
-
-1. **Every hero-area image is marked `fetchpriority="high"`.** Tower Burger, Offer Image, Mountain Dew icon, App Install banner, Combo 2, Smash Burger, BBQ Burger, Combo 1, Hero, Gallery images, Logo, Chicken Pizza, Special Pizza, Crown Crust Pizza — essentially the whole first screen — all compete for bandwidth at "high" priority simultaneously. This defeats the purpose of priority hints and starves the actual LCP element, which is why LCP is 14.6s despite a fast initial HTML/CSS response (~55–79ms).
-2. **Images are shipped far larger than their display size**, and it's the same waste on both the hero images and the small 116×116 category icons. Total identified savings: **1,832.5 KiB**, ~61% of total page weight, from oversized dimensions and AVIF encoded at too high a quality/compression setting.
-3. **Google Maps embed loads eagerly on first paint** and ships 405.7 KiB of JS, of which 229.2 KiB is unused on load.
-4. **Forced synchronous reflows** in `loader.js` and `script.bundle.js` (133ms total) — DOM geometry reads (e.g. `offsetWidth`) happening right after style/DOM mutations.
-5. **Render-blocking CSS**: `style.bundle.css` (26.6 KiB) blocks first paint for 310ms and contains 15.1 KiB (58%) of unused rules.
-6. 5 long main-thread tasks and 5 non-composited animations, likely driven by #3 and #4.
-
----
-
-## Phase 1 — Fix LCP and image weight (highest impact, do this first)
-
-### 1a. Fix `fetchpriority` and `loading` misuse
-- [ ] Identify the actual LCP element (almost certainly the hero image or the offer modal image — confirm via Lighthouse's "LCP element" trace or DevTools Performance panel).
-- [ ] Set `fetchpriority="high"` and `loading="eager"` on **only that one image**.
-- [ ] Remove `fetchpriority="high"` from every other image. Default priority is fine for anything in the first viewport; everything below the fold gets `loading="lazy"`.
-- [ ] Change `decoding="sync"` → `decoding="async"` on every image except the LCP element.
-
-Apply this pattern:
-```html
-<!-- The one true LCP image -->
-<img src="hero.avif" fetchpriority="high" loading="eager" decoding="async" width="693" height="417" alt="…">
-
-<!-- Everything else above the fold -->
-<img src="offer-1.avif" decoding="async" width="849" height="399" alt="…">
-
-<!-- Everything below the fold (gallery, combos, category icons, etc.) -->
-<img src="combo-2.avif" loading="lazy" decoding="async" width="319" height="319" alt="…">
-```
-
-### 1b. Resize/re-encode every oversized image
-Do NOT just recompress — first ship images at (display-size × 2 for retina), then recompress AVIF at a reasonable quality (~50-60 for photos, higher for logos/icons with flat color). Add real `srcset`/`sizes` so the browser doesn't over-fetch on smaller viewports.
-
-| Asset | Current | Displayed at | Fix | Est. savings |
+| Metric | Round 1 | Round 2 (now) | Target | Status |
 |---|---|---|---|---|
-| `burger-7.avif` (Tower Burger) | 1254×1254, 272.9 KiB | 319×319 | Resize to ~640×640 + recompress | 256.4 KiB |
-| `offer-1.avif` (Offer modal) | 1557×860, 306.3 KiB | 849×399 | Resize to ~1700×800 + recompress | 251.2 KiB |
-| `mountain-dew.avif` (category icon) | 1254×1254, 165.6 KiB | **116×116** | Resize to ~232×232 + recompress | 164.2 KiB |
-| `app-install.avif` | 1829×860, 160.8 KiB | 665×313 | Resize to ~1330×626 + recompress | 139.5 KiB |
-| `combo-2.avif` | 1254×1254, 143.6 KiB | 319×319 | Resize to ~640×640 + recompress | 134.4 KiB |
-| `burger-4.avif` (Smash Burger) | 1254×1254, 137.3 KiB | 319×319 | Resize to ~640×640 + recompress | 128.5 KiB |
-| `burger-5.avif` (BBQ Burger) | 1254×1254, 131.7 KiB | 319×319 | Resize to ~640×640 + recompress | 123.2 KiB |
-| `combo-1.avif` | 1254×1254, 120.6 KiB | 319×319 | Resize to ~640×640 + recompress | 112.8 KiB |
-| `hero.avif` | 1616×809, 139.3 KiB | 693×417 | Resize to ~1386×834 + recompress | 108.5 KiB |
-| `roll-1.avif` (category icon) | 800×800, 53.9 KiB | **116×116** | Resize to ~232×232 + recompress | 52.8 KiB |
-| `playstore-btn.avif` | 2159×728, 51.3 KiB | 259×88 | Resize to ~520×176 + recompress | 50.6 KiB |
-| `gallery-6.avif` | 466×581, 68.7 KiB | 321×401 | Recompress (already near-correct size) | 47.8 KiB |
-| `logo.avif` | 2172×724, 51.5 KiB | 630×210 | Resize to ~1260×420 + recompress | 47.2 KiB |
-| `gallery-1.avif` | 465×567, 52.3 KiB | 321×392 | Recompress | 31.8 KiB |
-| `chicken-pizza.avif` | 500×500, 48.0 KiB | 319×319 | Recompress / mild resize | 31.4 KiB |
-| `special-pizza.avif` | 500×500, 46.1 KiB | 319×319 | Recompress / mild resize | 29.6 KiB |
-| `crown-crust-pizza.avif` | 500×500, 43.4 KiB | 319×319 | Recompress / mild resize | 26.9 KiB |
-| `gallery-5.avif` | 462×583, 47.8 KiB | 321×405 | Recompress | 26.6 KiB |
-| `gallery-2.avif` | 470×596, 40.4 KiB | 321×407 | Recompress | 21.5 KiB |
-| `cheese-fries.avif` (category icon) | 500×500, 19.4 KiB | **116×116** | Resize to ~232×232 + recompress | 18.4 KiB |
-| `gallery-3.avif` | 465×581, 34.1 KiB | 321×401 | Recompress | 17.8 KiB |
-| `burger-1.avif` (category icon) | 360×360, 12.8 KiB | **116×116** | Resize to ~232×232 + recompress | 11.5 KiB |
-| **Total** | | | | **~1,832.5 KiB** |
+| Performance score | 67 | 66 | ≥ 90 | ⚠️ flat — CLS is masking real gains |
+| Accessibility | 91 | 95 | ≥ 95 | ✅ met |
+| Best Practices | 96 | 96 | 100 | — |
+| SEO | 100 | 100 | 100 | ✅ |
+| FCP | 2.6s | 0.8s | < 1.8s | ✅ met |
+| LCP | 14.6s | 3.5s | < 2.5s | ⚠️ close, needs one more pass |
+| TBT | 80ms | 30ms | < 200ms | ✅ met |
+| **CLS** | **0.068** | **1.000** | **< 0.1** | **🔴 severe new regression** |
+| SI | 4.6s | 2.7s | < 3.4s | ✅ met |
+| Image waste | 1,832.5 KiB | 11 KiB | — | ✅ essentially solved |
 
-Note the recurring pattern: every "category circle" icon (mountain-dew, roll-1, cheese-fries, burger-1) is shipping a full-size product photo master (up to 1254×1254) to render a 116×116 circle. Fix the image source at the pipeline level, not just via CSS.
-
-- [ ] Build an image pipeline (e.g. `sharp` at build time, or Vercel's Image Optimization / `next/image` if this is a Next.js app) that generates the correctly-sized AVIF variant + a `srcset` for each breakpoint, instead of hand-placing full-resolution masters.
-- [ ] Add explicit `width`/`height` (already present on most — keep them, they help CLS) matching the real intrinsic size of the new resized asset.
-
-**Expected result of Phase 1 alone: total page weight drops from ~3,008 KiB to roughly ~1,175 KiB, and LCP should drop dramatically since the true LCP image is no longer contending with ~15 other "high priority" images.**
+Do not touch image sizing/fetchpriority again — that work is done. Focus entirely on the items below.
 
 ---
 
-## Phase 2 — Stop loading Google Maps on initial page load
+## Phase 0 — Fix the CLS regression (blocking everything else, do this first)
 
-Currently: 405.7 KiB of JS from `maps.googleapis.com`/`maps.gstatic.com`, of which 229.2 KiB is unused at load, plus it contributes to long main-thread tasks.
-
-- [ ] Remove the Maps `<script>`/embed from the initial render path entirely.
-- [ ] Replace the visible "map" on first load with a static placeholder (a lightweight static map image, or just a "View on Google Maps" link/button) that looks identical to the real map.
-- [ ] Load the real interactive Maps JS **only** when the user scrolls the map into view (IntersectionObserver) or clicks the placeholder — whichever fits the UX better.
-
-```js
-const mapPlaceholder = document.querySelector('#map-placeholder');
-const loadRealMap = () => {
-  if (window.__mapsLoaded) return;
-  window.__mapsLoaded = true;
-  const script = document.createElement('script');
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_KEY&callback=initMap';
-  document.head.appendChild(script);
-};
-
-// Option A: load when scrolled into view
-const observer = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) { loadRealMap(); observer.disconnect(); }
-}, { rootMargin: '200px' });
-observer.observe(mapPlaceholder);
-
-// Option B: load on click instead, if the map isn't critical to the page
-mapPlaceholder.addEventListener('click', loadRealMap, { once: true });
+The report's entire layout-shift score (1.000 — the max) is attributed to a single element:
+```
+body
+<body style="overflow: hidden;">
 ```
 
-- [ ] Confirm this removes ~230–405 KiB of JS transfer and the associated long tasks from the initial load entirely (not just the "unused" portion — the whole script moves off the critical path).
+This is the textbook cause: some JS sets `document.body.style.overflow = 'hidden'`, which removes the vertical scrollbar. Removing the scrollbar shifts every element on the page rightward to fill the space it used to occupy — Lighthouse sees that as a single catastrophic shift affecting ~100% of the viewport.
 
----
-
-## Phase 3 — Fix forced reflows in `loader.js` / `script.bundle.js`
-
-Report shows 133ms of forced reflow attributed to `loader.js:573:851`, `loader.js:572:1267`, and `script.bundle.js:2:3663`. This is layout thrashing: JS is reading a geometric property (`offsetWidth`, `offsetHeight`, `getBoundingClientRect`, `scrollHeight`, etc.) immediately after a DOM/style mutation, forcing the browser to synchronously recalculate layout.
-
-- [ ] Open `loader.js` around lines 572–573 and `script.bundle.js` around line 2 (or their un-minified source) and find the pattern:
-  ```js
-  // BAD: write, then read, in a loop or in sequence — forces reflow each time
-  el.style.width = '100px';
-  const h = el.offsetHeight; // <- forces synchronous layout recalculation
+- [ ] Find every place in the codebase that sets `body.style.overflow = 'hidden'` or toggles a class that does the same (grep for `overflow: hidden` in JS files, and for `overflow:hidden`/`overflow: hidden` applied to `body`/`html` in CSS classes). The prime suspect is whatever opens the **offer modal** (`#offer-modal-img`'s parent modal) — check if it auto-opens on page load or on a timer.
+- [ ] Fix it with `scrollbar-gutter`, which reserves the scrollbar's space permanently so hiding/showing the scrollbar never shifts layout:
+  ```css
+  html {
+    scrollbar-gutter: stable;
+  }
   ```
-- [ ] Refactor to batch all reads before any writes ("read-then-write" / FastDOM pattern):
+  This is the cleanest fix and needs no JS changes — add it once, globally, and the shift disappears regardless of how many places toggle `overflow: hidden`.
+- [ ] If broader browser support is a concern, the fallback is to measure the scrollbar width once and compensate with padding when locking scroll:
   ```js
-  // GOOD: read first, write after
-  const h = el.offsetHeight;
-  el.style.width = '100px';
+  function lockScroll() {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+    document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+  }
   ```
-- [ ] If the reflow happens inside a loop over multiple elements, read all needed measurements into an array first, then apply all writes in a second pass.
-- [ ] Where possible, wrap layout-dependent writes in `requestAnimationFrame` to let the browser batch them naturally.
-- [ ] Re-profile with the DevTools Performance panel after the fix to confirm the forced-reflow warnings are gone.
+  Prefer `scrollbar-gutter: stable` if your browser support matrix allows it (all evergreen browsers support it) — it's one line and can't be forgotten in a future modal.
+- [ ] After the fix, manually trigger whatever opens the modal and confirm in DevTools (Rendering tab → "Layout Shift Regions") that no shift occurs.
+- [ ] Re-run Lighthouse and confirm CLS is back under 0.1.
 
 ---
 
-## Phase 4 — Render-blocking CSS + unused CSS/JS
+## Phase 1 — Actually fix the forced reflow (round 1 did not resolve this)
 
-- [ ] `style.bundle.css` (26.6 KiB) blocks render for 310ms and has 15.1 KiB (58%) unused.
-  - Extract critical, above-the-fold CSS and inline it in `<head>` (a `<style>` block).
-  - Load the rest of `style.bundle.css` non-blocking:
-    ```html
-    <link rel="preload" href="/css/style.bundle.css?v=16" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/css/style.bundle.css?v=16"></noscript>
-    ```
-  - Run the CSS through a purge/tree-shake step (PurgeCSS, or your bundler's built-in unused-CSS removal) against the actual rendered HTML to cut the 15.1 KiB of dead rules.
-- [ ] Google Maps unused JS (229.2 KiB) is resolved by Phase 2 (deferred loading) — no separate action needed here.
+Same magnitude as before (131ms vs. 133ms), now at slightly different line numbers because the bundle changed — meaning either the previous fix targeted the wrong code, or the refactor didn't remove the read-after-write pattern. Re-investigate from scratch:
 
----
+- [ ] `script.bundle.js?v=20:69:158` — 131ms
+- [ ] `script.bundle.js?v=20:2:3663` — 131ms (this exact line number, `2:3663`, also appeared in the round-1 report — this specific code path was never actually fixed)
+- [ ] `loader.js?v=20:586:1297` — 27ms
 
-## Phase 5 — Caching and payload housekeeping
+For each: open the un-minified source, find where a geometric read (`offsetWidth`, `offsetHeight`, `getBoundingClientRect()`, `scrollHeight`, `clientWidth`, etc.) happens right after a style/class/DOM mutation, and reorder to read-before-write:
+```js
+// BAD — write then read forces a synchronous layout recalculation
+el.classList.add('is-loaded');
+const height = el.offsetHeight;
 
-- [ ] Google Maps static image / JS responses are cached only 30m–1d. This is third-party and mostly out of your control, but confirm you're not setting a shorter cache policy yourself anywhere for first-party static assets (images, CSS, JS bundles). First-party static assets under `/assets/` and `/css/`, `/js/` should have a long `Cache-Control: public, max-age=31536000, immutable` policy with content-hashed filenames (the `?v=16` query-string cache-busting works too, but a hashed filename is more robust).
-- [ ] After Phases 1–4, confirm total transferred payload is under ~1,500 KiB (from 3,008 KiB).
+// GOOD — read first, write after
+const height = el.offsetHeight;
+el.classList.add('is-loaded');
+```
+If this is happening inside a loop (likely, given `script.bundle.js:2:3663` keeps recurring and the site has many `.is-loaded` image elements), batch all reads into an array first, then apply all writes in a second pass — never interleave them per-element in a loop.
 
----
-
-## Phase 6 — Layout stability & main-thread cleanup (lower priority — CLS/TBT are already passing, but clean these up while you're in the code)
-
-- [ ] **5 non-composited animations** were flagged. Find them and make sure they animate only `transform` and `opacity` (GPU-composited), never `width`, `height`, `top`, `left`, `margin`, etc. Add `will-change: transform` only where an animation is actually running, not globally.
-- [ ] **5 long main-thread tasks** — after Phase 2 (removing Maps from initial load) and Phase 3 (fixing reflows), re-check the Performance panel. Any remaining long tasks should be broken up with `requestIdleCallback`/chunking or deferred until after first paint.
-- [ ] Layout shift culprits — CLS is already good (0.068) but double check the offer modal and any dynamically-injected banners reserve their space (fixed `width`/`height` or `aspect-ratio` on the container) before their image loads, so nothing shifts existing content when they appear.
+- [ ] Verify with DevTools Performance panel (record a trace, look for "Forced reflow" purple warnings) that this is actually gone this time, not just moved.
 
 ---
 
-## Out of scope for this report but flagged for follow-up
+## Phase 2 — Finish off LCP (3.5s → target < 2.5s)
 
-Accessibility (91/100) and Best Practices (96/100) weren't broken down in this report excerpt. After finishing Phases 1–6:
-- [ ] Run a full Lighthouse Accessibility audit and fix whatever it flags (common culprits: color contrast on buttons/badges, missing/insufficient `alt` text on informative images — note several icons currently have empty `alt=""`, which is correct only if they're purely decorative, and missing form labels).
-- [ ] Run a full Lighthouse Best Practices audit and fix whatever it flags (common culprits: console errors, missing `rel="noopener"` on external links, image aspect-ratio mismatches).
+Small remaining items:
+- [ ] `hero.avif` is now 801×400 shipped for a 736×347 display — resize to match display size (or 2x for retina, ~1472×694) and re-encode. Est. savings: 5 KiB, plus it removes one more render dependency from the LCP path.
+- [ ] `whatsapp.png` — still a PNG (7.4 KiB). Convert to AVIF/WebP and compress. Est. savings: 5.6 KiB.
+- [ ] These two are small in isolation, but combined with Phase 0 (removing the CLS-driven repaint) they should be enough to pull LCP under 2.5s. Re-measure after Phase 0 before doing more LCP work — the modal-driven layout shift may itself be delaying LCP by repainting the hero image's position.
 
 ---
 
-## Definition of done
+## Phase 3 — Build pipeline: minification isn't running
 
-- [ ] Mobile Performance score ≥ 90 (Slow 4G, Moto G Power emulation, matching the original test conditions)
-- [ ] Desktop Performance score ≥ 90
-- [ ] LCP < 2.5s
-- [ ] FCP < 1.8s
-- [ ] TBT stays < 200ms
-- [ ] CLS stays < 0.1
-- [ ] Total transferred payload < 1,500 KiB
-- [ ] No forced-reflow warnings in DevTools Performance panel
-- [ ] Google Maps JS does not load until user interaction/intersection
-- [ ] Exactly one image on the page has `fetchpriority="high"`
-- [ ] Re-run Lighthouse and paste the new report scores for verification
+Both bundles are shipping unminified in production:
+- [ ] `style.bundle.css?v=20` — 29.2 KiB, minifiable to ~24 KiB (5 KiB savings). Check whether your CSS build step (PostCSS/cssnano, or your bundler's CSS minifier) is actually enabled for the production build — right now it looks like it isn't running at all.
+- [ ] `script.bundle.js?v=20` — 27.0 KiB, minifiable to ~24 KiB (3.1 KiB savings). Same check: confirm your bundler is running in production mode (e.g. Webpack `mode: 'production'`, or Terser/esbuild minify step enabled) rather than a dev/unminified build being deployed.
+- [ ] This is likely a one-line config fix (build mode or a missing minifier plugin), not a code change — check your build script / `vercel.json` / bundler config first before touching source.
+
+---
+
+## Phase 4 — Unused CSS and JS (still unresolved from round 1)
+
+- [ ] `style.bundle.css` — 16.9 KiB of 28.6 KiB (59%) unused. Run it through PurgeCSS (or your bundler's unused-CSS elimination) against the actual rendered HTML to strip dead rules. Combine with Phase 3 minification.
+- [ ] `script.bundle.js` — **20.3 KiB of 27 KiB (75%) unused.** This is a lot of dead code for a 27 KiB file. Use DevTools → Sources → Coverage (record while loading the page) to see exactly which functions never execute. Likely candidates: leftover code paths for features not used on this page, or code that only runs after an interaction that never happens during the initial-load trace. Code-split anything not needed for first paint (dynamic `import()` on interaction) rather than shipping it all in the initial bundle.
+
+---
+
+## Phase 5 — Non-composited animations (55 elements — up from 5 in round 1)
+
+This jump is suspicious and worth checking as one root cause rather than 55 separate ones: every image on the page gets an `is-loaded` class added after load (visible throughout both reports — `class="is-loaded"` is on nearly every `<img>`). If the CSS transition tied to `.is-loaded` (or its parent) animates a non-composited property — `box-shadow`, `top`/`left`, `margin`, `filter`, `width`/`height`, or a bare `transition: all` — every one of those images/elements gets flagged individually, which would explain a count in the 50s matching roughly the number of images on the page.
+
+- [ ] Find the `.is-loaded` CSS rule (and any other global fade-in/hover transition rules) and check what properties it transitions.
+- [ ] Replace `transition: all …` with an explicit property list.
+- [ ] Ensure only `transform` and `opacity` are animated — these are the only properties the compositor can handle without triggering layout/paint on the main thread.
+  ```css
+  /* BAD */
+  .is-loaded { transition: all 0.3s ease; }
+
+  /* GOOD */
+  .is-loaded { transition: opacity 0.3s ease, transform 0.3s ease; }
+  ```
+- [ ] Re-run Lighthouse's "Avoid non-composited animations" insight and confirm the count drops close to 0.
+
+---
+
+## Definition of done (round 2)
+
+- [ ] CLS < 0.1 (currently 1.000 — this is the priority)
+- [ ] LCP < 2.5s (currently 3.5s)
+- [ ] No forced-reflow entries in DevTools Performance panel
+- [ ] CSS and JS bundles confirmed minified in the deployed build
+- [ ] Unused CSS < 5 KiB, unused JS < 5 KiB
+- [ ] Non-composited animation count near 0
+- [ ] Performance score ≥ 90 on re-run (Slow 4G, Moto G Power, matching original test conditions)

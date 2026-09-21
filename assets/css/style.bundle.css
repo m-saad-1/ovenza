@@ -42,6 +42,7 @@ body {
 }
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 body {
   font-family: var(--ff-body);
@@ -479,7 +480,7 @@ html.dark-mode .loader-bar-track {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-20px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 99999;
   overflow: hidden;
 }
@@ -499,7 +500,7 @@ html.dark-mode .loader-bar-track {
   width: 100%;
   opacity: 0;
   transform: translate(-20px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (min-width: 1025px) {
   .nav-center {
@@ -731,7 +732,7 @@ html.dark-mode .mobile-menu-btn:hover {
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   opacity: 0;
   transform: translateY(20px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-center.active .menu-bottom-controls {
   transition-delay: 0.4s;
@@ -1888,7 +1889,7 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
 }
 .notification-panel.show {
@@ -2772,7 +2773,7 @@ body {
   font-weight: 600;
   color: #545454;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
   background: #f8f8f8;
   user-select: none;
 }
@@ -3310,7 +3311,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   box-shadow: none;
 }
 .about-slider-btn:hover {
@@ -3905,7 +3906,7 @@ textarea:focus {
     background: var(--clr-background, #f4f4f4);
     border-radius: 50px;
     padding: 0.4rem 0.8rem;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     width: 40px;
     height: 40px;
     overflow: hidden;
@@ -4008,7 +4009,7 @@ textarea:focus {
     opacity: 0 !important;
     pointer-events: none;
     transform: translate(-20px);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 }
 .header-desktop-search {
@@ -4016,7 +4017,7 @@ textarea:focus {
   align-items: center;
   background: transparent;
   border-radius: 50px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 40px;
   height: 40px;
   overflow: hidden;
@@ -4124,7 +4125,7 @@ textarea:focus {
   transition-delay: 0.1s;
 }
 .nav-center {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 }
 header:has(.header-desktop-search:focus-within) .nav-center {
@@ -4322,7 +4323,7 @@ header:has(.header-desktop-search:focus-within) .nav-center {
   white-space: nowrap;
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .chat-suggestion-btn:hover {
   background: var(--clr-primary);
@@ -4396,7 +4397,7 @@ header:has(.header-desktop-search:focus-within) .nav-center {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .header-desktop-search.mobile-force-show {
     transform: translateY(-50%) scale(1);
@@ -4968,7 +4969,7 @@ header:has(.header-desktop-search:focus-within) .nav-center {
   font-family: var(--ff-body);
   cursor: pointer;
   color: #5a5a5a;
-  transition: all 0.18s;
+  transition: opacity 0.18s, transform 0.18s;
 }
 .loc-time-btn.loc-time-btn-active {
   background: var(--clr-primary);
@@ -5582,7 +5583,7 @@ html.dark-mode select:focus {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 .theme-toggle-btn:hover {
   color: var(--clr-primary);
@@ -5606,7 +5607,7 @@ html.dark-mode select:focus {
     color: var(--clr-text-primary);
     font-weight: 600;
     background: #fdfbf7;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     cursor: pointer;
   }
   html.dark-mode .mobile-theme-toggle {
@@ -6248,7 +6249,7 @@ html.dark-mode .demo-features-tree {
   height: 20px;
   border-radius: 50%;
   pointer-events: none;
-  transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
   opacity: 0.8;
 }
 @media (min-width: 768px) {
@@ -6284,7 +6285,7 @@ html.dark-mode .demo-modal-hero {
   align-items: center;
   justify-content: center;
   color: var(--clr-text-primary);
-  transition: all 0.2s;
+  transition: opacity 0.2s, transform 0.2s;
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
@@ -6340,7 +6341,7 @@ html.dark-mode .demo-modal-subtitle {
   border-radius: 12px;
   margin-bottom: 0.75rem;
   box-shadow: 0 2px 8px #8b45b826;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   text-decoration: none;
 }
 .demo-modal-main-btn:hover {
