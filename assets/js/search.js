@@ -292,7 +292,7 @@
         overlay.classList.remove('item-modal-open');
         // Body scroll remains locked because search overlay is still open
         if (isOpen) {
-          document.body.style.overflow = 'hidden';
+          void 0;
         }
       }
     });
@@ -392,7 +392,7 @@
     isOpen = true;
     overlay.classList.remove('item-modal-open');
     overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    void 0;
     history.pushState({ searchOpen: true }, "");
   }
 
@@ -400,7 +400,7 @@
     if (!isOpen) return;
     isOpen = false;
     overlay.classList.remove('open', 'item-modal-open');
-    document.body.style.overflow = '';
+    void 0;
     
     const inputs = document.querySelectorAll('#desktop-search-input, #mobile-search-overlay-input');
     inputs.forEach(inp => { inp.value = ''; });
@@ -415,7 +415,7 @@
     if (isOpen && (!ev.state || !ev.state.searchOpen)) {
       isOpen = false;
       overlay.classList.remove('open', 'item-modal-open');
-      document.body.style.overflow = '';
+      void 0;
       const inputs = document.querySelectorAll('#desktop-search-input, #mobile-search-overlay-input');
       inputs.forEach(inp => { inp.value = ''; });
       resultsGrid.innerHTML = '';

@@ -32,7 +32,7 @@
                 window._tl_openModal(cm, "contact-modal");
               } else {
                 cm.classList.add("active");
-                document.body.style.overflow = "hidden";
+                void 0;
               }
               return;
             }
@@ -386,13 +386,13 @@
           e.classList.remove("active"),
           d && d.classList.remove("show"),
           i && i.blur(),
-          (document.body.style.overflow = ""),
+          (void 0),
           history.state && history.state.chatbotOpen && history.back())
         : (t.classList.add("show"),
           e.classList.add("active"),
           d && d.classList.add("show"),
           window.matchMedia('(max-width: 768px)').matches &&
-            ((document.body.style.overflow = "hidden"),
+            ((void 0),
             history.pushState({ chatbotOpen: !0 }, "")));
     };
     (window.addEventListener("popstate", (a) => {
@@ -401,7 +401,7 @@
         (t.classList.remove("show"),
         e.classList.remove("active"),
         d && d.classList.remove("show"),
-        (document.body.style.overflow = ""));
+        (void 0));
     }),
       e.addEventListener("click", l),
       o && o.addEventListener("click", l),
@@ -742,12 +742,12 @@
   }
   function _(e, t) {
     (e.classList.add("active"),
-      window.matchMedia('(max-width: 768px)').matches && (document.body.style.overflow = "hidden"),
+      window.matchMedia('(max-width: 768px)').matches && (void 0),
       history.pushState({ modalOpen: t }, ""));
     let o = (i) => {
       (!i.state || i.state.modalOpen !== t) &&
         (e.classList.remove("active"),
-        window.matchMedia('(max-width: 768px)').matches && (document.body.style.overflow = ""),
+        window.matchMedia('(max-width: 768px)').matches && (void 0),
         window.removeEventListener("popstate", o),
         delete e._popStateListener);
     };
@@ -756,7 +756,7 @@
   function R(e) {
     e.classList.contains("active") &&
       (e.classList.remove("active"),
-      window.matchMedia('(max-width: 768px)').matches && (document.body.style.overflow = ""),
+      window.matchMedia('(max-width: 768px)').matches && (void 0),
       e._popStateListener &&
         (window.removeEventListener("popstate", e._popStateListener),
         delete e._popStateListener,
@@ -1003,7 +1003,7 @@
             let w = document.getElementById("location-modal");
             w &&
               (w.classList.add("active"),
-              (document.body.style.overflow = "hidden"));
+              (void 0));
             return;
           }
           let f = c.innerHTML;
@@ -1090,7 +1090,7 @@
             let w = document.getElementById("location-modal");
             w &&
               (w.classList.add("active"),
-              (document.body.style.overflow = "hidden"));
+              (void 0));
             return;
           }
           let x = f.innerHTML;
@@ -1693,7 +1693,7 @@
 
   function closeModal() {
     modal.classList.remove("active");
-    document.body.style.overflow = "";
+    void 0;
   }
 
   closeBtn.addEventListener("click", closeModal);
@@ -2590,7 +2590,7 @@ document.body.addEventListener(
         } else {
           cm.classList.add("active");
           if (window.matchMedia('(max-width: 768px)').matches) {
-            document.body.style.overflow = "hidden";
+            void 0;
           }
         }
       }
@@ -2618,7 +2618,7 @@ document.body.addEventListener(
       if (cartModal) {
         cartModal.classList.add("active");
         if (window.matchMedia('(max-width: 768px)').matches) {
-          document.body.style.overflow = "hidden";
+          void 0;
         }
         if (typeof window._renderCC === "function") {
           window._renderCC();

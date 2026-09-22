@@ -86,7 +86,7 @@
           cls: "",
           icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>',
           onclick:
-            "event.preventDefault(); document.querySelector('.nav-center').classList.remove('active'); document.querySelector('.mobile-menu-btn').classList.remove('active'); if(typeof window._tl_openModal==='function'){window._tl_openModal(document.getElementById('about-demo-modal'), 'about-demo-modal');}else{document.getElementById('about-demo-modal').classList.add('active'); document.body.style.overflow='hidden';}",
+            "event.preventDefault(); document.querySelector('.nav-center').classList.remove('active'); document.querySelector('.mobile-menu-btn').classList.remove('active'); if(typeof window._tl_openModal==='function'){window._tl_openModal(document.getElementById('about-demo-modal'), 'about-demo-modal');}else{document.getElementById('about-demo-modal').classList.add('active'); void 0;}",
         },
       ].map((t) => {
         const p = t.href === "#" ? "#" : v(t.href),
@@ -565,7 +565,7 @@ ${s}`,
       </div>
 
       <div id="loc-info-row">
-        <button id="loc-info-btn" onclick="document.getElementById('delivery-info-modal').classList.add('active'); document.body.style.overflow='hidden';">Delivery &amp; Pickup Info</button>
+        <button id="loc-info-btn" onclick="document.getElementById('delivery-info-modal').classList.add('active'); void 0;">Delivery &amp; Pickup Info</button>
       </div>
     </div>
   </div>
@@ -666,13 +666,13 @@ ${s}`,
     };
     function B() {
       (e.classList.add("active"),
-        (document.body.style.overflow = "hidden"),
+        (void 0),
         window._locSetMode(localStorage.getItem(y) || "delivery"));
       const l = localStorage.getItem(x);
       l && A(l);
     }
     function I() {
-      (e.classList.remove("active"), (document.body.style.overflow = ""));
+      (e.classList.remove("active"), (void 0));
     }
     function _(l) {
       localStorage.setItem(y, T);
@@ -925,7 +925,7 @@ ${s}`,
     <div class="modal-drag-handle"></div>
     <div id="delivery-info-modal-header" class="contact-modal-header">
       <h2 id="delivery-info-title" class="contact-modal-title">Delivery &amp; Pickup Info</h2>
-      <button class="contact-modal-close" onclick="document.getElementById('delivery-info-modal').classList.remove('active'); document.body.style.overflow='';" aria-label="Close">&times;</button>
+      <button class="contact-modal-close" onclick="document.getElementById('delivery-info-modal').classList.remove('active'); void 0;" aria-label="Close">&times;</button>
     </div>
     <div id="delivery-info-modal-body">
       <h3 class="loc-info-section-title">Home Delivery</h3>
@@ -1133,10 +1133,10 @@ ${s}`,
         typeof window._tl_openModal == "function"
           ? window._tl_openModal(e, "demo-modal")
           : (e.classList.add("active"),
-            (document.body.style.overflow = "hidden"));
+            (void 0));
       },
       s = () => {
-        (e.classList.remove("active"), (document.body.style.overflow = ""));
+        (e.classList.remove("active"), (void 0));
         const a = e.querySelector(".modal-sheet");
         if (!a) {
           n.classList.add("bounce");
@@ -1236,12 +1236,12 @@ ${s}`,
         typeof window._tl_openModal == "function"
           ? window._tl_openModal(e, "about-demo-modal")
           : (e.classList.add("active"),
-            (document.body.style.overflow = "hidden"));
+            (void 0));
       },
       a = () => {
         (typeof window._tl_closeModal == "function"
           ? window._tl_closeModal(e)
-          : (e.classList.remove("active"), (document.body.style.overflow = "")),
+          : (e.classList.remove("active"), (void 0)),
           n.classList.add("bounce"));
       };
     (n.addEventListener("click", s),
@@ -1561,7 +1561,7 @@ ${s}`,
     const r = () => {
       const s = document.querySelector(".navbar");
       if (s) {
-        const h = s.offsetHeight;
+        const h = 70;
         requestAnimationFrame(() => {
           document.documentElement.style.setProperty(
             "--header-height",

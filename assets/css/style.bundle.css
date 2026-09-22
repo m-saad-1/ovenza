@@ -582,9 +582,7 @@ html.dark-mode .loader-bar-track {
   text-decoration: none;
   color: var(--clr-text-primary);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  transition:
-    padding-left 0.3s ease,
-    color 0.3s ease;
+  /* transition color removed */
   position: relative;
 }
 .nav-center a:after {
@@ -758,9 +756,7 @@ html.dark-mode .mobile-menu-btn:hover {
   border: none;
   padding: 0 !important;
   box-sizing: border-box;
-  transition:
-    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.2s ease;
+  /* transition box-shadow removed */
 }
 .social-circle svg {
   display: block;
@@ -1140,12 +1136,7 @@ body {
   font-weight: 600;
   color: var(--clr-text-primary);
   text-align: center;
-  transition:
-    font-size 0.3s ease,
-    padding 0.3s ease,
-    color 0.3s ease,
-    background 0.3s ease,
-    border-radius 0.3s ease;
+  /* transition color removed */
   white-space: nowrap;
 }
 .category-circle-btn.active .circle-label {
@@ -2504,9 +2495,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    transform 0.2s ease,
-    color 0.2s ease;
+  /* transition color removed */
   padding: 4px;
 }
 .chatbot-input button:hover:not(:disabled) {
@@ -3668,9 +3657,7 @@ textarea:focus {
   font-size: 1rem;
   padding: 0.8rem 1.8rem;
   box-shadow: none;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  /* transition box-shadow removed */
 }
 .hero-image-frame .hero-order-btn:hover {
   transform: translateY(-3px);
@@ -5892,9 +5879,7 @@ html.dark-mode #chat-send-btn:hover {
   border: var(--card-border) !important;
   box-shadow: var(--card-shadow) !important;
   border-radius: var(--border-radius-lg);
-  transition:
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  /* transition box-shadow removed */
 }
 .review-card:hover,
 .testimonial-card:hover {
@@ -6612,9 +6597,7 @@ html.dark-mode .payment-label:has(input:checked) {
   border-radius: var(--border-radius-lg);
   padding: 2.5rem 1.5rem;
   text-align: center;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  /* transition box-shadow removed */
   box-shadow: 0 2px 8px #0000000d;
   position: relative;
   overflow: hidden;
@@ -6648,10 +6631,7 @@ html.dark-mode .payment-label:has(input:checked) {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    transform 0.3s ease,
-    background 0.3s ease,
-    color 0.3s ease;
+  /* transition color removed */
 }
 .why-us-icon svg {
   width: 32px;
@@ -7141,9 +7121,7 @@ html.dark-mode .glass-panel {
   box-shadow: 0 4px 12px #0006 !important;
 }
 .product-card {
-  transition:
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  /* transition box-shadow removed */
 }
 .icon-btn.active,
 html.dark-mode .icon-btn.active {
