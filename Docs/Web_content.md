@@ -81,7 +81,7 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📍+92 03001013556
+📞 +92 03001013556
 
 📍Hospital Road Central Park, Lahore
  

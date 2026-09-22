@@ -7568,3 +7568,18 @@ html.dark-mode .about-section-subtitle {
 #contact-modal .modal-img-wrap {
   aspect-ratio: 1 / 1;
 }
+
+/* Accessibility contrast overrides */
+:root {
+  --clr-primary: #c84b09; /* Darkened from #FB6815 for better contrast with white text */
+}
+.card-desc {
+  color: #595959 !important; /* Darkened from #777 */
+}
+.review-timestamp {
+  color: #595959 !important; /* Darkened from #999 */
+}
+/* Ensure category circles don't shift during load */
+.category-circles-wrapper {
+  min-height: 120px;
+}
