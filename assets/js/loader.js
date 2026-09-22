@@ -1,3 +1,55 @@
+
+function initCategorySticky() {
+  let e = document.getElementById("category-sticky-wrapper");
+  if (!e) return;
+  let t = document.querySelector(".navbar"),
+      o = t ? t.offsetHeight : 60;
+  e.style.top = o + "px";
+
+  let i = document.createElement("div");
+  i.style.cssText = "height:1px;pointer-events:none;position:relative;";
+  e.parentElement.insertBefore(i, e);
+
+  new IntersectionObserver(([s]) => e.classList.toggle("is-sticky", !s.isIntersecting), {
+    rootMargin: `-${o}px 0px 0px 0px`,
+    threshold: 0
+  }).observe(i);
+
+  let r = e.querySelectorAll(".category-circle-btn");
+  r.forEach(s => {
+    s.addEventListener("click", () => {
+      r.forEach(y => y.classList.remove("active"));
+      s.classList.add("active");
+    });
+  });
+
+  let n = document.querySelectorAll('[id="combos"],[id="burgers"],[id="pizzas"],[id="rolls"],[id="fries"],[id="drinks"]'),
+      d = new IntersectionObserver(s => {
+        s.forEach(y => {
+          if (y.isIntersecting) {
+            let l = y.target.id;
+            r.forEach(h => {
+              let v = h.getAttribute("href") === `#${l}`;
+              h.classList.toggle("active", v);
+              if (v && window.innerWidth <= 768) {
+                let u = e.querySelector(".category-circles-wrapper");
+                u && requestAnimationFrame(() => {
+                  let E = h.offsetLeft,
+                      b = h.clientWidth,
+                      a = u.clientWidth;
+                  u.scrollTo({ left: E - a / 2 + b / 2, behavior: "smooth" });
+                });
+              }
+            });
+          }
+        });
+      }, {
+        rootMargin: `-${o + 80}px 0px -60% 0px`,
+        threshold: 0
+      });
+  n.forEach(s => { s && d.observe(s); });
+}
+
 (function () {
   document.addEventListener(
     "load",
@@ -1545,6 +1597,7 @@ ${s}`,
     }, 2e3);
   }
   document.addEventListener("DOMContentLoaded", () => {
+    initCategorySticky();
     const e = q(),
       n = () => {
         if (
