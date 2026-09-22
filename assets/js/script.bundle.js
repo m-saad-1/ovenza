@@ -1214,6 +1214,46 @@
     let i = document.querySelector(".empty-orders-state");
     i && (i.style.display = "none");
   }
+  function ee() {
+    const pageName = location.pathname.split("/").pop() || "index.html";
+    if (pageName !== "menu.html" && pageName !== "offers.html") return;
+    if (document.getElementById("socialProofToast")) return;
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<div class="social-proof-toast" id="socialProofToast">
+        <div class="toast-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="toast-text" id="socialProofText">Someone just ordered the Tower Burger!</div>
+      </div>`,
+    );
+    if (pageName === "menu.html" && window.innerWidth <= 768) {
+      const toast = document.getElementById("socialProofToast");
+      if (toast) toast.classList.add("menu-mobile-toast");
+    }
+    const msgs = [
+      "Usman just ordered a Smash Burger!",
+      "Hurry! Only 2 'Mega Feast Combo' deals left.",
+      "Sara just got 20% off on the Family Feast Combo.",
+      "Ahmed just claimed the Crispy Combo deal!",
+      "Hot deal! 3 people are viewing Crown Crust Pizza.",
+      "Only 1 Combo 4 remaining at this price!",
+      "Ali just ordered the BBQ Burger.",
+      "Ayesha just saved Rs 600 on Combo 3!",
+      "Someone just bought the Chicken Fajita Pizza.",
+      "Imran just added Tower Burger to his cart!",
+    ];
+    const toast = document.getElementById("socialProofToast");
+    const textEl = document.getElementById("socialProofText");
+    if (!toast || !textEl) return;
+    const show = () => {
+      textEl.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    };
+    setTimeout(() => { show(); setInterval(show, 8000); }, 2000);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     (console.log("Hotbox - Script Loaded"),
       (window.CartManager = O),
