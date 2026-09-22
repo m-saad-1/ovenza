@@ -426,7 +426,8 @@ html.dark-mode .loader-bar-track {
 .navbar {
   background-color: var(--clr-surface) !important;
   padding: 0.5rem 0;
-  position: sticky;
+  position: fixed;
+  width: 100%;
   top: 0;
   z-index: 100000;
   border-bottom: none !important;
