@@ -14,7 +14,7 @@ async function build() {
   const purgeResult = await new PurgeCSS().purge({
     content: ['d:/WEB_DEVELOPMENT/crust/index.html', 'd:/WEB_DEVELOPMENT/crust/pages/**/*.html', 'd:/WEB_DEVELOPMENT/crust/assets/js/**/*.js'],
     css: ['d:/WEB_DEVELOPMENT/crust/assets/css/style.bundle.css'],
-    safelist: ['html', 'body', /^is-loaded$/, /^active$/, /^show$/, /^open$/, /^mobile-force-show$/, /^dark-mode$/, /bounce/, /spinner-mode/, /complete/, /fade-out/, /loaded/, /visible/]
+    safelist: ['html', 'body', /^is-loaded$/, /^active$/, /^show$/, /^open$/, /^mobile-force-show$/, /^dark-mode$/, /bounce/, /spinner-mode/, /complete/, /fade-out/, /loaded/, /visible/, /menu-grid/, /product-card/]
   });
   
   if (!purgeResult || purgeResult.length === 0) {

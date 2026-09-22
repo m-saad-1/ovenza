@@ -199,7 +199,7 @@
       );
     },
     updateUI() {
-      let e = window.innerWidth,
+      let e = window.matchMedia('(max-width: 768px)').matches ? 768 : 1024,
         t = this.getTotalItems(),
         o = this.getSubtotal(),
         i = `Rs ${H(o)}`;
@@ -391,7 +391,7 @@
         : (t.classList.add("show"),
           e.classList.add("active"),
           d && d.classList.add("show"),
-          window.innerWidth <= 768 &&
+          window.matchMedia('(max-width: 768px)').matches &&
             ((document.body.style.overflow = "hidden"),
             history.pushState({ chatbotOpen: !0 }, "")));
     };
@@ -645,7 +645,7 @@
                 let v = h.getAttribute("href") === `#${l}`;
                 if (
                   (h.classList.toggle("active", v),
-                  v && window.innerWidth <= 768)
+                  v && window.matchMedia('(max-width: 768px)').matches)
                 ) {
                   let u = e.querySelector(".category-circles-wrapper");
                   if (u) {
@@ -742,12 +742,12 @@
   }
   function _(e, t) {
     (e.classList.add("active"),
-      window.innerWidth <= 768 && (document.body.style.overflow = "hidden"),
+      window.matchMedia('(max-width: 768px)').matches && (document.body.style.overflow = "hidden"),
       history.pushState({ modalOpen: t }, ""));
     let o = (i) => {
       (!i.state || i.state.modalOpen !== t) &&
         (e.classList.remove("active"),
-        window.innerWidth <= 768 && (document.body.style.overflow = ""),
+        window.matchMedia('(max-width: 768px)').matches && (document.body.style.overflow = ""),
         window.removeEventListener("popstate", o),
         delete e._popStateListener);
     };
@@ -756,7 +756,7 @@
   function R(e) {
     e.classList.contains("active") &&
       (e.classList.remove("active"),
-      window.innerWidth <= 768 && (document.body.style.overflow = ""),
+      window.matchMedia('(max-width: 768px)').matches && (document.body.style.overflow = ""),
       e._popStateListener &&
         (window.removeEventListener("popstate", e._popStateListener),
         delete e._popStateListener,
@@ -2589,7 +2589,7 @@ document.body.addEventListener(
           window._tl_openModal(cm, "contact-modal");
         } else {
           cm.classList.add("active");
-          if (window.innerWidth <= 768) {
+          if (window.matchMedia('(max-width: 768px)').matches) {
             document.body.style.overflow = "hidden";
           }
         }
@@ -2617,7 +2617,7 @@ document.body.addEventListener(
       const cartModal = document.getElementById("custom-cart-modal");
       if (cartModal) {
         cartModal.classList.add("active");
-        if (window.innerWidth <= 768) {
+        if (window.matchMedia('(max-width: 768px)').matches) {
           document.body.style.overflow = "hidden";
         }
         if (typeof window._renderCC === "function") {
