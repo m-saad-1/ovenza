@@ -913,7 +913,7 @@ ${s}`,
         if (l && l.textContent === "Select delivery area...") l.textContent = S;
       }
       A(S);
-    } else te || (localStorage.setItem("tl_location_prompted", "true"), B());
+    } else te || (localStorage.setItem("tl_location_prompted", "true"), void 0);
   }
   function X() {
     E(
