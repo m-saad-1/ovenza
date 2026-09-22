@@ -5,13 +5,10 @@
 
 window.CRUST_MENU = [
   // Combos
-  { name: 'Combo 1',      desc: '1x Classic Beef Burger, 1x Crispy Chicken Burger, 4x Fried Chicken Pieces, 1x Fries, 1x NEXT Cola, 1x Cheese Dip', price: 'Rs 1499', img: 'assets/images/combo-1.avif', category: 'Combos' },
   { name: 'Combo 2',      desc: '1x Chicken Pizza, 8x Chicken Wings, 1x 7UP, 2x Dips', price: 'Rs 1799', img: 'assets/images/combo-2.avif', category: 'Combos' },
   { name: 'Combo 3',      desc: '1x Cheeseburger, 6x Chicken Nuggets, 1x Fries, 1x Cheese Dip, 1x Small NEXT Cola', price: 'Rs 1299', img: 'assets/images/combo-3.avif', category: 'Combos' },
   { name: 'Combo 4',      desc: '2x Chicken Pizzas, 6x Chicken Wings, 1x Pepsi, 2x Dips', price: 'Rs 2299', img: 'assets/images/combo-4.avif', category: 'Combos' },
   // Burgers
-  { name: 'Classic Beef Burger',       desc: 'Juicy beef patty with fresh greens.',                        price: 'Rs 600',  img: 'assets/images/burger-1.avif',       category: 'Burgers' },
-  { name: 'Double Beef Smash',         desc: 'Double smashed patties, double cheese.',                     price: 'Rs 850',  img: 'assets/images/burger-2.avif',     category: 'Burgers' },
   { name: 'Spicy Jalapeno Chicken',    desc: 'Spicy chicken patty with jalapenos.',                        price: 'Rs 750',  img: 'assets/images/burger-3.avif',     category: 'Burgers' },
   { name: 'Smash Burger',              desc: 'Thin smashed beef patty with pickles & sauce.',              price: 'Rs 700',  img: 'assets/images/burger-4.avif',    category: 'Burgers' },
   { name: 'BBQ Burger',                desc: 'Smoky BBQ sauce with caramelized onions.',                   price: 'Rs 800',  img: 'assets/images/burger-5.avif',    category: 'Burgers' },

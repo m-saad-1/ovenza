@@ -29,8 +29,6 @@ window.crustDemoData = {
             { id: "o3", name: "Mega Feast Combo", desc: "2x Large Pizzas, 2x Burgers, 10x Hot Wings, 2x Family Fries, 2x 1.5L Drinks", price: 3600, categoryId: "c1", status: "Available", image: "../assets/images/Deals/mega-feast-combo.avif" },
             { id: "o4", name: "Ultimate Duo Combo", desc: "2x Signature Smash Burgers, 2x Loaded Fries, 2x Drinks", price: 1600, categoryId: "c1", status: "Available", image: "../assets/images/Deals/ultimate-duo-combo.avif" },
             // Burgers
-            { id: "p5", name: "Classic Beef Burger", desc: "Juicy beef patty with fresh greens.", price: 600, categoryId: "c2", status: "Available", image: "../assets/images/burger-1.avif" },
-            { id: "p6", name: "Double Beef Smash", desc: "Double smashed patties, double cheese.", price: 850, categoryId: "c2", status: "Available", image: "../assets/images/burger-2.avif" },
             { id: "p7", name: "Spicy Jalapeno Chicken", desc: "Spicy chicken patty with jalapenos.", price: 750, categoryId: "c2", status: "Available", image: "../assets/images/burger-3.avif" },
             { id: "p8", name: "Smash Burger", desc: "Thin smashed beef patty with pickles & sauce.", price: 700, categoryId: "c2", status: "Available", image: "../assets/images/burger-4.avif" },
             { id: "p9", name: "BBQ Burger", desc: "Smoky BBQ sauce with caramelized onions.", price: 800, categoryId: "c2", status: "Available", image: "../assets/images/burger-5.avif" },
