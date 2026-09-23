@@ -77,7 +77,7 @@ function initCategorySticky() {
 })();
 (function () {
   "use strict";
-  localStorage.getItem("tl_theme") !== "light"
+  localStorage.getItem("crust_theme") !== "light"
     ? document.documentElement.classList.add("dark-mode")
     : document.documentElement.classList.remove("dark-mode");
   function v(e) {
@@ -192,7 +192,7 @@ function initCategorySticky() {
           <div class="theme-toggle-switch">
             <div class="theme-toggle-thumb">
               <svg class="sun-icon-thumb" viewBox="0 0 24 24" width="14" height="14" stroke="#F57F17" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-              <svg class="moon-icon-thumb" viewBox="0 0 24 24" width="14" height="14" stroke="#333" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              <svg class="moon-icon-thumb" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             </div>
           </div>
         </button>
@@ -689,7 +689,7 @@ ${s}`,
         var closeMins = 24 * 60;
         var isOpen = totalMins >= openMins && totalMins < closeMins;
         statusEl.textContent = isOpen ? "● Open" : "● Closed";
-        statusEl.style.color = isOpen ? "#1b5e20" : "#d32f2f";
+        statusEl.style.color = isOpen ? "#28a745" : "#dc3545";
         statusEl.style.display = "block";
       }
     }
@@ -1414,8 +1414,8 @@ ${s}`,
       document
         .querySelectorAll(".theme-toggle-btn, .mobile-theme-toggle")
         .forEach((t) => {
-          const p = t.querySelector(".sun-icon"),
-            d = t.querySelector(".moon-icon");
+          const p = t.querySelector(".sun-icon, .sun-icon-thumb"),
+            d = t.querySelector(".moon-icon, .moon-icon-thumb");
           (p && (p.style.display = o ? "none" : "block"),
             d && (d.style.display = o ? "block" : "none"));
         });
@@ -1427,14 +1427,14 @@ ${s}`,
         "background-color 0.4s ease, color 0.4s ease",
       );
       const o = document.documentElement.classList.toggle("dark-mode");
-      (localStorage.setItem("tl_theme", o ? "dark" : "light"),
+      (localStorage.setItem("crust_theme", o ? "dark" : "light"),
         s(),
         setTimeout(() => {
           document.documentElement.style.removeProperty("transition");
         }, 400));
     };
     (window.addEventListener("storage", (o) => {
-      o.key === "tl_theme" &&
+      o.key === "crust_theme" &&
         (o.newValue === "dark"
           ? document.documentElement.classList.add("dark-mode")
           : document.documentElement.classList.remove("dark-mode"),
@@ -1558,6 +1558,7 @@ ${s}`,
       T(p));
   }
   function ee() {
+    if (document.getElementById("socialProofToast")) return;
     E(
       "beforeend",
       "body",
