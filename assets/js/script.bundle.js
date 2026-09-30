@@ -128,28 +128,6 @@
       e
     );
   }
-  function ee() {
-    if (!("IntersectionObserver" in window)) return;
-    let e = new IntersectionObserver(
-      (t, o) => {
-        t.forEach((i) => {
-          if (!i.isIntersecting) return;
-          let r = i.target,
-            n = r.querySelector("source[data-src]");
-          (n &&
-            ((n.src = n.dataset.src),
-            r.load(),
-            r.play().catch(() => {}),
-            n.removeAttribute("data-src")),
-            o.unobserve(r));
-        });
-      },
-      { rootMargin: "0px 0px 200px 0px" },
-    );
-    document.querySelectorAll("video").forEach((t) => {
-      t.querySelector("source[data-src]") && e.observe(t);
-    });
-  }
   var O = {
     state: { items: [] },
     init() {
@@ -1157,63 +1135,6 @@
       });
     });
   }
-  function ie() {
-    let e = document.querySelector(".dynamic-orders-wrapper");
-    if (!window.location.pathname.includes("orders.html") || !e) return;
-    let t = JSON.parse(localStorage.getItem("hdm_orders")) || [];
-    if (t.length === 0) return;
-    let o = "";
-    (t.forEach((r) => {
-      let n = r.items
-        .map(
-          (d) =>
-            `<strong style="color:#333;">${d.qty}x</strong> ${d.title} ${d.size ? `(${d.size})` : ""} ${d.extras && d.extras.length > 0 ? `<span style="color:#888;font-size:0.85em;">(+ ${d.extras.join(", ")})</span>` : ""}`,
-        )
-        .join("<br>");
-      o += `
-        <div class="order-card active-order" style="background:white;border-radius:16px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 4px 15px rgba(0,0,0,0.05);border:2px solid var(--clr-primary);">
-            <div class="order-header" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--clr-border);padding-bottom:1rem;margin-bottom:1rem;">
-                <div>
-                    <span class="order-status" style="display:inline-block;background:#e8f5e9;color:#2e7d32;padding:0.3rem 0.8rem;border-radius:50px;font-size:0.75rem;font-weight:700;margin-bottom:0.5rem;">${r.status}</span>
-                    <h3 class="order-id" style="margin:0 0 0.2rem 0;font-size:1.2rem;color:var(--clr-text-primary);">Order #${r.id}</h3>
-                    <span class="order-time" style="color:#666;font-size:0.85rem;">${r.date}</span>
-                </div>
-                <div style="text-align:right;">
-                    <span class="order-price" style="font-weight:700;color:var(--clr-text-primary);font-size:1.2rem;display:block;margin-bottom:0.5rem;">Rs ${H(r.total)}</span>
-                    <span style="font-size:0.8rem;color:#888;">${r.items.reduce((d, s) => d + s.qty, 0)} items</span>
-                </div>
-            </div>
-            <div class="order-items-list" style="margin-bottom:1.5rem;">
-                <p class="order-items" style="margin:0;color:#555;line-height:1.6;font-size:0.95rem;">${n}</p>
-            </div>
-            ${
-              r.customer
-                ? `
-            <div class="order-details-box" style="margin-bottom:1.5rem; font-size: 0.9rem; color: #666; border-left: 3px solid var(--clr-primary); padding-left: 1rem;">
-                <p style="margin:0 0 0.2rem 0;"><strong>Payment Method:</strong> ${r.paymentMethod || "Cash on Delivery"}</p>
-                <p style="margin:0 0 0.2rem 0;"><strong>Deliver to:</strong> ${r.customer.name} (${r.customer.phone})</p>
-                <p style="margin:0;"><strong>Address:</strong> ${r.customer.address}, ${r.customer.city}</p>
-                ${r.customer.notes ? `<p style="margin:0.2rem 0 0 0;"><strong>Notes:</strong> ${r.customer.notes}</p>` : ""}
-            </div>`
-                : ""
-            }
-            <div class="order-progress-box" style="background:#f9f9f9;padding:1rem;border-radius:12px;">
-                <strong class="order-progress-title" style="display:block;margin-bottom:0.8rem;color:var(--clr-text-primary);font-size:0.95rem;">Estimated Delivery: +30-45 mins</strong>
-                <div class="order-progress-bar" style="height:8px;background:#e0e0e0;border-radius:4px;margin-bottom:0.8rem;overflow:hidden;">
-                    <div class="order-progress-fill" style="height:100%;width:50%;background:var(--clr-primary);border-radius:4px;"></div>
-                </div>
-                <div class="order-progress-steps" style="display:flex;justify-content:space-between;font-size:0.8rem;color:#888;font-weight:500;">
-                    <span style="color:var(--clr-primary);">Confirmed</span>
-                    <span style="color:var(--clr-primary);font-weight:700;">Preparing</span>
-                    <span>Out for Delivery</span>
-                </div>
-            </div>
-        </div>`;
-    }),
-      (e.innerHTML = o));
-    let i = document.querySelector(".empty-orders-state");
-    i && (i.style.display = "none");
-  }
   function ee() {
     const pageName = location.pathname.split("/").pop() || "index.html";
     if (pageName !== "menu.html" && pageName !== "offers.html") return;
@@ -1260,7 +1181,6 @@
       V(),
       G(),
       K(),
-      ee(),
       O.init(),
       te());
     let e = Z(),
@@ -1269,7 +1189,6 @@
       oe(),
       ne(),
       le(e, t),
-      ie(),
       document.querySelectorAll(".category-btn").forEach((r) => {
         r.addEventListener("click", () => {
           (document
@@ -1450,7 +1369,7 @@
             });
           }));
       }),
-      window.addEventListener("load", () => {
+      document.addEventListener("DOMContentLoaded", () => {
         let r = document.getElementById("page-loader");
         r &&
           ((r.style.transition = "opacity 0.5s ease"),
@@ -2296,306 +2215,6 @@
 })();
 
 // 2. Orders page: comprehensive renderer with full details and fixed progress pipeline
-(function fixOrdersPage() {
-  if (!window.location.pathname.includes("orders.html")) return;
-
-  const STAGES = [
-    "Pending",
-    "Confirmed",
-    "Preparing",
-    "Out for Delivery",
-    "Delivered",
-  ];
-
-  function getProgressPercent(statusIndex) {
-    if (statusIndex <= 0) return 0;
-    if (statusIndex >= STAGES.length - 1) return 100;
-    return (statusIndex / (STAGES.length - 1)) * 100;
-  }
-
-  function handleReorder(orderId) {
-    let orders = JSON.parse(localStorage.getItem("hdm_orders")) || [];
-    let orderToClone = orders.find((o) => o.id == orderId);
-    if (!orderToClone) return;
-
-    let newOrder = JSON.parse(JSON.stringify(orderToClone)); // Deep clone
-    newOrder.id = Math.floor(100000 + Math.random() * 900000);
-    newOrder.date =
-      new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString();
-    newOrder.timestamp = Date.now();
-    newOrder.status = "Pending";
-    delete newOrder.lastUpdated;
-    delete newOrder.statusTimestamps;
-    delete newOrder._elapsed;
-
-    orders.unshift(newOrder);
-    localStorage.setItem("hdm_orders", JSON.stringify(orders));
-
-    // Show success and reload
-    alert("Order #" + orderId + " reordered successfully!");
-    window.location.reload();
-  }
-
-  function renderFullOrders() {
-    const wrapper = document.querySelector(".dynamic-orders-wrapper");
-    const emptyState = document.querySelector(".empty-orders-state");
-    if (!wrapper) return;
-
-    let orders = JSON.parse(localStorage.getItem("hdm_orders")) || [];
-    const STAGE_DELAY_MS = 6000;
-
-    if (orders.length === 0) {
-      wrapper.style.display = "none";
-      if (emptyState) emptyState.style.display = "block";
-      return;
-    }
-
-    wrapper.style.display = "block";
-    if (emptyState) emptyState.style.display = "none";
-
-    let needsUpdate = false;
-    let html = "";
-
-    orders.forEach((order) => {
-      let STAGES = ["Confirmed", "Preparing", "Out for Delivery", "Delivered"];
-      if (order.type === "Pickup" || order.type === "Takeaway") {
-        STAGES = ["Confirmed", "Preparing", "Ready", "Delivered"];
-      }
-      if (order.status === "Cancelled") {
-        STAGES.push("Cancelled");
-      } else if (order.status === "Refunded") {
-        STAGES.push("Refunded");
-      }
-
-      let currentStatusIndex = STAGES.indexOf(order.status);
-      if (currentStatusIndex === -1) {
-        if (order.status === "New" || order.status === "Accepted") {
-          currentStatusIndex =
-            STAGES.indexOf("Confirmed") !== -1
-              ? STAGES.indexOf("Confirmed")
-              : 0;
-        } else if (order.status === "Picked Up") {
-          currentStatusIndex = STAGES.indexOf("Delivered");
-        } else {
-          currentStatusIndex = 0;
-        }
-      }
-
-      const now = Date.now();
-      if (!order.lastUpdated) order.lastUpdated = now;
-
-      let progressPercent = 0;
-      if (currentStatusIndex > 0) {
-        progressPercent =
-          currentStatusIndex >= STAGES.length - 1
-            ? 100
-            : (currentStatusIndex / (STAGES.length - 1)) * 100;
-      }
-
-      const isDelivered =
-        order.status === "Delivered" ||
-        order.status === "Picked Up" ||
-        order.status === "Completed" ||
-        order.status === "Cancelled" ||
-        order.status === "Refunded";
-
-      // Build timeline steps
-      const stepsHtml = STAGES.map((stage, idx) => {
-        let cls = "timeline-step";
-        if (idx < currentStatusIndex) cls += " completed";
-        else if (idx === currentStatusIndex && !isDelivered)
-          cls += " pulsing completed";
-        else if (idx === currentStatusIndex && isDelivered) cls += " completed";
-
-        let displayStage = stage;
-        if (order.type === "Pickup" || order.type === "Takeaway") {
-          if (stage === "Confirmed") displayStage = "Confirm";
-          else if (stage === "Ready") displayStage = "Ready for Pickup";
-          else if (stage === "Delivered") displayStage = "Picked Up";
-        } else {
-          if (stage === "Confirmed") displayStage = "Accept";
-        }
-        if (stage === "Cancelled") displayStage = "Cancel";
-
-        let colorOverrides = "";
-        if (stage === "Cancelled")
-          colorOverrides =
-            "color: var(--clr-danger); border-color: var(--clr-danger);";
-        if (stage === "Refunded")
-          colorOverrides =
-            "color: var(--clr-info); border-color: var(--clr-info);";
-
-        const stepTime =
-          (order.statusTimestamps && order.statusTimestamps[stage]) ||
-          (idx === 0 ? order.time : "");
-
-        return `<div class="${cls}" style="${colorOverrides}"><div class="step-icon" style="${colorOverrides ? "border-color:inherit;background:currentColor;" : ""}"></div><span style="${colorOverrides}">${displayStage}${stepTime ? `<br><small style="font-size:0.65rem;opacity:0.75;">${stepTime}</small>` : ""}</span></div>`;
-      }).join("");
-
-      // Build items html with images and full details
-      let itemsHtml = "";
-      if (order.items && order.items.length > 0) {
-        itemsHtml = order.items
-          .map((item) => {
-            let imgPath = item.image || "";
-            if (imgPath && !window.location.pathname.includes("/pages/")) {
-              imgPath = imgPath.replace("../", "./");
-            }
-            const itemPrice = item.basePrice || item.price || 0;
-            const itemTotal = itemPrice * item.qty;
-            const sizeText = item.size
-              ? `<span style="font-size:0.8rem;color:var(--clr-text-secondary);">Size: ${item.size}</span>`
-              : "";
-            const extrasText =
-              item.extras && item.extras.length > 0
-                ? `<span style="font-size:0.8rem;color:var(--clr-text-secondary);">+ ${item.extras.join(", ")}</span>`
-                : "";
-            return `
-                        <div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.75rem 0;border-bottom:1px solid var(--clr-border);">
-                            ${imgPath ? `<img loading="lazy" src="${imgPath}" alt="${item.title}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : `<div style="width:52px;height:52px;border-radius:8px;background:var(--clr-primary);opacity:0.2;flex-shrink:0;"></div>`}
-                            <div style="flex:1;min-width:0;">
-                                <p style="font-weight:600;font-size:0.9rem;margin:0 0 0.2rem;color:var(--clr-text-primary);">${item.title} <span style="color:var(--clr-text-secondary);">x${item.qty}</span></p>
-                                ${sizeText}
-                                ${extrasText}
-                            </div>
-                            <span style="font-weight:700;font-size:0.9rem;color:var(--clr-text-primary);white-space:nowrap;flex-shrink:0;">Rs ${itemTotal}</span>
-                        </div>`;
-          })
-          .join("");
-      }
-
-      // Customer info section
-      const cust = order.customer || {};
-      const custHtml =
-        cust.phone || cust.name || cust.address
-          ? `
-                <div style="background:rgba(0,0,0,0.03);border-left:3px solid var(--clr-primary);border-radius:0 8px 8px 0;padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.88rem;">
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1rem;">
-                        ${cust.name ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Name:</span> <span style="color:var(--clr-text-primary);">${cust.name}</span></div>` : ""}
-                        ${cust.phone ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Phone:</span> <span style="color:var(--clr-text-primary);">${cust.phone}</span></div>` : ""}
-                        ${cust.email ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Email:</span> <span style="color:var(--clr-text-primary);">${cust.email}</span></div>` : ""}
-                        ${cust.address && cust.address !== "Pickup" ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Address:</span> <span style="color:var(--clr-text-primary);">${cust.address}</span></div>` : ""}
-                        ${cust.city ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Area/City:</span> <span style="color:var(--clr-text-primary);">${cust.city}</span></div>` : ""}
-                        ${cust.notes ? `<div style="grid-column:1/-1;"><span style="color:var(--clr-text-secondary);font-weight:600;">Notes:</span> <span style="color:var(--clr-text-primary);">${cust.notes}</span></div>` : ""}
-                    </div>
-                </div>`
-          : "";
-
-      // Totals
-      const subtotal = order.items
-        ? order.items.reduce(
-            (sum, i) => sum + (i.basePrice || i.price || 0) * i.qty,
-            0,
-          )
-        : order.total;
-      const deliveryFee = order.type === "Pickup" ? 0 : 12;
-      const grandTotal = order.total || subtotal + deliveryFee;
-
-      const statusBadgeColor = isDelivered ? "#e8f5e9" : "rgba(167,2,1,0.1)";
-      const statusTextColor = isDelivered ? "#2e7d32" : "var(--clr-primary)";
-      let timeDisplayStr = "Est. Delivery: ~35 mins";
-      if (order.type === "Pickup") {
-        const pTime = order.pickupTime || "ASAP";
-        if (pTime === "ASAP") {
-          timeDisplayStr = "Est. Pickup: ~20 mins";
-        } else {
-          let formattedTime = pTime;
-          if (pTime.includes(":")) {
-            const [h, m] = pTime.split(":");
-            const hInt = parseInt(h);
-            const ampm = hInt >= 12 ? "PM" : "AM";
-            const h12 = hInt % 12 || 12;
-            formattedTime = `${h12}:${m} ${ampm}`;
-          }
-          timeDisplayStr = `Scheduled Pickup: ${formattedTime}`;
-        }
-      }
-
-      html += `
-            <div class="order-card" style="margin-bottom:1.5rem;padding:1.5rem;background:var(--clr-bg-app);border-radius:12px;border:1px solid var(--clr-border);">
-                <!-- Header -->
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;border-bottom:1px solid var(--clr-border);padding-bottom:1rem;">
-                    <div>
-                        <h4 style="margin:0 0 0.4rem;font-size:1.1rem;color:var(--clr-text-primary);">Order #${order.id}</h4>
-                        <p style="margin:0 0 0.6rem;font-size:0.85rem;color:var(--clr-text-secondary);">${order.date}</p>
-                        <p style="margin:0;font-size:0.85rem;color:var(--clr-text-secondary);">
-                            ${order.type ? `<strong>${order.type}</strong> &bull; ` : ""}
-                            ${order.paymentMethod || "Cash on Delivery"}
-                        </p>
-                    </div>
-                    <span style="background:${statusBadgeColor};color:${statusTextColor};font-size:0.78rem;font-weight:700;padding:0.3rem 0.8rem;border-radius:50px;text-transform:uppercase;">${order.status}</span>
-                </div>
-                
-                <!-- Progress Timeline -->
-                <div class="order-timeline" style="margin-bottom:1.5rem;">
-                    <div class="timeline-track">
-                        <div class="timeline-progress" style="width:${progressPercent}%;"></div>
-                    </div>
-                    ${stepsHtml}
-                </div>
-                
-                ${!isDelivered ? `<p style="font-size:0.85rem;color:var(--clr-primary);font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>${timeDisplayStr}</p>` : `<p style="font-size:0.85rem;color:#2e7d32;font-weight:600;margin:0 0 1rem;display:flex;align-items:center;gap:0.4rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>${order.type === "Pickup" ? "Picked Up Successfully" : "Delivered Successfully"}</p>`}
-                
-                <!-- Customer Details -->
-                ${custHtml}
-                
-                <!-- Order Items -->
-                <div style="border-top:1px solid var(--clr-border);padding-top:0.75rem;margin-bottom:0.75rem;">
-                    ${itemsHtml}
-                </div>
-                
-                <!-- Totals -->
-                <div style="border-top:1px solid var(--clr-border);padding-top:0.75rem;">
-                    ${
-                      subtotal !== grandTotal
-                        ? `
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;font-size:0.88rem;color:var(--clr-text-secondary);">
-                        <span>Subtotal</span><span>Rs ${subtotal}</span>
-                    </div>
-                    ${deliveryFee > 0 ? `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;font-size:0.88rem;color:var(--clr-text-secondary);"><span>Delivery Fee</span><span>Rs ${deliveryFee}</span></div>` : ""}`
-                        : ""
-                    }
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <span style="font-size:0.9rem;font-weight:600;color:var(--clr-text-primary);">Total</span>
-                        <span style="font-size:1.15rem;font-weight:800;color:var(--clr-text-primary);">Rs ${grandTotal}</span>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
-                    <a href="javascript:void(0)" class="btn btn-primary reorder-btn" data-order-id="${order.id}" style="border-radius:50px;padding:0.6rem 1.25rem;font-size:0.85rem;font-weight:600;text-decoration:none;">Reorder</a>
-                </div>
-            </div>`;
-    });
-
-    if (wrapper.innerHTML !== html) {
-      wrapper.innerHTML = html;
-      // Bind reorder buttons
-      wrapper.querySelectorAll(".reorder-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          const orderId = e.target.getAttribute("data-order-id");
-          handleReorder(orderId);
-        });
-      });
-    }
-
-    if (needsUpdate) {
-      localStorage.setItem("hdm_orders", JSON.stringify(orders));
-    }
-  }
-
-  // Run immediately and then on interval
-  document.addEventListener("DOMContentLoaded", () => {
-    renderFullOrders();
-    setInterval(renderFullOrders, 1500);
-  });
-
-  // Also run now if DOM is already ready
-  if (document.readyState !== "loading") {
-    renderFullOrders();
-    setInterval(renderFullOrders, 1500);
-  }
-})();
 
 // 3. MASTER INTERCEPTOR FOR MODALS
 // Catch all clicks globally so it doesn't matter when DOM elements are injected
