@@ -1369,7 +1369,7 @@
             });
           }));
       }),
-      document.addEventListener("DOMContentLoaded", () => {
+      window.setTimeout(() => {
         let r = document.getElementById("page-loader");
         r &&
           ((r.style.transition = "opacity 0.5s ease"),
@@ -2627,3 +2627,5 @@ document.body.addEventListener(
     renderOrders();
   }
 })();
+
+
