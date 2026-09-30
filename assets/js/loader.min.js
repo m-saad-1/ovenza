@@ -3,7 +3,7 @@ function initCategorySticky() {
   let e = document.getElementById("category-sticky-wrapper");
   if (!e) return;
   let t = document.querySelector(".navbar"),
-      o = t ? t.offsetHeight : 60;
+      o = t ? 70 : 60;
   e.style.top = o + "px";
 
   let i = document.createElement("div");

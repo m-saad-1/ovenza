@@ -617,7 +617,7 @@
     let e = document.getElementById("category-sticky-wrapper");
     if (!e) return;
     let t = document.querySelector(".navbar"),
-      o = t ? t.offsetHeight : 60;
+      o = t ? 70 : 60;
     e.style.top = o + "px";
     let i = document.createElement("div");
     ((i.style.cssText = "height:1px;pointer-events:none;position:relative;"),
@@ -1722,7 +1722,7 @@
   function openModal() {
     // Measure actual navbar height
     const navbar = document.querySelector(".navbar");
-    const navH = navbar ? navbar.offsetHeight : 70;
+    const navH = navbar ? 70 : 70;
     requestAnimationFrame(() => {
       document.documentElement.style.setProperty("--header-height", navH + "px");
       modal.classList.add("active");
