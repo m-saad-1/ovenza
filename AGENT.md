@@ -339,3 +339,57 @@ Do not provide a long explanation unless requested.
 When in doubt:
 
 > **Preserve the existing implementation.**
+
+
+
+
+# IMPORTANT
+
+# Standing Instruction: Performance Guardrails for Every Change
+
+Attach this to every task where you ask the agent to swap text, images, or any other content into a project — especially a duplicated/templated project. The agent must follow this on its own, without being reminded each time.
+
+---
+
+## Rule 0 — A "small file" is not the same as "cheap to render"
+
+Never judge an image by its KB size alone. Before adding or replacing any image, check its **actual pixel dimensions** (not the file size) using whatever tool is available in the environment (`identify` from ImageMagick, Python `PIL.Image.open(path).size`, `exiftool`, or the OS file inspector — pick one that exists). A well-compressed 80KB file can still be 4000×3000px, and decode cost scales with pixel count, not byte size. This is the single most common cause of "I used a smaller image and performance still dropped."
+
+## Rule 1 — Every image swap must pass this checklist before being considered done
+
+For each image added or replaced:
+
+1. Get the image's **actual rendered width and height** in the layout (check the CSS/container at the relevant breakpoints — mobile, tablet, desktop), not just "it looks fine."
+2. Resize the source file so its largest dimension does not meaningfully exceed the largest rendered width across breakpoints (roughly 1.5–2x for retina, not more).
+3. Confirm the image is served through whatever optimization pipeline the project already has (framework image component, a build-time image plugin, a CDN transform) — never bypass it with a raw `<img src>` pointing straight at an unprocessed file, if the project has such a pipeline.
+4. Confirm `width` and `height` (or equivalent aspect-ratio CSS) are set explicitly, so the layout doesn't shift when the image loads.
+5. Confirm format: prefer AVIF/WebP with a fallback if the pipeline supports it; don't ship raw PNG/JPEG for photographic content if better options exist in this project's stack.
+6. If the image is above the fold / is the likely LCP element, it should load eagerly with high priority; if it's below the fold, it should lazy-load. Don't flip these by accident when swapping content.
+7. If this project has a loader/splash-screen overlay (check for one before assuming it doesn't), confirm the new image doesn't get stuck behind it — verify the overlay's removal isn't gated on anything that got heavier because of this change (e.g., a bigger bundle now takes longer to hit `DOMContentLoaded`).
+
+## Rule 2 — Text/content changes aren't free either
+
+- Longer text can push new elements below the fold or change wrap points — check for new layout shift, not just "the text fits."
+- New text must not silently pull in new font weights/subsets that weren't already loaded. If a new weight or style is now used, it has a real cost — flag it, don't add it silently.
+
+## Rule 3 — Never trust "it looks the same" — measure
+
+Any change that touches images, fonts, above-the-fold markup, or third-party scripts requires a before/after check, even if the agent is confident it's harmless:
+
+1. Before the change: note the current LCP, Speed Index, and Performance score (use PageSpeed Insights — https://pagespeed.web.dev — against the live/staging URL if local Lighthouse isn't available; run it at least twice and use the better-supported number, not a single run).
+2. Make the change.
+3. After the change: re-run the same check.
+4. If LCP or Speed Index regress by more than ~10%, do not consider the task done — investigate why before moving on, using the same root-cause tracing discipline as the diagnostic protocol (find the actual mechanism, don't guess).
+5. Report the before/after numbers alongside the change, every time. "I swapped the image" is not a complete report; "I swapped the image, LCP went from X to Y" is.
+
+## Rule 4 — When duplicating a project as a starting point
+
+Before changing any content in a cloned/templated project, first confirm you understand what's already driving its performance profile — do not assume a copy inherits good performance just because the original was fine, and do not assume a copy inherits bad performance just because a past version had issues. Specifically check:
+
+- Is there a loader/overlay pattern, and what does it wait on?
+- What's already wired into the image-optimization pipeline, and what isn't?
+- What's the current baseline (LCP/SI/TBT, mobile and desktop) **before you touch anything** — so any later regression can be attributed correctly instead of blamed on "the images," "the text," or guessed at.
+
+## Non-negotiable
+
+If any of the checks above can't be completed (no tool available to check pixel dimensions, no way to measure before/after), say so explicitly instead of proceeding anyway. A skipped check reported honestly is fine; a skipped check reported as "done" is how regressions stack up silently over multiple rounds of edits.

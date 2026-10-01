@@ -1,4 +1,4 @@
-// Administration & System Logic (Phase 7)
+﻿// Administration & System Logic (Phase 7)
 
 document.addEventListener('DOMContentLoaded', () => {
     // Subscriptions
@@ -216,7 +216,7 @@ function initAnalyticsCharts() {
         plugins: { legend: { position: 'right' } }
     };
 
-    const brandColor = '#FB6815';
+    const brandColor = '#719397';
     const accentColor = '#3b82f6';
     const successColor = '#10b981';
     const warningColor = '#f59e0b';
@@ -302,7 +302,7 @@ function initAnalyticsCharts() {
     analyticsCharts.branchRevenue = new Chart(document.getElementById('chartBranchRevenue'), {
         type: 'doughnut',
         data: {
-            labels: ['Hospital Road Central Park, Lahore', 'Hospital Road Central Park, Lahore', ''],
+            labels: ['Lahore : Opposite Jinnah Hospital', 'Lahore : Opposite Jinnah Hospital', ''],
             datasets: [{
                 data: [55, 30, 15],
                 backgroundColor: [brandColor, accentColor, warningColor]

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize Charts
     initSalesChart();
@@ -192,7 +192,7 @@ function initSalesChart() {
             datasets: [{
                 label: 'Revenue (Rs.)',
                 data: [120000, 190000, 150000, 210000, 280000, 320000, 290000],
-                borderColor: '#FB6815',
+                borderColor: '#719397',
                 backgroundColor: 'rgba(233, 41, 14, 0.1)',
                 borderWidth: 2,
                 fill: true,
@@ -230,7 +230,7 @@ function initChannelChart() {
             labels: ['Website', 'POS', 'WhatsApp', 'Mobile App'],
             datasets: [{
                 data: [0, 0, 0, 0],
-                backgroundColor: ['#FB6815', '#10B981', '#111111', '#F59E0B'],
+                backgroundColor: ['#719397', '#10B981', '#111111', '#F59E0B'],
                 borderWidth: 0,
                 cutout: '75%'
             }]

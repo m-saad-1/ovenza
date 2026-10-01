@@ -1,5 +1,5 @@
-/* ==========================================================================
-   crust - Static Menu Data
+﻿/* ==========================================================================
+   imbiss - Static Menu Data
    Used by search.js on pages that don't have product cards in the DOM.
    ========================================================================== */
 
@@ -16,11 +16,11 @@ window.CRUST_MENU = [
   { name: 'Tower Burger',              desc: 'Triple-stacked patties with all the toppings.',              price: 'Rs 950',  img: 'assets/images/burger-7.avif',    category: 'Burgers' },
   // Pizzas
   { name: 'Chicken Pizza',         desc: 'Grilled chicken with golden cheese topping.',          price: 'Rs 1400', img: 'assets/images/chicken-pizza.avif',       category: 'Pizzas' },
-  { name: 'Crown crust Pizza',     desc: 'Signature crown crust loaded with cheese.',            price: 'Rs 1600', img: 'assets/images/crown-crust-pizza.avif',   category: 'Pizzas' },
+  { name: 'Crown imbiss Pizza',     desc: 'Signature crown imbiss loaded with cheese.',            price: 'Rs 1600', img: 'assets/images/crown-crust-pizza.avif',   category: 'Pizzas' },
   { name: 'Mughlai Pizza',         desc: 'Rich Mughlai spices with tender chicken.',             price: 'Rs 1500', img: 'assets/images/mughali-pizza.avif',       category: 'Pizzas' },
   { name: 'Special Pizza',         desc: "Our chef's special with premium toppings.",            price: 'Rs 1700', img: 'assets/images/special-pizza.avif',       category: 'Pizzas' },
   { name: 'Tandoori Pizza',        desc: 'Classic tandoori flavours on a crispy base.',          price: 'Rs 1450', img: 'assets/images/tandoori-pizza.avif',      category: 'Pizzas' },
-  { name: 'Thin crust Pizza',      desc: 'Ultra-thin, crispy base with fresh toppings.',         price: 'Rs 1300', img: 'assets/images/thin-crust-pizza.avif',    category: 'Pizzas' },
+  { name: 'Thin imbiss Pizza',      desc: 'Ultra-thin, crispy base with fresh toppings.',         price: 'Rs 1300', img: 'assets/images/thin-crust-pizza.avif',    category: 'Pizzas' },
   { name: 'Chicken Fajita Pizza',  desc: 'Spiced fajita chicken with fresh veggies.',            price: 'Rs 1350', img: 'assets/images/pizza-1.avif',             category: 'Pizzas' },
   { name: 'Tikka Sensation Pizza', desc: 'Spicy chicken tikka chunks on a rich base.',           price: 'Rs 1450', img: 'assets/images/pizza-2.avif',             category: 'Pizzas' },
   { name: 'Pepperoni Classic Pizza', desc: 'Loaded with premium pepperoni slices.',              price: 'Rs 1600', img: 'assets/images/pizza-3.avif',             category: 'Pizzas' },

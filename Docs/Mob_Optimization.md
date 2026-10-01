@@ -1,4 +1,4 @@
-# Performance & Accessibility Fix Plan — crust.vercel.app
+﻿# Performance & Accessibility Fix Plan — imbiss.vercel.app
 
 **Source audit:** PageSpeed Insights / Lighthouse 13.4.1, Moto G Power emulation, Slow 4G throttling, captured Sep 4, 2026
 **Current scores:** Performance 64 · Accessibility 88 · Best Practices 92 · SEO 100 · Agentic Browsing 0/2

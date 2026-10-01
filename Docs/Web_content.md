@@ -1,8 +1,8 @@
-# PHASE 1 
+﻿# PHASE 1 
 
 ### Read the instruction in @Agent.md first.
 
-We are working on the **crust** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
+We are working on the **imbiss** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
 
 ### 1. Assets & Menu — CRITICAL
 
@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #FB6815 to #FB6815. 
+Change the complete website color from #719397 to #719397. 
 
 Apply it consistently while maintaining proper contrast and readability.
 
@@ -81,9 +81,9 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📞 +92 03001013556
+📞 +92 3232000888
 
-📍Hospital Road Central Park, Lahore
+📍Lahore : Opposite Jinnah Hospital
  
 📍8A Commercial, Pak Arab, Lahore
 
@@ -207,5 +207,5 @@ Finally, verify the complete website on **desktop and mobile** and ensure there 
 
 After complete implementation and validation,First create a PRIVATE repo and then push the changes to the `main` branch of the git repository.
 
-Repo Should be: `https://github.com/m-saad-1/crust`
+Repo Should be: `https://github.com/m-saad-1/imbiss`
 

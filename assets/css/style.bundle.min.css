@@ -1,4 +1,4 @@
-body,
+﻿body,
 html {
   overflow-x: hidden;
 }
@@ -6,8 +6,8 @@ html {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
   --clr-surface-dark: #1e1e1e;
-  --clr-primary: #FB6815;
-  --clr-primary-dark: #FB6815;
+  --clr-primary: #719397;
+  --clr-primary-dark: #719397;
   --clr-text-primary: #1e1e1e;
   --clr-text-secondary: #545454;
   --clr-text-on-dark: #fdfbf7;
@@ -7526,7 +7526,7 @@ html.dark-mode .about-section-subtitle {
 
 /* Accessibility contrast overrides */
 :root {
-  --clr-primary: #FB6815; /* Reverted to match exact brand color */
+  --clr-primary: #719397; /* Reverted to match exact brand color */
 }
 .card-desc {
   color: #595959 !important; /* Darkened from #777 */

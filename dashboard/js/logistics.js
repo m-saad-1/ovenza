@@ -1,4 +1,4 @@
-// Delivery, Reservations, and Branches Logic (Phase 5)
+﻿// Delivery, Reservations, and Branches Logic (Phase 5)
 
 document.addEventListener('DOMContentLoaded', () => {
     // Tab Switching Logic for Reservations
@@ -159,7 +159,7 @@ function renderDelivery(state) {
         window.zoneChartInstance = new Chart(zoneChartCtx, {
             type: 'doughnut',
             data: {
-                labels: ['', 'Clifton Block 4', 'Hospital Road Central Park, Lahore', 'Bahria Town'],
+                labels: ['', 'Clifton Block 4', 'Lahore : Opposite Jinnah Hospital', 'Bahria Town'],
                 datasets: [{
                     data: [45, 25, 20, 10],
                     backgroundColor: ['#4f46e5', '#0ea5e9', '#8b5cf6', '#10b981'],

@@ -1,4 +1,4 @@
-# PHASE 1 
+﻿# PHASE 1 
 
 ### Read the instruction in @Agent.md first.
 
@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #FB6815 to #F04420. 
+Change the complete website color from #719397 to #F04420. 
 
 Apply it consistently while maintaining proper contrast and readability.
 

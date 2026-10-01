@@ -1,4 +1,4 @@
-// Content & Media Management Logic
+﻿// Content & Media Management Logic
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initial Render of Content Data
@@ -152,10 +152,10 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-    name: "crust Restaurant",
-    phone: "+92 03001013556",
-    email: "contact@crust.com",
-    whatsapp: "+92 03001013556",
+    name: "imbiss Restaurant",
+    phone: "+92 3232000888",
+    email: "contact@imbiss.com",
+    whatsapp: "+92 3232000888",
     address: "123 Food Street, Karachi, Pakistan",
     map: "https://maps.google.com/?q=karachi"
 };
