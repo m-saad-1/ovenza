@@ -7,13 +7,13 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: '4 Brothers Pizza',
+    name: 'crust',
     tagline: 'Premium Burgers & Fast Food',
-    instagram: 'https://www.instagram.com/4brotherspizza/',
-    phone: '+92 030000000000',
-    phonePretty: '+92 030000000000',
-    whatsapp: 'https://wa.me/923000000000',
-    email: 'info@4brotherspizza.com',
+    instagram: 'https://www.instagram.com/crust/',
+    phone: '+92 03001013556',
+    phonePretty: '+92 03001013556',
+    whatsapp: 'https://wa.me/923001013556',
+    email: 'info@crust.com',
     copyright: '© 2026 crust. All rights reserved.',
   },
 
@@ -93,5 +93,4 @@ const BB_CONFIG = {
 
 /* Make config globally accessible */
 window.BB_CONFIG = BB_CONFIG;
-
 
