@@ -7580,7 +7580,7 @@ html, body {
 
 
 /* Theme fixes */
-html.dark-mode .header-logo, html.dark-mode .footer-logo-img { filter: brightness(0) invert(1) !important; }
+
 html.dark-mode .mobile-social-icons .tt-circle, html.dark-mode .mobile-social-icons .tw-circle { background: #ffffff !important; }
 html.dark-mode .mobile-social-icons .tt-circle svg, html.dark-mode .mobile-social-icons .tw-circle svg { stroke: #000000 !important; color: #000000 !important; }
 
@@ -7605,3 +7605,4 @@ html.dark-mode .mobile-social-icons .tt-circle svg, html.dark-mode .mobile-socia
     justify-content: center !important;
   }
 }
+
