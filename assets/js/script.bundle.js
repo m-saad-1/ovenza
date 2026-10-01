@@ -1135,7 +1135,7 @@
       });
     });
   }
-  function ee() {
+  function showSocialProofToast() {
     const pageName = location.pathname.split("/").pop() || "index.html";
     if (pageName !== "menu.html" && pageName !== "offers.html") return;
     if (document.getElementById("socialProofToast")) return;
@@ -1177,7 +1177,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     (console.log("Hotbox - Script Loaded"),
-      (window.CartManager = O),
+      (window.CartManager = O), showSocialProofToast(), 
       V(),
       G(),
       K(),
@@ -2627,5 +2627,6 @@ document.body.addEventListener(
     renderOrders();
   }
 })();
+
 
 
