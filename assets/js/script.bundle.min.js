@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   function H(e) {
     typeof e == "string" && (e = e.replace(",", "."));
     let t = parseFloat(e);
@@ -627,15 +627,15 @@
                 ) {
                   let u = e.querySelector(".category-circles-wrapper");
                   if (u) {
-                    let E = h.offsetLeft,
-                      b = h.clientWidth,
-                      a = u.clientWidth;
-                    requestAnimationFrame(() => {
+                    setTimeout(() => {
+                      let E = h.offsetLeft,
+                        b = h.clientWidth,
+                        a = u.clientWidth;
                       u.scrollTo({
                         left: E - a / 2 + b / 2,
                         behavior: "smooth",
                       });
-                    });
+                    }, 50);
                   }
                 }
               });

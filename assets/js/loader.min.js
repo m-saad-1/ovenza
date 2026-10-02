@@ -1,4 +1,4 @@
-﻿
+
 function initCategorySticky() {
   let e = document.getElementById("category-sticky-wrapper");
   if (!e) return;
@@ -33,12 +33,12 @@ function initCategorySticky() {
               h.classList.toggle("active", v);
               if (v && window.innerWidth <= 768) {
                 let u = e.querySelector(".category-circles-wrapper");
-                u && requestAnimationFrame(() => {
+                u && setTimeout(() => {
                   let E = h.offsetLeft,
                       b = h.clientWidth,
                       a = u.clientWidth;
                   u.scrollTo({ left: E - a / 2 + b / 2, behavior: "smooth" });
-                });
+                }, 50);
               }
             });
           }
