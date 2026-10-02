@@ -15,6 +15,16 @@ Convert **all website images to AVIF format**, but process them **strictly one b
 * Carefully handle spaces, parentheses, capitalization, and special characters in filenames.
 * Prefer a consistent **lowercase naming convention** for all converted assets.
 
+### 1b. Preserving Transparency (CRITICAL for Logos)
+
+If an image has a transparent background (e.g., `logo.png`), standard `ffmpeg` AV1 conversion may lose the alpha channel and add a solid background. In such cases:
+
+* **DO NOT** use `ffmpeg -c:v libaom-av1` directly on transparent images without knowing what you are doing.
+* **DO USE** `cavif` (from [cavif-rs](https://github.com/kornelski/cavif-rs)). 
+* If `cavif` is not installed, you can download the standalone binary for Windows from its GitHub releases (e.g., `Invoke-WebRequest -Uri https://github.com/kornelski/cavif-rs/releases/download/v1.8.0/cavif-1.8.0.zip -OutFile cavif.zip`) and run it:
+  `cavif.exe input.png -o output.avif`
+* Alternatively, resize with `ffmpeg` to PNG first, then convert to AVIF using `cavif`.
+
 ### 2. Case-Sensitivity — CRITICAL
 
 The project has previously suffered from a **Git/Windows case-sensitivity bug**.
