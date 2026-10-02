@@ -1,395 +1,102 @@
-# Universal Agent Instructions
+# 🛡️ Universal Agent Blueprint: Mastery & Execution
 
-## 1. Core Rule
-
-**Read this file before making any changes.**
-
-This is an existing project. **Preserve the existing website/application unless the user explicitly requests a change.**
-
-The goal is:
-
-> **Make exactly the requested changes while preserving everything else.**
-
-Do not redesign, refactor, remove, replace, or "improve" unrelated parts.
+This document contains the non-negotiable operational guidelines for all workspace agents. **Read this completely before making any changes.** You are evaluated on your absolute adherence to these principles.
 
 ---
 
-## 2. Preserve Existing UI & Structure — CRITICAL
+## 🛑 Phase 1: Core Philosophy & Boundaries
 
-**Never make existing content or UI disappear unless the user explicitly asks for it.**
+### 1. The Zero-Destruction Guarantee (Core Rule)
+This is an existing, functional project. Your primary directive is to **make exactly the requested changes while preserving everything else.**
+- Do not redesign, refactor, reorganize, or "clean up" unrelated code.
+- Never let existing functionality, styling, or content disappear accidentally.
 
-Always preserve:
+### 2. Follow the Exact User Scope
+Make the **smallest change necessary** to achieve the user's exact request.
+- **Do not modify**: Colors, typography, spacing, layouts, animations, logic, or component structures unless explicitly instructed.
+- **Do not modernize**: Do not rewrite vanilla CSS into Tailwind or refactor functional JS into modern frameworks without permission.
+- **Prefer CSS**: For visual changes, prefer CSS over modifying HTML structures.
 
-* Header / Navbar
-* Footer
-* Logo
-* Existing sections
-* Existing pages
-* Existing components
-* Navigation
-* Buttons and links
-* Forms
-* Cards
-* Modals
-* Existing functionality
-* Desktop layout
-* Mobile layout
-* Responsive behavior
-* Existing styling
-
-When updating a page, **do not accidentally remove sections, components, footer, header, or existing functionality.**
-
-If modifying a component, preserve everything that is not part of the request.
-
-Before replacing any component or section, verify that all existing functionality and content are carried over.
+### 3. Protect Existing UI Components
+When updating any page or component, you must rigorously protect the surroundings.
+- **Always preserve**: Header/Navbar, Footer, Logo, existing routing, responsive mobile/desktop layouts, and interactive elements (modals/forms).
+- Verify that your edits do not bleed into or accidentally delete neighboring components.
 
 ---
 
-## 3. Follow the Exact User Scope
+## ⚡ Phase 2: Performance Guardrails (CRITICAL)
 
-Do not make unrequested changes.
+*Performance is not an afterthought. You must proactively guard the Lighthouse scores (LCP, FCP, SI) during every task.*
 
-Unless explicitly requested, do NOT change:
+### 4. Strict Asset Sizing & Scaling
+- **Rule 0: KB ≠ Render Cost**: Never judge an image by file size alone. Check actual pixel dimensions. A highly compressed 4000x3000px image will still destroy decode times.
+- **Rule 1: Match Display Bounds**: Never serve an image significantly larger than its rendered size.
+  - If a hero banner renders at `800x400`, the source asset must be resized to `~800x400` (e.g., `ffmpeg -vf scale=800:-1`).
+  - If a menu grid displays items at `320x320`, do not serve `640x640` images.
+- **Rule 2: Priorities**: Above-the-fold images (Hero) must have `fetchpriority="high"`. Below-the-fold images must have `loading="lazy"`.
 
-* Colors
-* Typography
-* Spacing
-* Layout
-* Dimensions
-* Borders/radius
-* Shadows
-* Animations
-* Hover effects
-* Responsive behavior
-* Header
-* Footer
-* Navigation
-* Components
-* Content
-* Images/assets
-* URLs
-* Functionality
-* Data structures
-* Architecture
+### 5. The Loader & Splash Screen Bottleneck
+If a project uses a loading overlay/splash screen that waits for `window.onload`:
+- **Never use massive lossless images**: A 1.2MB lossless loader logo will halt the entire page render and tank the LCP to <60.
+- **Aggressive Compression**: Always use lossy compression (`-q:v 70` or `80`) and scale the loader logo down to its exact display size (e.g., `200x200`). 
 
-Do not apply "better design", "modernization", or personal preferences without permission.
-
-If the request is ambiguous, ask before making broad changes.
+### 6. AVIF / WebP Conversion & Transparency
+When instructed to convert images to modern formats (`.avif`):
+- **Process Sequentially**: Process images strictly one at a time. Never batch-process or parallelize to avoid CPU/RAM limits.
+- **Transparency Preservation (CRITICAL)**: If the local `ffmpeg` build (e.g., `libaom-av1`) drops the alpha channel and outputs a black/white background, you **MUST** fallback to `.webp` (using `-c:v libwebp`) or retain the `.png`. *Never output broken opaque images.*
 
 ---
 
-## 4. Minimal-Diff Principle
+## 🛠️ Phase 3: Integrity & Environment
 
-Make the **smallest change necessary**.
+### 7. File System Case-Sensitivity
+Assume the project is deployed on **Linux/Vercel**.
+- Filename casing must match exactly across the Filesystem, Git, and Source code.
+- If fixing a casing error, you **must** use `git mv OldName.ext temp-name.ext` followed by `git mv temp-name.ext oldname.ext`. Do not rely on Windows Explorer renames.
 
-* Modify only relevant files.
-* Modify only relevant code.
-* Do not rewrite entire files for small changes.
-* Do not reformat unrelated code.
-* Do not rename unrelated variables/classes.
-* Do not refactor unrelated code.
-* Do not reorganize the project unnecessarily.
+### 8. Encoding Integrity (No Mojibake)
+All files must remain **UTF-8 encoded**.
+- Be extremely careful during mass-text replacements (e.g., PowerShell scripts). 
+- Verify that special characters, emojis (`🤖`), and icons (`★`, `✓`) do not corrupt into Mojibake.
 
-For visual changes, prefer **CSS over HTML/JavaScript** when possible.
-
-For CSS-only requests, do not modify JavaScript unless technically required.
-
----
-
-## 5. Assets & Images
-
-When the user requests an asset update:
-
-1. Inspect the relevant asset directories first.
-2. Identify the correct actual files.
-3. Match assets to their correct pages/components/content.
-4. Update **every relevant reference**, not just the first occurrence.
-5. Remove obsolete references only when they are part of the requested update.
-6. Verify every referenced asset actually exists.
-
-Never blindly replace image extensions or filenames.
-
-### AVIF Conversion
-
-If the user requests image conversion:
-
-* Convert required images to `.avif`.
-* Process images **strictly one at a time**.
-* Never batch-convert or parallelize image processing.
-* After each conversion, immediately verify:
-
-  * File exists
-  * File is readable
-  * Filename is correct
-  * Source-code reference is correct
-  * Actual image matches the intended asset
-
-Check:
-
-* `assets/images`
-* `assets/gallery`
-* Other relevant asset directories
-
-Audit image references across:
-
-* `.jsx`
-* `.tsx`
-* `.js`
-* `.ts`
-* `.css`
-* `.html`
-* JSON/data/config files
-
-Do not leave broken, missing, placeholder, obsolete, or incorrectly named image references.
+### 9. Holistic Content Updates
+When given new business details (locations, names, emails, phone numbers):
+- Update them consistently across the **entire app**: Footer, Header, Modals, Contact pages, configuration files (`config.js`), and SEO meta tags.
+- Do not leave conflicting outdated information in obscure components.
 
 ---
 
-## 6. Case Sensitivity — CRITICAL
+## 🔍 Phase 4: Verification & Git Safety
 
-Assume the project will run on **Linux/Vercel**, even if development is performed on Windows.
+### 10. The Persistence Rule (Do Not Stop)
+Do not declare a task "done" just because you ran a script.
+- **Verify**: `Reference → Correct Path → File Exists → Correct Asset → Correct Component`.
+- **Fix & Repeat**: If a build fails, a path 404s, or a dimension is wrong, fix it and verify again. Do not stop until the implementation is flawless.
 
-Filename casing must match exactly between:
+### 11. Measure, Don't Guess
+- **Text & Layouts**: New text lengths can break flexboxes or push content below the fold. Measure the layout shift.
+- **Audits**: If possible, verify the baseline LCP/Speed Index before and after your changes. If it drops by >10%, investigate the root cause immediately.
 
-* Filesystem
-* Git
-* Source code
-
-When changing filename casing, use:
-
-```bash
-git mv OldName.avif temp-name.avif
-git mv temp-name.avif oldname.avif
-```
-
-Then verify with:
-
-```bash
-git ls-files
-```
-
-Do not rely only on Windows Explorer or the local filesystem.
+### 12. Git Safety Protocol
+Before pushing any code, verify:
+- `git status` / `git diff`: Ensure no unrelated files are staged and no accidental deletions occurred.
+- `git remote -v`: Ensure you are pushing to the correct repository.
 
 ---
 
-## 7. Content Updates
-
-When the user provides new business/project information, update it consistently across every relevant location.
-
-Check:
-
-* Pages
-* Header
-* Footer
-* Cards
-* Modals
-* Forms
-* Contact sections
-* Navigation
-* Data files
-* Metadata where applicable
-
-Do not leave old information behind in another component.
-
----
-
-## 8. Encoding Integrity
-
-All edited files must remain **UTF-8 encoded**.
-
-After edits, verify that emojis and special characters remain intact.
-
-Watch for Mojibake such as:
-
-```text
-★
-
-🤖
-```
-
-Do not allow encoding corruption during mass replacements or file rewrites.
-
----
-
-## 9. Git Safety
-
-Before pushing:
-
-```bash
-git status
-git remote -v
-git diff
-git ls-files
-```
-
-Verify:
-
-* Correct repository
-* Correct branch
-* Only intended files are changed
-* No unrelated project files are staged
-* No accidental deletions
-* No incorrect filename casing
-
-Never push to a repository that has not been verified as the intended project.
-
----
-
-## 10. Verification
-
-Do not assume the task is complete after editing.
-
-Verify the actual result.
-
-Depending on the request, check:
-
-* All relevant pages
-* Header
-* Footer
-* Existing sections
-* Components
-* Images
-* Modals
-* Navigation
-* Desktop
-* Mobile
-* Responsive behavior
-* Build
-* Runtime behavior
-* Asset paths
-* File casing
-
-For asset changes, verify:
-
-`Reference → Correct Path → File Exists → Correct Asset → Correct Component`
-
-For larger changes, run the project's build and fix all errors before finishing.
-
----
-
-## 11. Persistence Rule — DO NOT STOP AFTER THE FIRST FIX
-
-If verification discovers a problem:
-
-**Fix it → verify again → repeat until resolved.**
-
-Do not stop after saying:
-
-> "The paths have been updated."
-
-or:
-
-> "The images have been converted."
-
-If broken references, missing assets, deleted sections, build errors, runtime errors, incorrect casing, or outdated content remain, the task is **not complete**.
-
----
-
-## 12. Before Editing
-
-Determine:
-
-```text
-REQUEST:
-What exactly did the user ask for?
-
-SCOPE:
-Which files/components actually need changes?
-
-PROTECTED:
-What existing content, styling, sections, header, footer, and functionality must remain?
-
-METHOD:
-What is the smallest safe way to implement it?
-
-VERIFICATION:
-How will the result be verified?
-```
-
-Do not scan or modify the entire project unnecessarily.
-
----
-
-## 13. Final Report
-
-After completing the task, provide a concise report:
-
-```text
-Changed:
-- [file/component] — [change]
-
-Preserved:
-- Existing header, footer, sections, styling, and functionality unless explicitly changed.
-
-Verification:
-- [brief verification result]
-```
-
-Do not provide a long explanation unless requested.
-
----
-
-# Golden Rule
-
-**Do exactly what the user asks.**
-
-**Do not redesign, refactor, remove, replace, optimize, reorganize, or "fix" anything outside the requested scope.**
-
-**Never allow existing header, footer, sections, components, styling, content, or functionality to disappear accidentally.**
-
-When in doubt:
-
-> **Preserve the existing implementation.**
-
-
-
-
-# IMPORTANT
-
-# Standing Instruction: Performance Guardrails for Every Change
-
-Attach this to every task where you ask the agent to swap text, images, or any other content into a project — especially a duplicated/templated project. The agent must follow this on its own, without being reminded each time.
-
----
-
-## Rule 0 — A "small file" is not the same as "cheap to render"
-
-Never judge an image by its KB size alone. Before adding or replacing any image, check its **actual pixel dimensions** (not the file size) using whatever tool is available in the environment (`identify` from ImageMagick, Python `PIL.Image.open(path).size`, `exiftool`, or the OS file inspector — pick one that exists). A well-compressed 80KB file can still be 4000×3000px, and decode cost scales with pixel count, not byte size. This is the single most common cause of "I used a smaller image and performance still dropped."
-
-## Rule 1 — Every image swap must pass this checklist before being considered done
-
-For each image added or replaced:
-
-1. Get the image's **actual rendered width and height** in the layout (check the CSS/container at the relevant breakpoints — mobile, tablet, desktop), not just "it looks fine."
-2. Resize the source file so its largest dimension does not meaningfully exceed the largest rendered width across breakpoints (roughly 1.5–2x for retina, not more).
-3. Confirm the image is served through whatever optimization pipeline the project already has (framework image component, a build-time image plugin, a CDN transform) — never bypass it with a raw `<img src>` pointing straight at an unprocessed file, if the project has such a pipeline.
-4. Confirm `width` and `height` (or equivalent aspect-ratio CSS) are set explicitly, so the layout doesn't shift when the image loads.
-5. Confirm format: prefer AVIF/WebP with a fallback if the pipeline supports it; don't ship raw PNG/JPEG for photographic content if better options exist in this project's stack.
-6. If the image is above the fold / is the likely LCP element, it should load eagerly with high priority; if it's below the fold, it should lazy-load. Don't flip these by accident when swapping content.
-7. If this project has a loader/splash-screen overlay (check for one before assuming it doesn't), confirm the new image doesn't get stuck behind it — verify the overlay's removal isn't gated on anything that got heavier because of this change (e.g., a bigger bundle now takes longer to hit `DOMContentLoaded`).
-
-## Rule 2 — Text/content changes aren't free either
-
-- Longer text can push new elements below the fold or change wrap points — check for new layout shift, not just "the text fits."
-- New text must not silently pull in new font weights/subsets that weren't already loaded. If a new weight or style is now used, it has a real cost — flag it, don't add it silently.
-
-## Rule 3 — Never trust "it looks the same" — measure
-
-Any change that touches images, fonts, above-the-fold markup, or third-party scripts requires a before/after check, even if the agent is confident it's harmless:
-
-1. Before the change: note the current LCP, Speed Index, and Performance score (use PageSpeed Insights — https://pagespeed.web.dev — against the live/staging URL if local Lighthouse isn't available; run it at least twice and use the better-supported number, not a single run).
-2. Make the change.
-3. After the change: re-run the same check.
-4. If LCP or Speed Index regress by more than ~10%, do not consider the task done — investigate why before moving on, using the same root-cause tracing discipline as the diagnostic protocol (find the actual mechanism, don't guess).
-5. Report the before/after numbers alongside the change, every time. "I swapped the image" is not a complete report; "I swapped the image, LCP went from X to Y" is.
-
-## Rule 4 — When duplicating a project as a starting point
-
-Before changing any content in a cloned/templated project, first confirm you understand what's already driving its performance profile — do not assume a copy inherits good performance just because the original was fine, and do not assume a copy inherits bad performance just because a past version had issues. Specifically check:
-
-- Is there a loader/overlay pattern, and what does it wait on?
-- What's already wired into the image-optimization pipeline, and what isn't?
-- What's the current baseline (LCP/SI/TBT, mobile and desktop) **before you touch anything** — so any later regression can be attributed correctly instead of blamed on "the images," "the text," or guessed at.
-
-## Non-negotiable
-
-If any of the checks above can't be completed (no tool available to check pixel dimensions, no way to measure before/after), say so explicitly instead of proceeding anyway. A skipped check reported honestly is fine; a skipped check reported as "done" is how regressions stack up silently over multiple rounds of edits.
+## 🧠 The Golden Directives
+
+### Before Editing (The Agent Checklist)
+1. **REQUEST**: What exactly did the user ask for?
+2. **SCOPE**: Which specific files/components actually need changes?
+3. **PROTECTED**: What existing content, header/footer, and functionality must survive?
+4. **METHOD**: What is the smallest, safest way to implement this?
+5. **VERIFICATION**: How will I verify the result?
+
+### After Editing (The Report)
+Keep your final report concise and actionable:
+- **Changed**: [Files] — [Brief description]
+- **Preserved**: Explicitly state that surrounding architecture was protected.
+- **Verification**: [Brief result of your integrity/performance checks]
+
+**You are an elite agent. Do exactly what is requested, protect the performance baseline, and never break the existing implementation.**
