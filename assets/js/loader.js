@@ -34,10 +34,7 @@ function initCategorySticky() {
               if (v && window.innerWidth <= 768) {
                 let u = e.querySelector(".category-circles-wrapper");
                 u && setTimeout(() => {
-                  let E = h.offsetLeft,
-                      b = h.clientWidth,
-                      a = u.clientWidth;
-                  u.scrollTo({ left: E - a / 2 + b / 2, behavior: "smooth" });
+                  h.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
                 }, 50);
               }
             });
@@ -1195,31 +1192,38 @@ ${s}`,
             (void 0));
       },
       s = () => {
-        (typeof window._tl_closeModal == "function"
-          ? window._tl_closeModal(e)
-          : (e.classList.remove("active"), (void 0)));
         const a = e.querySelector(".modal-sheet");
         if (!a) {
+          typeof window._tl_closeModal == "function"
+            ? window._tl_closeModal(e)
+            : e.classList.remove("active");
           n.classList.add("bounce");
           return;
         }
         const c = a.getBoundingClientRect(),
           o = n.getBoundingClientRect(),
           t = document.createElement("div");
+        typeof window._tl_closeModal == "function"
+          ? window._tl_closeModal(e)
+          : e.classList.remove("active");
         ((t.className = "demo-btn-fly-effect"),
           (t.style.left = c.left + c.width / 2 - 10 + "px"),
           (t.style.top = c.top + c.height / 2 - 10 + "px"),
-          document.body.appendChild(t),
-          t.offsetHeight,
-          requestAnimationFrame(() => {
-            (t.style.left = o.left + o.width / 2 - 10 + "px"),
-            (t.style.top = o.top + o.height / 2 - 10 + "px"),
-            (t.style.transform = "scale(0.2)"),
-            (t.style.opacity = "0"),
-            setTimeout(() => {
-              (t.remove(), n.classList.add("bounce"));
-            }, 700);
-          }));
+          document.body.appendChild(t));
+        const animation = t.animate(
+          [
+            { transform: "translate(0, 0) scale(1)", opacity: 0.8 },
+            {
+              transform: `translate(${o.left + o.width / 2 - c.left - c.width / 2}px, ${o.top + o.height / 2 - c.top - c.height / 2}px) scale(0.2)`,
+              opacity: 0,
+            },
+          ],
+          { duration: 700, easing: "cubic-bezier(0.25, 1, 0.5, 1)" },
+        );
+        animation.finished.then(() => {
+          t.remove();
+          n.classList.add("bounce");
+        });
       };
     (n.addEventListener("click", i), r.addEventListener("click", s));
   }

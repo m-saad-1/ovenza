@@ -628,12 +628,10 @@
                   let u = e.querySelector(".category-circles-wrapper");
                   if (u) {
                     setTimeout(() => {
-                      let E = h.offsetLeft,
-                        b = h.clientWidth,
-                        a = u.clientWidth;
-                      u.scrollTo({
-                        left: E - a / 2 + b / 2,
+                      h.scrollIntoView({
                         behavior: "smooth",
+                        block: "nearest",
+                        inline: "center",
                       });
                     }, 50);
                   }
