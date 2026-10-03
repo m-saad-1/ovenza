@@ -734,7 +734,6 @@
   }
   function R(e) {
     if (!e.classList.contains("active")) return;
-    const savedScrollY = e._pageScrollY ?? window.scrollY;
     e.classList.remove("active");
     if (e._popStateListener) {
       window.removeEventListener("popstate", e._popStateListener);
@@ -743,9 +742,6 @@
     if (history.state && history.state.modalOpen) {
       history.replaceState(null, "", window.location.href);
     }
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: savedScrollY, left: 0, behavior: "auto" });
-    });
   }
   function closeModalAtCurrentPagePosition(modal, trigger, savedScrollY) {
     if (trigger) trigger.blur();
@@ -757,9 +753,6 @@
     if (history.state && history.state.modalOpen) {
       history.replaceState(null, "", window.location.href);
     }
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: savedScrollY, left: 0, behavior: "auto" });
-    });
   }
   ((window._tl_openModal = _), (window._tl_closeModal = R));
   function le(e, t) {

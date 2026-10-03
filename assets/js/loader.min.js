@@ -1674,12 +1674,17 @@ ${s}`,
         document.body.style.top = `-${lockedScrollY}px`;
         document.body.style.width = "100%";
       } else {
+        const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = "auto";
         document.documentElement.classList.remove("modal-open");
         document.body.classList.remove("modal-open");
         document.body.style.position = "";
         document.body.style.top = "";
         document.body.style.width = "";
         window.scrollTo(0, lockedScrollY);
+        requestAnimationFrame(() => {
+          document.documentElement.style.scrollBehavior = previousScrollBehavior;
+        });
       }
     };
 

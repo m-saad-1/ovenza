@@ -7984,5 +7984,22 @@ html.dark-mode .mobile-social-icons .tw-circle svg {
   .modal-overlay > .modal-sheet {
     max-height: calc(100dvh - var(--header-height, 70px) - (var(--modal-viewport-gap, 20px) * 2)) !important;
   }
+
+  body:has(#demo-modal.active) .navbar,
+  body:has(#about-demo-modal.active) .navbar {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  #demo-modal.modal-overlay,
+  #about-demo-modal.modal-overlay {
+    padding-top: var(--modal-viewport-gap, 20px) !important;
+  }
+
+  #demo-modal.modal-overlay > .modal-sheet,
+  #about-demo-modal.modal-overlay > .modal-sheet {
+    max-height: calc(100dvh - (var(--modal-viewport-gap, 20px) * 2)) !important;
+  }
 }
 
