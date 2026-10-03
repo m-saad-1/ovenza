@@ -1195,7 +1195,9 @@ ${s}`,
             (void 0));
       },
       s = () => {
-        (e.classList.remove("active"), (void 0));
+        (typeof window._tl_closeModal == "function"
+          ? window._tl_closeModal(e)
+          : (e.classList.remove("active"), (void 0)));
         const a = e.querySelector(".modal-sheet");
         if (!a) {
           n.classList.add("bounce");

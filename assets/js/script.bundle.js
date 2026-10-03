@@ -719,7 +719,8 @@
       }));
   }
   function _(e, t) {
-    (e.classList.add("active"),
+    ((e._pageScrollY = window.scrollY),
+      e.classList.add("active"),
       window.matchMedia('(max-width: 768px)').matches && (void 0),
       history.pushState({ modalOpen: t }, ""));
     let o = (i) => {
@@ -732,13 +733,19 @@
     (window.addEventListener("popstate", o), (e._popStateListener = o));
   }
   function R(e) {
-    e.classList.contains("active") &&
-      (e.classList.remove("active"),
-      window.matchMedia('(max-width: 768px)').matches && (void 0),
-      e._popStateListener &&
-        (window.removeEventListener("popstate", e._popStateListener),
-        delete e._popStateListener,
-        history.state && history.state.modalOpen && history.back()));
+    if (!e.classList.contains("active")) return;
+    const savedScrollY = e._pageScrollY ?? window.scrollY;
+    e.classList.remove("active");
+    if (e._popStateListener) {
+      window.removeEventListener("popstate", e._popStateListener);
+      delete e._popStateListener;
+    }
+    if (history.state && history.state.modalOpen) {
+      history.replaceState(null, "", window.location.href);
+    }
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: savedScrollY, left: 0, behavior: "auto" });
+    });
   }
   function closeModalAtCurrentPagePosition(modal, trigger, savedScrollY) {
     if (trigger) trigger.blur();
