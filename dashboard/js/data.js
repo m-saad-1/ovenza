@@ -27,8 +27,31 @@ const Store = {
         }
     },
 
-    // Status transition order — used to prevent backwards transitions
-    _statusOrder: ["New", "Accepted", "Sent for Preparing", "Preparing", "Ready", "Dispatched", "Out for Delivery", "Completed", "Delivered", "Cancelled"],
+    _statusOrder: ["New", "Accepted", "Sent for Preparing", "Preparing", "Ready", "Dispatched", "Out for Delivery", "Completed", "Delivered"],
+
+    getValidNextStatuses(order) {
+        if (!order) return [];
+        const aliases = { Pending: 'New', Confirmed: 'Accepted', Assigned: 'Dispatched' };
+        const status = aliases[order.status] || order.status;
+        const isDelivery = order.type === 'Delivery';
+        const transitions = {
+            'New': ['Accepted'],
+            'Accepted': ['Sent for Preparing'],
+            'Sent for Preparing': ['Preparing'],
+            'Preparing': ['Ready'],
+            'Ready': [isDelivery ? 'Dispatched' : 'Completed'],
+            'Dispatched': ['Out for Delivery'],
+            'Out for Delivery': ['Delivered']
+        };
+        return transitions[status] || [];
+    },
+
+    canTransition(order, newStatus) {
+        if (!order) return false;
+        if (newStatus === 'Cancelled') return !['Completed', 'Delivered', 'Cancelled', 'Refunded'].includes(order.status);
+        if (newStatus === 'Refunded') return ['Completed', 'Delivered'].includes(order.status);
+        return this.getValidNextStatuses(order).includes(newStatus);
+    },
 
     /**
      * Updates the admin-facing order status.
@@ -40,17 +63,19 @@ const Store = {
         const order = this.state.orders.find(o => o.id === orderId);
         if (!order) return;
 
-        // Guard: prevent backwards transitions (Cancelled is always allowed)
-        if (newStatus !== 'Cancelled') {
-            const currentIdx = this._statusOrder.indexOf(order.status);
-            const newIdx = this._statusOrder.indexOf(newStatus);
-            if (newIdx < currentIdx) {
-                console.warn(`Blocked backwards status transition: ${order.status} → ${newStatus}`);
-                return;
-            }
+        if (!this.canTransition(order, newStatus)) {
+            console.warn(`Blocked invalid status transition: ${order.status} → ${newStatus}`);
+            return;
         }
 
         order.status = newStatus;
+        order.kitchenStatus = this.getKitchenStatus(order);
+        if (order.type === 'Delivery') {
+            if (newStatus === 'Dispatched') order.deliveryStatus = 'Assigned';
+            if (newStatus === 'Out for Delivery') order.deliveryStatus = 'Out for Delivery';
+            if (newStatus === 'Delivered') order.deliveryStatus = 'Delivered';
+            if (newStatus === 'Cancelled') order.deliveryStatus = 'Cancelled';
+        }
 
         // Record per-step timestamp
         if (!order.statusTimestamps) order.statusTimestamps = {};
@@ -62,6 +87,8 @@ const Store = {
                 const localOrder = localOrders.find(o => o.id.toString() === orderId.toString());
                 if (localOrder) {
                     localOrder.status = newStatus;
+                    localOrder.kitchenStatus = order.kitchenStatus;
+                    localOrder.deliveryStatus = order.deliveryStatus;
                     if (!localOrder.statusTimestamps) localOrder.statusTimestamps = {};
                     localOrder.statusTimestamps[newStatus] = order.statusTimestamps[newStatus];
                     localStorage.setItem("hdm_orders", JSON.stringify(localOrders));
@@ -115,8 +142,10 @@ const Store = {
                         name: i.title || i.name,
                         qty: i.qty || 1,
                         price: (i.basePrice || 0) + (i.addonsTotal || 0),
+                        unitPrice: (i.basePrice || i.price || 0) + (i.addonsTotal || 0),
+                        addonsTotal: i.addonsTotal || 0,
                         variant: [i.size, ...(i.extras || [])].filter(Boolean).join(', ') || "",
-                        image: i.image || ''
+                        image: i.image ? (i.image.startsWith('./assets/') ? '../' + i.image.slice(2) : i.image) : ''
                     })),
                     statusTimestamps: o.statusTimestamps || {},
                     _isLocal: true

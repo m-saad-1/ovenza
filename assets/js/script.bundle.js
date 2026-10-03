@@ -740,6 +740,20 @@
         delete e._popStateListener,
         history.state && history.state.modalOpen && history.back()));
   }
+  function closeModalAtCurrentPagePosition(modal, trigger, savedScrollY) {
+    if (trigger) trigger.blur();
+    modal.classList.remove("active");
+    if (modal._popStateListener) {
+      window.removeEventListener("popstate", modal._popStateListener);
+      delete modal._popStateListener;
+    }
+    if (history.state && history.state.modalOpen) {
+      history.replaceState(null, "", window.location.href);
+    }
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: savedScrollY, left: 0, behavior: "auto" });
+    });
+  }
   ((window._tl_openModal = _), (window._tl_closeModal = R));
   function le(e, t) {
     let o = document.getElementById("contact-modal"),
@@ -949,6 +963,7 @@
           : ((c.style.opacity = "1"), (c.style.pointerEvents = "auto"))),
         P(),
         (r.style.zIndex = "100000"),
+        (r._pageScrollY = window.scrollY),
         _(r, "item-modal"));
     }),
       n &&
@@ -979,9 +994,7 @@
         c.addEventListener("click", () => {
           if (!localStorage.getItem("tl_location_name")) {
             let w = document.getElementById("location-modal");
-            w &&
-              (w.classList.add("active"),
-              (void 0));
+            w && window._tl_openLocationModal && window._tl_openLocationModal();
             return;
           }
           let f = c.innerHTML;
@@ -1011,8 +1024,8 @@
             setTimeout(() => {
               ((c.innerHTML = f),
                 (c.style.background = ""),
-                r.classList.remove("active"));
-            }, 800));
+                closeModalAtCurrentPagePosition(r, c, r._pageScrollY ?? window.scrollY));
+            }, 450));
         }));
     let C = r.querySelector(".modal-sheet");
     if (C) {
@@ -1058,7 +1071,7 @@
     if (W) {
       document.querySelectorAll(".offer-image-trigger").forEach((x) => {
         x.addEventListener("click", (L) => {
-          (L.preventDefault(), _(W, "offer-modal"));
+          (L.preventDefault(), (W._pageScrollY = window.scrollY), _(W, "offer-modal"));
         });
       });
       let f = document.getElementById("offer-modal-add-to-cart");
@@ -1066,9 +1079,7 @@
         f.addEventListener("click", () => {
           if (!localStorage.getItem("tl_location_name")) {
             let w = document.getElementById("location-modal");
-            w &&
-              (w.classList.add("active"),
-              (void 0));
+            w && window._tl_openLocationModal && window._tl_openLocationModal();
             return;
           }
           let x = f.innerHTML;
@@ -1084,8 +1095,8 @@
             qty: 1,
           }),
             setTimeout(() => {
-              ((f.innerHTML = x), (f.style.background = ""), R(W));
-            }, 800));
+              ((f.innerHTML = x), (f.style.background = ""), closeModalAtCurrentPagePosition(W, f, W._pageScrollY ?? window.scrollY));
+            }, 450));
         });
       let g = W.querySelector(".modal-sheet");
       if (g) {
@@ -1350,12 +1361,21 @@
         `;
         document.body.insertAdjacentHTML("beforeend", b);
         const a = document.getElementById("order-confirm-modal");
+        typeof window._tl_openModal === "function" &&
+          window._tl_openModal(a, "order-confirm-modal");
+        const closeOrderConfirmation = () => {
+          typeof window._tl_closeModal === "function"
+            ? window._tl_closeModal(a)
+            : a.classList.remove("active");
+          window.isOrdering = !1;
+          setTimeout(() => a.remove(), 0);
+        };
         (a.addEventListener("click", (m) => {
-          m.target === a && (a.remove(), (window.isOrdering = !1));
+          m.target === a && closeOrderConfirmation();
         }),
           document.querySelectorAll(".confirm-modal-back").forEach((m) => {
             m.addEventListener("click", () => {
-              (a.remove(), (window.isOrdering = !1));
+              closeOrderConfirmation();
             });
           }),
           document.querySelectorAll(".confirm-modal-submit").forEach((m) => {
@@ -1639,15 +1659,22 @@
     const navH = navbar ? 70 : 70;
     requestAnimationFrame(() => {
       document.documentElement.style.setProperty("--header-height", navH + "px");
-      modal.classList.add("active");
+      if (typeof window._tl_openModal === "function") {
+        window._tl_openModal(modal, "custom-cart-modal");
+      } else {
+        modal.classList.add("active");
+      }
       renderCart();
       showCartView();
     });
   }
 
   function closeModal() {
-    modal.classList.remove("active");
-    void 0;
+    if (typeof window._tl_closeModal === "function") {
+      window._tl_closeModal(modal);
+    } else {
+      modal.classList.remove("active");
+    }
   }
 
   closeBtn.addEventListener("click", closeModal);
@@ -2123,18 +2150,29 @@
       document.body.insertAdjacentHTML("beforeend", confirmHtml);
 
       const confirmModal = document.getElementById("order-confirm-modal");
+      if (typeof window._tl_openModal === "function") {
+        window._tl_openModal(confirmModal, "order-confirm-modal");
+      }
+      const closeOrderConfirmation = () => {
+        if (typeof window._tl_closeModal === "function") {
+          window._tl_closeModal(confirmModal);
+        } else {
+          confirmModal.classList.remove("active");
+        }
+        setTimeout(() => confirmModal.remove(), 0);
+      };
 
       // Close on outside click for confirm modal
       confirmModal.addEventListener("click", (e) => {
         if (e.target === confirmModal) {
-          confirmModal.remove();
+          closeOrderConfirmation();
         }
       });
 
       // Handle Back / Cancel
       confirmModal.querySelectorAll(".confirm-modal-back").forEach((btn) => {
         btn.addEventListener("click", () => {
-          confirmModal.remove();
+          closeOrderConfirmation();
         });
       });
 
@@ -2350,7 +2388,9 @@ document.body.addEventListener(
     var pct =
       ai < 0 || steps.length < 2
         ? 0
-        : Math.min(100, Math.round((ai / (steps.length - 1)) * 100));
+        : ai === 0
+          ? 3
+          : Math.min(100, Math.round((ai / (steps.length - 1)) * 100));
 
     var stepsHtml = steps
       .map(function (step, i) {
@@ -2387,7 +2427,7 @@ document.body.addEventListener(
     }
 
     return (
-      '<div style="background:var(--clr-bg-app,#f9f9f9);padding:1.25rem;border-radius:12px;margin-top:1rem;">' +
+      '<div class="order-progress-panel">' +
       (etaMsg
         ? '<p style="font-size:0.88rem;font-weight:600;color:var(--clr-text-primary);margin:0 0 0.75rem 0;">' +
           etaMsg +
@@ -2412,9 +2452,11 @@ document.body.addEventListener(
         var ex = [];
         if (item.size) ex.push(item.size);
         if (item.extras && item.extras.length) ex = ex.concat(item.extras);
+        var image = item.image || "../assets/images/logo.avif";
         return (
-          '<div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:0.25rem;">' +
-          "<span><strong>" +
+          '<div class="order-history-item">' +
+          '<img src="' + image + '" alt="' + name + '" loading="lazy" decoding="async">' +
+          '<span class="order-history-item-text"><strong>' +
           (item.qty || 1) +
           "x</strong> " +
           name +
@@ -2584,11 +2626,21 @@ document.body.addEventListener(
       "</div>";
     document.body.appendChild(modal);
 
+    if (typeof window._tl_openModal === "function") {
+      window._tl_openModal(modal, "reorder-confirm-modal");
+    }
+    function closeReorderModal() {
+      if (typeof window._tl_closeModal === "function") {
+        window._tl_closeModal(modal);
+      }
+      setTimeout(function () { modal.remove(); }, 0);
+    }
+
     document.getElementById("reorder-cancel-btn").onclick = function () {
-      modal.remove();
+      closeReorderModal();
     };
     modal.addEventListener("click", function (e) {
-      if (e.target === modal) modal.remove();
+      if (e.target === modal) closeReorderModal();
     });
     document.getElementById("reorder-confirm-btn").onclick = function () {
       if (window.CartManager) {
@@ -2604,7 +2656,7 @@ document.body.addEventListener(
           });
         });
       }
-      modal.remove();
+      closeReorderModal();
       window.location.href = "cart.html";
     };
   }

@@ -1,4 +1,4 @@
-// settings.js — Dashboard Settings Logic
+// settings.js â€” Dashboard Settings Logic
 // Extracted from inline scripts in index.html for maintainability.
 
 // -------------------------------------------------------
@@ -29,33 +29,17 @@ window.saveBusinessInfo = function() {
 window.applyBusinessInfo = function(info) {
     if (!info || !info.name) return;
 
-    // Sidebar brand text
-    document.querySelectorAll('.sidebar-brand-text, .brand span').forEach(el => {
+    document.querySelectorAll('.brand span').forEach(el => {
         el.textContent = info.name;
     });
 
-    // Simple-mode header title (if present)
-    const headerTitle = document.querySelector('.header-title-simple');
-    if (headerTitle) headerTitle.textContent = info.name;
 
     // Page title
-    document.title = info.name + ' — Dashboard';
+    document.title = info.name + ' â€” Dashboard';
 };
 
 // -------------------------------------------------------
-// 2. Dashboard Mode (Simple / Advanced)
-// -------------------------------------------------------
-window.switchDashboardMode = function(mode) {
-    localStorage.setItem('crust_dashboard_mode', mode);
-    if (mode === 'simple') {
-        document.body.classList.add('simple-mode');
-    } else {
-        document.body.classList.remove('simple-mode');
-    }
-};
-
-// -------------------------------------------------------
-// 3. Boot: Restore persisted settings on DOMContentLoaded
+// 2. Boot: Restore persisted settings on DOMContentLoaded
 // -------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -83,9 +67,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } catch (e) { console.error('Error restoring business info', e); }
 
-    // --- Restore Dashboard Mode select state ---
-    const mode = localStorage.getItem('crust_dashboard_mode') || 'simple';
-    const modeSelect = document.getElementById('dashboard-mode-select');
-    if (modeSelect) modeSelect.value = mode;
-    // body.simple-mode class already applied by inline <body> script — do not re-apply
 });

@@ -53,7 +53,7 @@
         display: flex;
         align-items: flex-start;
         justify-content: center;
-        padding-top: 90px;
+        padding: max(16px, env(safe-area-inset-top)) 1rem max(16px, env(safe-area-inset-bottom));
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.25s ease;
@@ -70,7 +70,8 @@
         background: var(--clr-surface, #fff);
         border-radius: 16px;
         width: min(720px, calc(100vw - 2rem));
-        max-height: calc(100vh - 110px);
+        max-height: calc(100dvh - 32px);
+        min-height: 0;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -109,7 +110,9 @@
       }
       #search-results-close:hover { background: rgba(0,0,0,0.1); }
       #search-results-body {
+        min-height: 0;
         overflow-y: auto;
+        overscroll-behavior: contain;
         padding: 1rem 1.25rem 1.5rem;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
@@ -142,8 +145,8 @@
       }
       @media (max-width: 480px) {
         #search-results-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-        #search-results-panel { border-radius: 16px 16px 0 0; max-height: calc(100vh - 70px); }
-        #search-results-overlay { align-items: flex-end; padding-top: 0; }
+        #search-results-panel { border-radius: 16px; max-height: calc(100dvh - 24px); }
+        #search-results-overlay { align-items: center; padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)); }
       }
       .search-result-card {
         background: var(--clr-surface, #fff);

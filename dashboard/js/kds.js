@@ -54,7 +54,7 @@ function renderKDSBoard(state) {
             statusClass = 'new';
             nextAction = `
                 <div style="display:flex; gap:0.25rem; margin-top: 0.5rem;">
-                    <button class="btn btn-warning" style="flex:1; font-size: 0.75rem; padding: 0.25rem 0.4rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Preparing')">Start</button>
+                    <button class="btn btn-warning" style="flex:1; font-size: 0.75rem; padding: 0.25rem 0.4rem;" onclick="window.Store.updateOrderStatus('${order.id}', '${order.status === 'New' ? 'Accepted' : order.status === 'Accepted' ? 'Sent for Preparing' : 'Preparing'}')">${order.status === 'New' ? 'Accept' : order.status === 'Accepted' ? 'Send to Kitchen' : 'Start'}</button>
                 </div>
             `;
             newCount++;
@@ -64,7 +64,7 @@ function renderKDSBoard(state) {
             prepCount++;
         } else if (kStatus === 'Ready') {
             statusClass = 'ready';
-            nextAction = `<button class="btn btn-outline" style="width:100%; font-size: 0.75rem; padding: 0.25rem 0.4rem; margin-top: 0.5rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed')">Clear</button>`;
+            nextAction = order.type === 'Delivery' ? '' : `<button class="btn btn-outline" style="width:100%; font-size: 0.75rem; padding: 0.25rem 0.4rem; margin-top: 0.5rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Completed')">Complete</button>`;
             readyCount++;
         } else if (kStatus === 'Completed') {
             statusClass = 'completed';

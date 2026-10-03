@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileToggle = document.getElementById('mobile-toggle');
     const sidebar = document.getElementById('app-sidebar');
     const collapseBtn = document.getElementById('sidebar-collapse-btn');
+    const headerSearch = document.querySelector('.header-search');
+    const headerSearchInput = headerSearch && headerSearch.querySelector('input[type="search"]');
+    const notificationWrapper = document.getElementById('notification-wrapper');
+    const notificationDropdown = document.getElementById('notification-dropdown');
     
     if (mobileToggle && sidebar) {
         mobileToggle.addEventListener('click', () => {
@@ -56,6 +60,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
                 sidebar.classList.remove('open');
             }
+        }
+
+        if (headerSearch && !headerSearch.contains(e.target) && (!headerSearchInput || !headerSearchInput.value.trim())) {
+            headerSearch.classList.remove('is-expanded');
+            if (headerSearchInput) headerSearchInput.blur();
+        }
+        if (notificationWrapper && notificationDropdown && !notificationWrapper.contains(e.target)) {
+            notificationDropdown.style.display = 'none';
+        }
+    });
+
+    if (headerSearch && headerSearchInput) {
+        headerSearch.addEventListener('click', () => headerSearch.classList.add('is-expanded'));
+        headerSearchInput.addEventListener('focus', () => headerSearch.classList.add('is-expanded'));
+        headerSearchInput.addEventListener('input', () => {
+            headerSearch.classList.toggle('is-expanded', document.activeElement === headerSearchInput || !!headerSearchInput.value.trim());
+        });
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        if (notificationDropdown) notificationDropdown.style.display = 'none';
+        if (headerSearch && headerSearchInput && !headerSearchInput.value.trim()) {
+            headerSearch.classList.remove('is-expanded');
+            headerSearchInput.blur();
         }
     });
 
@@ -194,4 +223,4 @@ function updateSidebarBadges(state) {
 }
 
 
-
+

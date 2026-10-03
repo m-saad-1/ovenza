@@ -20,10 +20,24 @@ window.openGenericModal = function(type, editId = null) {
         if (editId) data = state.products.find(p => p.id === editId);
         
         let categoryOptions = state.categories.map(c => `<option value="${c.id}" ${data && data.categoryId === c.id ? 'selected' : ''}>${c.name}</option>`).join('');
+        const dataCategory = data && state.categories.find(c => c.id === data.categoryId);
+        const productType = data && data.productType
+            ? data.productType
+            : (dataCategory && /^(combo|combos|deal|deals)$/i.test(dataCategory.name.trim()) ? 'deal' : 'single');
         
         body.innerHTML = `
+            <label style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.8rem; font-weight:700; color:var(--clr-text-secondary);">
+                Product Type
+                <select id="modal-p-type" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px; background:var(--clr-surface); color:var(--clr-text-primary);">
+                    <option value="single" ${productType === 'single' ? 'selected' : ''}>Single Item</option>
+                    <option value="deal" ${productType === 'deal' ? 'selected' : ''}>Deal / Combo</option>
+                </select>
+            </label>
             <input type="text" id="modal-p-name" placeholder="Product Name" value="${data ? data.name : ''}" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;">
-            <textarea id="modal-p-desc" placeholder="Description" rows="2" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;">${data ? (data.desc || '') : ''}</textarea>
+            <div id="modal-p-deal-fields" style="display:flex; flex-direction:column; gap:1rem;">
+                <textarea id="modal-p-desc" placeholder="Deal / combo contents and description" rows="3" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;">${data ? (data.desc || '') : ''}</textarea>
+                <input type="datetime-local" id="modal-p-deal-end" value="${data && data.dealEnd ? data.dealEnd : ''}" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;" title="Deal End Date/Time">
+            </div>
             
             <div style="display: flex; gap: 0.5rem;">
                 <input type="number" id="modal-p-price" placeholder="Price (Rs.)" value="${data ? data.price : ''}" style="width:50%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;">
@@ -40,7 +54,7 @@ window.openGenericModal = function(type, editId = null) {
                 <input type="file" id="modal-p-image" accept="image/*" style="width:50%; padding:0.4rem; border:1px solid var(--clr-border); border-radius:4px;">
             </div>
 
-            <div style="display: flex; gap: 0.5rem;">
+            <div id="modal-p-single-fields" style="display: flex; gap: 0.5rem;">
                 <input type="text" id="modal-p-sizes" placeholder="Sizes (comma separated)" value="${data && data.sizes ? data.sizes : ''}" style="width:50%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;">
                 <input type="text" id="modal-p-modifiers" placeholder="Modifiers (comma separated)" value="${data && data.modifiers ? data.modifiers : ''}" style="width:50%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;">
             </div>
@@ -55,9 +69,16 @@ window.openGenericModal = function(type, editId = null) {
                     <option value="Out of Stock" ${data && data.status === 'Out of Stock' ? 'selected' : ''}>Out of Stock</option>
                 </select>
             </div>
-            
-            <input type="datetime-local" id="modal-p-deal-end" placeholder="Deal End Date/Time" value="${data && data.dealEnd ? data.dealEnd : ''}" style="width:100%; padding:0.5rem; border:1px solid var(--clr-border); border-radius:4px;" title="Deal End Date/Time">
         `;
+
+        const typeSelect = document.getElementById('modal-p-type');
+        const updateProductTypeFields = () => {
+            const isDeal = typeSelect.value === 'deal';
+            document.getElementById('modal-p-deal-fields').style.display = isDeal ? 'flex' : 'none';
+            document.getElementById('modal-p-single-fields').style.display = isDeal ? 'none' : 'flex';
+        };
+        typeSelect.addEventListener('change', updateProductTypeFields);
+        updateProductTypeFields();
     }
     else if (type === 'rider') {
         title.textContent = editId ? 'Edit Rider' : 'Add New Rider';
@@ -200,16 +221,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const { type, editId } = currentModalContext;
             
             if (type === 'product') {
+                const pType = document.getElementById('modal-p-type').value;
                 const pName = document.getElementById('modal-p-name').value;
-                const pDesc = document.getElementById('modal-p-desc').value;
+                const pDesc = pType === 'deal' ? document.getElementById('modal-p-desc').value : '';
                 const pPrice = parseInt(document.getElementById('modal-p-price').value) || 0;
                 const pOrigPrice = parseInt(document.getElementById('modal-p-orig-price').value) || null;
                 const pDiscPrice = parseInt(document.getElementById('modal-p-disc-price').value) || null;
                 const pDiscount = parseInt(document.getElementById('modal-p-discount').value) || null;
                 const pStock = parseInt(document.getElementById('modal-p-stock').value) || null;
-                const pSizes = document.getElementById('modal-p-sizes').value;
-                const pModifiers = document.getElementById('modal-p-modifiers').value;
-                const pDealEnd = document.getElementById('modal-p-deal-end').value;
+                const pSizes = pType === 'single' ? document.getElementById('modal-p-sizes').value : '';
+                const pModifiers = pType === 'single' ? document.getElementById('modal-p-modifiers').value : '';
+                const pDealEnd = pType === 'deal' ? document.getElementById('modal-p-deal-end').value : '';
                 const pCat = document.getElementById('modal-p-cat').value;
                 const pStatus = document.getElementById('modal-p-status').value;
                 
@@ -217,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (editId) {
                         const product = state.products.find(p => p.id === editId);
                         if (product) {
-                            product.name = pName; product.desc = pDesc; product.price = pPrice; 
+                            product.name = pName; product.productType = pType; product.desc = pDesc; product.price = pPrice; 
                             product.originalPrice = pOrigPrice; product.discountedPrice = pDiscPrice;
                             product.discount = pDiscount; product.stock = pStock;
                             product.sizes = pSizes; product.modifiers = pModifiers;
@@ -226,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         state.products.push({
                             id: 'p' + Math.floor(Math.random() * 10000),
-                            name: pName, desc: pDesc, price: pPrice, 
+                            name: pName, productType: pType, desc: pDesc, price: pPrice, 
                             originalPrice: pOrigPrice, discountedPrice: pDiscPrice,
                             discount: pDiscount, stock: pStock,
                             sizes: pSizes, modifiers: pModifiers,

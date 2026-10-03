@@ -321,12 +321,22 @@ window.openOrderDrawer = function(orderId) {
 
         <h4 style="margin-bottom: 1rem;">Order Items</h4>
         <div style="margin-bottom: 1.5rem;">
-            ${(order.items || [{name: 'Demo Item', qty: 1, price: order.total}]).map(item => `
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span>${item.qty}x ${item.name}</span>
-                    <span style="font-weight: 500;">${state.restaurant.currency} ${item.price}</span>
-                </div>
-            `).join('')}
+            ${(order.items || [{name: 'Demo Item', qty: 1, price: order.total}]).map(item => {
+                const product = state.products && state.products.find(productItem => productItem.id === item.id);
+                const unitPrice = Number(item.unitPrice ?? (Number(item.basePrice ?? item.price ?? product?.price ?? 0) + Number(item.addonsTotal || 0)));
+                const quantity = Number(item.qty || 1);
+                const image = item.image || product?.image || '../assets/images/logo.avif';
+                return `
+                <div class="order-detail-item">
+                    <img src="${image}" alt="${item.name || item.title || 'Order item'}" loading="lazy" decoding="async">
+                    <div class="order-detail-item-main">
+                        <strong>${quantity}x ${item.name || item.title || 'Item'}</strong>
+                        ${item.variant ? `<span>${item.variant}</span>` : ''}
+                        <span>${state.restaurant.currency} ${unitPrice.toLocaleString()} each</span>
+                    </div>
+                    <strong>${state.restaurant.currency} ${(unitPrice * quantity).toLocaleString()}</strong>
+                </div>`;
+            }).join('')}
         </div>
         
         <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 700; border-top: 1px solid var(--clr-border); padding-top: 1rem;">
@@ -342,28 +352,14 @@ window.openOrderDrawer = function(orderId) {
     let mainActions = [];
     let cancelAction = '';
 
-    if (document.body.classList.contains('simple-mode')) {
-        if (order.status === 'New') {
-            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); window.closeOrderDrawer();">Accept</button>`);
-        } else if (order.status === 'Accepted') {
-            mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Start Preparing</button>`);
-        } else if (order.status === 'Preparing') {
-            if (order.type === 'Pickup' || order.type === 'Takeaway') {
-                mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Ready</button>`);
-            } else {
-                mainActions.push(`<button class="btn btn-info" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}');">Dispatch</button>`);
-            }
-        } else if (order.status === 'Dispatched') {
-            mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Out for Delivery'); window.closeOrderDrawer();">Rider Picked Up</button>`);
-        } else if (order.status === 'Out for Delivery' || order.status === 'Ready') {
-            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Completed' : 'Delivered'}'); window.closeOrderDrawer();">${(order.type === 'Pickup' || order.type === 'Takeaway') ? 'Complete Order' : 'Mark Delivered'}</button>`);
-        }
-    } else {
-        // Advanced actions
-        if (order.status === 'New') {
+    if (order.status === 'New') {
             mainActions.push(`<button class="btn btn-primary" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Accepted'); window.closeOrderDrawer(); showNotification('Order Accepted','Order #${order.id} has been accepted','success')">Accept</button>`);
         } else if (order.status === 'Accepted') {
             mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Sent for Preparing'); window.closeOrderDrawer(); showNotification('Sent to Kitchen','Order #${order.id} is sent for preparing','success')">Send for Preparing</button>`);
+        } else if (order.status === 'Sent for Preparing') {
+            mainActions.push(`<button class="btn btn-warning" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Preparing'); window.closeOrderDrawer();">Start Preparing</button>`);
+        } else if (order.status === 'Preparing') {
+            mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}','Ready'); window.closeOrderDrawer();">Mark Ready</button>`);
         } else if (order.status === 'Ready') {
             if (order.type === 'Delivery') {
                  mainActions.push(`<button class="btn btn-info" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.closeOrderDrawer(); openDispatchModal('${order.id}')">Dispatch</button>`);
@@ -375,7 +371,6 @@ window.openOrderDrawer = function(orderId) {
         } else if (order.status === 'Out for Delivery') {
             mainActions.push(`<button class="btn btn-success" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="window.Store.updateOrderStatus('${order.id}', 'Delivered'); window.closeOrderDrawer();">Mark Delivered</button>`);
         }
-    }
 
     // Utility actions for BOTH modes
     utilityActions.push(`<button class="btn btn-outline" style="padding: 0.35rem 0.6rem; font-size: 0.85rem;" onclick="showToast('Printing bill...','info')">🖨 Print Bill</button>`);

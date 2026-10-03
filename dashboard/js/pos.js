@@ -33,8 +33,8 @@ function renderPOSCategories(state) {
     if (!container) return;
     
     container.innerHTML = state.categories.map(c => `
-        <button class="pos-category-btn ${activeCategoryId === c.id ? 'active' : ''}" onclick="setPOSCategory('${c.id}')">
-            ${c.name}
+        <button class="pos-category-btn ${activeCategoryId === c.id ? 'active' : ''}" onclick="setPOSCategory('${c.id}')" title="${c.name}" aria-label="${c.name}">
+            <span>${c.name}</span>
         </button>
     `).join('');
 }
@@ -54,12 +54,14 @@ function renderPOSProducts(state) {
         setTimeout(() => renderPOSCategories(state), 0);
     }
     
-    const activeCategory = state.categories.find(c => c.id === activeCategoryId);
     const products = state.products.filter(p => p.categoryId === activeCategoryId);
-    const showDesc = activeCategory && activeCategory.name === 'Combos';
     
-    container.innerHTML = products.map(p => `
-        <div class="pos-product-card${showDesc ? '' : ' compact'}" onclick="addToPOSCartOptions('${p.id}')">
+    container.innerHTML = products.map(p => {
+        const category = state.categories.find(c => c.id === p.categoryId);
+        // Older demo products pre-date productType, so infer it once for display compatibility.
+        const isDeal = p.productType === 'deal' || (!p.productType && category && /^(combo|combos|deal|deals)$/i.test(category.name.trim()));
+        return `
+        <div class="pos-product-card ${isDeal ? 'pos-product-card--deal' : 'pos-product-card--single compact'}" data-product-type="${isDeal ? 'deal' : 'single'}" role="button" tabindex="0" onclick="addToPOSCartOptions('${p.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();addToPOSCartOptions('${p.id}');}">
             <span class="pos-status badge ${p.status === 'Available' ? 'badge-success' : 'badge-warning'}">${p.status}</span>
             <div class="pos-img-wrap">
                 <img src="${p.image || ''}" alt="${p.name}" loading="lazy" decoding="async">
@@ -67,15 +69,13 @@ function renderPOSProducts(state) {
             <div class="pos-content">
                 <div class="pos-content-top">
                     <h3 class="pos-name">${p.name}</h3>
-                    ${showDesc ? `<p class="pos-desc">${p.desc || 'A delicious choice.'}</p>` : ''}
+                    ${isDeal ? `<p class="pos-desc">${p.desc || 'A delicious choice.'}</p>` : ''}
                 </div>
-                <div class="pos-footer">
-                    <span class="pos-price">${state.restaurant.currency} ${p.price}</span>
-                    <button class="pos-add-btn">+ Add</button>
-                </div>
+                <div class="pos-footer"><span class="pos-price">${state.restaurant.currency} ${p.price}</span></div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 window.addToPOSCartOptions = function(productId) {
@@ -196,6 +196,8 @@ window.addToPOSCart = function(productId, variant = '') {
             name: product.name,
             variant: variant,
             price: product.price + extraPrice,
+            unitPrice: product.price + extraPrice,
+            image: product.image || '',
             qty: 1
         });
     }

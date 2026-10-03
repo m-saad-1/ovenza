@@ -8,14 +8,12 @@
     window.Store.subscribe((state) => {
         updateKPIs(state);
         renderRecentOrders(state);
-        if (typeof renderSimpleRecentOrders === 'function') renderSimpleRecentOrders(state);
         if (typeof updateChannelChartData === 'function') updateChannelChartData(state);
     });
 
     // Initial render
     updateKPIs(window.Store.state);
     renderRecentOrders(window.Store.state);
-    if (typeof renderSimpleRecentOrders === 'function') renderSimpleRecentOrders(window.Store.state);
     setTimeout(() => { if (typeof updateChannelChartData === 'function') updateChannelChartData(window.Store.state); }, 100);
 
     // Note: elapsed time badges are updated by orders.js setInterval + app.js Store.notify() every 60s.
@@ -53,18 +51,6 @@ function updateKPIs(state) {
     document.getElementById('kpi-active-deliveries').textContent = activeDeliveries;
     document.getElementById('kpi-new-customers').textContent = newCustomers;
 
-    // Simple Dashboard KPIs
-    const elSimpleNew = document.getElementById('simple-kpi-new');
-    if (elSimpleNew) elSimpleNew.textContent = targetOrders.filter(o => o.status === 'New').length;
-    
-    const elSimplePreparing = document.getElementById('simple-kpi-preparing');
-    if (elSimplePreparing) elSimplePreparing.textContent = targetOrders.filter(o => o.status === 'Preparing').length;
-    
-    const elSimpleOut = document.getElementById('simple-kpi-out');
-    if (elSimpleOut) elSimpleOut.textContent = activeDeliveries;
-    
-    const elSimpleSales = document.getElementById('simple-kpi-sales');
-    if (elSimpleSales) elSimpleSales.textContent = state.restaurant.currency + " " + revenue.toLocaleString();
 }
 
 function renderSimpleRecentOrders(state) {
@@ -299,34 +285,34 @@ window.updateSalesChart = function(duration) {
 // Dark Mode Toggle Logic
 document.addEventListener('DOMContentLoaded', () => {
     const darkModeToggles = document.querySelectorAll('.dark-mode-toggle');
-    const isDarkMode = document.documentElement.classList.contains('dark-mode');
-    
-    darkModeToggles.forEach(toggle => {
-        toggle.checked = isDarkMode;
-        
-        toggle.addEventListener('change', (e) => {
-            const shouldBeDark = e.target.checked;
-            if (shouldBeDark) {
-                document.documentElement.classList.add('dark-mode');
-                localStorage.setItem('crust_theme', 'dark');
-            } else {
-                document.documentElement.classList.remove('dark-mode');
-                localStorage.setItem('crust_theme', 'light');
-            }
-            // Sync all toggles
-            darkModeToggles.forEach(t => { t.checked = shouldBeDark; });
-        });
+    const syncControls = (isDark) => darkModeToggles.forEach(toggle => {
+        toggle.checked = isDark;
+        toggle.setAttribute('aria-checked', String(isDark));
     });
+    const applyTheme = (theme, persist = true) => {
+        const isDark = theme !== 'light';
+        document.documentElement.classList.toggle('dark-mode', isDark);
+        syncControls(isDark);
+        if (persist) localStorage.setItem('crust_theme', isDark ? 'dark' : 'light');
+        if (window.Chart) {
+            Chart.defaults.color = isDark ? '#d1d5db' : '#5a6268';
+            Chart.defaults.borderColor = isDark ? '#333333' : '#e5e9eb';
+            Object.values(Chart.instances || {}).forEach(chart => chart.update('none'));
+        }
+        window.dispatchEvent(new CustomEvent('crust-theme-change', { detail: { theme: isDark ? 'dark' : 'light' } }));
+    };
 
-    // Apply theme on load if it was set
-    const savedTheme = localStorage.getItem('crust_theme');
-    if (savedTheme === 'light') {
-        document.documentElement.classList.remove('dark-mode');
-        darkModeToggles.forEach(t => t.checked = false);
-    } else if (savedTheme === 'dark') {
-        document.documentElement.classList.add('dark-mode');
-        darkModeToggles.forEach(t => t.checked = true);
-    }
+    window.applyDashboardTheme = applyTheme;
+    localStorage.removeItem('crust_dashboard_mode');
+    applyTheme(localStorage.getItem('crust_theme') || 'dark', false);
+
+    darkModeToggles.forEach(toggle => toggle.addEventListener('change', event => {
+        applyTheme(event.target.checked ? 'dark' : 'light');
+    }));
+
+    window.addEventListener('storage', event => {
+        if (event.key === 'crust_theme') applyTheme(event.newValue || 'dark', false);
+    });
 });
 
 
