@@ -24,20 +24,8 @@
 
   
 
-  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=33" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=33">
-  <style>
-    #hero-carousel-container,
-    #hero-carousel-track { min-width: 0; }
-    #hero-carousel-track .hero-full-img {
-      width: 33.3333% !important; height: 100% !important;
-      max-width: none !important; object-fit: cover !important;
-      flex: 0 0 33.3333% !important;
-    }
-    @media (max-width: 768px) {
-      #hero-carousel-container { aspect-ratio: 4 / 3 !important; }
-    }
-  </style>
+  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=34" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=34">
   <link as="image" fetchpriority="high" href="./assets/images/hero-main.avif" imagesizes="100vw" rel="preload" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
@@ -51,7 +39,28 @@
   </style>
   <!-- Homepage Top Picks: cards styled exactly like search result cards on mobile -->
   <style>
+    #top-picks-section .save-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: var(--clr-danger, #d9534f);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
     @media (max-width: 768px) {
+
+      #top-picks-section .save-badge {
+        top: 6px;
+        left: 6px;
+        padding: 3px 6px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+      }
 
       /* Grid: same as search overlay grid */
       #top-picks-section .menu-grid {
@@ -299,18 +308,18 @@
     <!-- Hero Section -->
     <section class="hero refined-hero" id="home">
       <div class="hero-image-frame" id="hero-carousel-container"
-        style="position: relative; overflow: hidden; width: 100%; aspect-ratio: 16 / 7; touch-action: pan-y;">
+        style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y;">
         <div class="hero-carousel-track" id="hero-carousel-track"
-          style="display: flex; height: 100%; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
+          style="display: flex; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
           <img id="hero-primary-img" alt="imbiss Hero" class="hero-full-img is-loaded" decoding="async" fetchpriority="high"
             loading="eager" height="700" src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; height: 100%; object-fit: cover; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
           <img alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
             src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; height: 100%; object-fit: cover; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
           <img alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
             src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; height: 100%; object-fit: cover; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
+            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
         </div>
         <div class="carousel-indicators" id="hero-indicators"
           style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
@@ -372,6 +381,46 @@
             &rsaquo;</a>
         </div>
         <div class="menu-grid">
+          <!-- Deal 1 -->
+          <div class="product-card" data-category="Deals">
+            <div class="save-badge">Save 20%</div>
+            <div class="card-image"><img alt="Crispy Deal" decoding="async" loading="lazy" height="228"
+                src="./assets/images/Deals/crispy-combo.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Crispy Deal</h3>
+              </div>
+              <p class="card-desc">2x Crispy Chicken Burgers, 2x Fried Chicken Pieces, 1x Large Fries, 2x Drinks</p>
+              <div class="card-footer">
+                <div style="display:flex; flex-direction:column;">
+                  <span class="original-price" style="text-decoration:line-through; font-size:0.8rem; color:var(--clr-text-secondary);">Rs 1500</span>
+                  <span class="price">Rs 1200</span>
+                </div>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
+          <!-- Deal 2 -->
+          <div class="product-card" data-category="Deals">
+            <div class="save-badge">Save 20%</div>
+            <div class="card-image"><img alt="Family Feast Deal" decoding="async" loading="lazy" height="228"
+                src="./assets/images/Deals/family-feast-combo.avif" width="228" /></div>
+            <div class="card-content">
+              <div class="card-header">
+                <h3>Family Feast Deal</h3>
+              </div>
+              <p class="card-desc">4x Burgers of Choice, 8x Hot Wings, 1x Family Fries, 1x 1.5L Drink</p>
+              <div class="card-footer">
+                <div style="display:flex; flex-direction:column;">
+                  <span class="original-price" style="text-decoration:line-through; font-size:0.8rem; color:var(--clr-text-secondary);">Rs 3000</span>
+                  <span class="price">Rs 2400</span>
+                </div>
+                <button class="btn btn-primary"
+                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
+              </div>
+            </div>
+          </div>
           <!-- Combo 1 -->
           <div class="product-card" data-category="Combos">
             <div class="card-image"><img alt="Combo 1" decoding="async" loading="lazy" height="228"
@@ -437,22 +486,6 @@
               </div>
             </div>
           </div>
-          <!-- Burger 3 -->
-          <div class="product-card" data-category="Burgers">
-            <div class="card-image"><img alt="BBQ Burger" decoding="async" loading="lazy" height="228"
-                src="./assets/images/burger-5.avif" width="228" /></div>
-            <div class="card-content">
-              <div class="card-header">
-                <h3>BBQ Burger</h3>
-              </div>
-              <p class="card-desc">Smoky BBQ sauce with caramelized onions.</p>
-              <div class="card-footer">
-                <span class="price">Rs 800</span>
-                <button class="btn btn-primary"
-                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
-              </div>
-            </div>
-          </div>
           <!-- Pizza 1 -->
           <div class="product-card" data-category="Pizzas">
             <div class="card-image"><img alt="Chicken Pizza" decoding="async" loading="lazy" height="228"
@@ -480,22 +513,6 @@
               <p class="card-desc">Signature crown imbiss loaded with cheese.</p>
               <div class="card-footer">
                 <span class="price">Rs 1600</span>
-                <button class="btn btn-primary"
-                  style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
-              </div>
-            </div>
-          </div>
-          <!-- Pizza 3 -->
-          <div class="product-card" data-category="Pizzas">
-            <div class="card-image"><img alt="Special Pizza" decoding="async" loading="lazy" height="228"
-                src="./assets/images/special-pizza.avif" width="228" /></div>
-            <div class="card-content">
-              <div class="card-header">
-                <h3>Special Pizza</h3>
-              </div>
-              <p class="card-desc">Loaded with pepperoni, chicken, and extra cheese.</p>
-              <div class="card-footer">
-                <span class="price">Rs 1500</span>
                 <button class="btn btn-primary"
                   style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button>
               </div>
@@ -547,7 +564,7 @@
           <div class="install-app-img" style="flex: 1; display: flex; justify-content: flex-end;">
             <img loading="lazy" decoding="async" src="./assets/images/app-install.avif" alt="imbiss App"
               style="max-height: 250px; width: auto; object-fit: contain; border-radius: 12px; display: block;"
-              onerror="this.src='./assets/images/offer.avif'" width="532" height="250">
+              onerror="this.src='./assets/images/offer-1.avif'" width="532" height="250">
           </div>
         </div>
       </div>
@@ -920,7 +937,7 @@
       <div class="modal-drag-handle"></div>
       <div class="modal-img-wrap" style="height: auto; max-height: 250px;">
         <img alt="Offer Image" decoding="sync" height="228" id="offer-modal-img" fetchpriority="high"
-          src="./assets/images/offer.avif" style="width: 100%; object-fit: cover;" width="228" />
+          src="./assets/images/offer-1.avif" style="width: 100%; object-fit: cover;" width="228" />
       </div>
       <div class="modal-body" style="padding: 1.5rem;">
         <span class="modal-category-tag"
