@@ -24,12 +24,19 @@
 
   
 
-  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=27" fetchpriority="high">
-  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=27">
-  <link as="image" fetchpriority="high" href="./assets/images/hero.avif" imagesrcset="./assets/images/hero-mobile.avif 800w, ./assets/images/hero.avif 1796w" imagesizes="(max-width: 768px) 100vw, 100vw" rel="preload" />
+  <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=33" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=33">
+  <link as="image" fetchpriority="high" href="./assets/images/hero-main.avif" imagesizes="100vw" rel="preload" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
-  <script defer="" src="./assets/js/loader.min.js?v=27"></script>
+  <script defer="" fetchpriority="low" src="./assets/js/loader.min.js?v=31"></script>
+  <style>
+    /* Keep below-the-fold layout work out of the first render. */
+    #top-picks-section, #install-app-section, .reviews-section, .contact-section {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 760px;
+    }
+  </style>
   <!-- Homepage Top Picks: cards styled exactly like search result cards on mobile -->
   <style>
     @media (max-width: 768px) {
@@ -280,27 +287,24 @@
     <!-- Hero Section -->
     <section class="hero refined-hero" id="home">
       <div class="hero-image-frame" id="hero-carousel-container"
-        style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y;">
+        style="position: relative; overflow: hidden; width: 100%; aspect-ratio: 16 / 7; touch-action: pan-y;">
         <div class="hero-carousel-track" id="hero-carousel-track"
           style="display: flex; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
-          <img id="hero-primary-img" alt="imbiss Hero 1" class="hero-full-img is-loaded" decoding="sync" fetchpriority="high"
-            loading="eager" height="400" src="./assets/images/hero.avif" srcset="./assets/images/hero-mobile.avif 800w, ./assets/images/hero.avif 1796w" sizes="(max-width: 768px) 100vw, 100vw"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800" />
-          <img alt="imbiss Hero 2" class="hero-full-img" decoding="async" loading="lazy" height="400"
-            src="./assets/images/offer-1.avif"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800" />
-          <img alt="imbiss Hero 3" class="hero-full-img" decoding="async" loading="lazy" height="400"
-            src="./assets/images/offer-2.avif"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="800" />
+          <img id="hero-primary-img" alt="imbiss Hero" class="hero-full-img is-loaded" decoding="async" fetchpriority="high"
+            loading="eager" height="700" src="./assets/images/hero-main.avif"
+            style="width: 33.3333%; height: 100%; object-fit: cover; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
+          <img alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
+            src="./assets/images/hero-main.avif"
+            style="width: 33.3333%; height: 100%; object-fit: cover; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
+          <img alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
+            src="./assets/images/hero-main.avif"
+            style="width: 33.3333%; height: 100%; object-fit: cover; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
         </div>
         <div class="carousel-indicators" id="hero-indicators"
           style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
-          <span class="indicator active" data-slide="0"
-            style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 1;"></span>
-          <span class="indicator" data-slide="1"
-            style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
-          <span class="indicator" data-slide="2"
-            style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
+          <span class="indicator active" data-slide="0" style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 1;"></span>
+          <span class="indicator" data-slide="1" style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
+          <span class="indicator" data-slide="2" style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
         </div>
         <!-- hero order button removed -->
       </div>
@@ -531,7 +535,7 @@
           <div class="install-app-img" style="flex: 1; display: flex; justify-content: flex-end;">
             <img loading="lazy" decoding="async" src="./assets/images/app-install.avif" alt="imbiss App"
               style="max-height: 250px; width: auto; object-fit: contain; border-radius: 12px; display: block;"
-              onerror="this.src='./assets/images/offer-1.avif'" width="532" height="250">
+              onerror="this.src='./assets/images/offer.avif'" width="532" height="250">
           </div>
         </div>
       </div>
@@ -904,7 +908,7 @@
       <div class="modal-drag-handle"></div>
       <div class="modal-img-wrap" style="height: auto; max-height: 250px;">
         <img alt="Offer Image" decoding="sync" height="228" id="offer-modal-img" fetchpriority="high"
-          src="./assets/images/offer-1.avif" style="width: 100%; object-fit: cover;" width="228" />
+          src="./assets/images/offer.avif" style="width: 100%; object-fit: cover;" width="228" />
       </div>
       <div class="modal-body" style="padding: 1.5rem;">
         <span class="modal-category-tag"
@@ -941,9 +945,9 @@
       </div>
     </div>
   </div>
-  <script defer src="./assets/js/menu-data.js"></script>
-  <script defer src="./assets/js/search.js?v=2"></script>
-  <script defer="" src="./assets/js/script.bundle.min.js?v=27"></script>
+  <script defer fetchpriority="low" src="./assets/js/menu-data.js"></script>
+  <script defer fetchpriority="low" src="./assets/js/search.js?v=3"></script>
+  <script defer="" fetchpriority="low" src="./assets/js/script.bundle.min.js?v=29"></script>
 </body>
 
 </html>
