@@ -377,9 +377,11 @@
     }
 
     const label = overlay.querySelector('#search-results-label');
-    label.textContent = matches.length > 0
-      ? `${matches.length} result${matches.length !== 1 ? 's' : ''} for "${query}"`
-      : `No results for "${query}"`;
+    if (label) {
+      label.textContent = matches.length > 0
+        ? `${matches.length} result${matches.length !== 1 ? 's' : ''} for "${query}"`
+        : `No results for "${query}"`;
+    }
 
     openSearch();
   }

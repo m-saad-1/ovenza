@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build:assets": "node scripts/minify-assets.js"
+    "build:assets": "node scripts/minify-assets.js",
+    "build:images": "node scripts/responsive-images.js"
   },
   "dependencies": {
     "clean-css": "^5.3.3",

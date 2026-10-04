@@ -53,6 +53,7 @@ function initCategorySticky() {
     function (e) {
       if (e.target.tagName === "IMG") {
         e.target.classList.add("is-loaded");
+        e.target.closest(".hero-image-frame, .gallery-item")?.classList.add("loaded");
       }
     },
     true,
@@ -62,13 +63,17 @@ function initCategorySticky() {
     function (e) {
       if (e.target.tagName === "IMG") {
         e.target.classList.add("is-loaded");
+        e.target.closest(".hero-image-frame, .gallery-item")?.classList.add("loaded");
       }
     },
     true,
   );
   document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("img").forEach(function (img) {
-      if (img.complete) img.classList.add("is-loaded");
+      if (img.complete) {
+        img.classList.add("is-loaded");
+        img.closest(".hero-image-frame, .gallery-item")?.classList.add("loaded");
+      }
     });
   });
 })();
@@ -283,7 +288,7 @@ function initCategorySticky() {
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="${v("index.html")}" class="logo footer-logo-link">
-          <img fetchpriority="high" decoding="sync" src="${n}" alt="Logo" class="footer-logo-img" width="120" height="40">
+          <img loading="lazy" decoding="async" src="${n}" alt="Logo" class="footer-logo-img" width="120" height="40">
         </a>
         <p>${e.brand.tagline}. The perfect place to eat well and gather friends.</p>
         <div class="social-links" style="display: flex; gap: 1rem; flex-direction: row; margin-top: 1.5rem; justify-content: flex-start; flex-wrap: wrap;">
@@ -338,10 +343,10 @@ function initCategorySticky() {
         <h2 style="margin-top: 1.5rem; margin-bottom: 1rem;">Download App</h2>
         <div style="display: flex; flex-direction: row; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
             <a href="#" onclick="alert('App not available yet.'); return false;" aria-label="Download on App Store" style="display: inline-block;">
-                <img src="${v("assets/images/appstore-btn.avif")}" alt="App Store" style="height: 40px; border-radius: 6px; cursor: pointer; border: none; outline: none; background: transparent;" width="120" height="40">
+                <img loading="lazy" decoding="async" src="${v("assets/images/appstore-btn.avif")}" alt="App Store" style="height: 40px; border-radius: 6px; cursor: pointer; border: none; outline: none; background: transparent;" width="120" height="40">
             </a>
             <a href="#" onclick="alert('App not available yet.'); return false;" aria-label="Get it on Google Play" style="display: inline-block;">
-                <img src="${v("assets/images/playstore-btn.avif")}" alt="Google Play" style="height: 40px; border-radius: 6px; cursor: pointer; border: none; outline: none; background: transparent;" width="120" height="40">
+                <img loading="lazy" decoding="async" src="${v("assets/images/playstore-btn.avif")}" alt="Google Play" style="height: 40px; border-radius: 6px; cursor: pointer; border: none; outline: none; background: transparent;" width="120" height="40">
             </a>
         </div>
         <div class="mobile-mhstudio" style="margin-top: 2.5rem; text-align: center;">
@@ -1492,6 +1497,12 @@ ${s}`,
       h = !1;
     const b = c[0].cloneNode(!0),
       C = c[t - 1].cloneNode(!0);
+    // Loop copies must not duplicate the LCP element's ID or request priority.
+    [b, C].forEach((slide) => {
+      slide.removeAttribute("id");
+      slide.setAttribute("aria-hidden", "true");
+      slide.setAttribute("fetchpriority", "low");
+    });
     (b.classList.add("clone"),
       C.classList.add("clone"),
       i.appendChild(b),
@@ -1694,7 +1705,25 @@ ${s}`,
       }
     };
 
-    new MutationObserver(syncModalScrollLock).observe(document.body, {
+    const modalContainerSelector = [
+      ".modal-overlay", ".cc-modal-overlay", ".profile-modal",
+      "#search-results-overlay", "#reorder-confirm-modal", "#order-confirm-modal",
+      "#bookingModal", "#contactModal", "#address-modal",
+    ].join(",");
+    // Carousel transforms and image-load classes do not change modal state.
+    // Only rescan the dialogs when their containers are changed/inserted/removed.
+    new MutationObserver((records) => {
+      const affectsModals = records.some((record) => {
+        if (record.type === "attributes") {
+          return record.target.matches(modalContainerSelector);
+        }
+        return [...record.addedNodes, ...record.removedNodes].some((node) =>
+          node.nodeType === 1 &&
+          (node.matches(modalContainerSelector) || node.querySelector(modalContainerSelector))
+        );
+      });
+      if (affectsModals) syncModalScrollLock();
+    }).observe(document.body, {
       attributes: true,
       attributeFilter: ["class", "style"],
       childList: true,

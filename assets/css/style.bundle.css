@@ -7477,12 +7477,20 @@ html.dark-mode .timeline-track { background: #34393b !important; }
   }
 }
 .social-proof-toast,
-.modal-overlay,
-.modal-sheet,
 .nav-center,
-.floating-cart-bar,
-.page-loader {
+.floating-cart-bar {
   will-change: transform, opacity;
+}
+/* Keep the many closed dialogs out of initial layout/paint work. Discrete
+   visibility transitions retain their contents until the closing fade ends. */
+.modal-overlay {
+  content-visibility: hidden;
+  transition-property: opacity, visibility, content-visibility;
+  transition-behavior: allow-discrete;
+}
+.modal-overlay.active,
+.modal-overlay.show {
+  content-visibility: visible;
 }
 .btn-primary,
 .btn-primary:hover {
@@ -7610,7 +7618,8 @@ html.dark-mode .timeline-track { background: #34393b !important; }
 }
 img:not(.is-loaded) {
   background: #e5e7eb !important;
-  animation: imgSkeletonPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+  /* Offscreen lazy images need a placeholder, not continuous animation work. */
+  animation: none !important;
   color: transparent !important; /* Hides alt text while loading */
 }
 html.dark-mode img:not(.is-loaded) {
