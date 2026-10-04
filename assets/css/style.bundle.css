@@ -3640,6 +3640,7 @@ textarea:focus {
 .hero-image-frame {
   position: relative;
   width: 100%;
+  min-width: 0;
   border-radius: var(--border-radius-lg);
   overflow: hidden;
   box-shadow: none;
@@ -3655,9 +3656,12 @@ textarea:focus {
 }
 #hero-carousel-track .hero-full-img {
   aspect-ratio: 16 / 7;
+  width: 33.333333%;
+  min-width: 0;
+  max-width: none;
   height: 100%;
-  object-fit: fill;
-  width: 100%;
+  object-fit: cover;
+  flex: 0 0 33.333333%;
   background: var(--clr-primary);
 }
 #hero-carousel-container {
@@ -3666,13 +3670,20 @@ textarea:focus {
 }
 #hero-carousel-track {
   height: 100%;
+  min-width: 0;
 }
 #menu-carousel-track .hero-full-img {
   aspect-ratio: 1600 / 609;
+  width: 33.333333%;
+  min-width: 0;
+  max-width: none;
   height: 100%;
-  object-fit: fill;
-  width: 100%;
+  object-fit: cover;
+  flex: 0 0 33.333333%;
   background: var(--clr-primary);
+}
+#menu-carousel-track {
+  min-width: 0;
 }
 #menu-carousel-container {
   aspect-ratio: 1600 / 609;
@@ -3698,6 +3709,10 @@ textarea:focus {
 @media (max-width: 768px) {
   .refined-hero {
     padding: 0.5rem;
+  }
+  #hero-carousel-container,
+  #menu-carousel-container {
+    aspect-ratio: 4 / 3 !important;
   }
   .hero-image-frame .hero-order-btn {
     display: none;

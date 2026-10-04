@@ -26,6 +26,18 @@
 
   <link rel="preload" as="style" href="./assets/css/style.bundle.min.css?v=33" fetchpriority="high">
   <link rel="stylesheet" href="./assets/css/style.bundle.min.css?v=33">
+  <style>
+    #hero-carousel-container,
+    #hero-carousel-track { min-width: 0; }
+    #hero-carousel-track .hero-full-img {
+      width: 33.3333% !important; height: 100% !important;
+      max-width: none !important; object-fit: cover !important;
+      flex: 0 0 33.3333% !important;
+    }
+    @media (max-width: 768px) {
+      #hero-carousel-container { aspect-ratio: 4 / 3 !important; }
+    }
+  </style>
   <link as="image" fetchpriority="high" href="./assets/images/hero-main.avif" imagesizes="100vw" rel="preload" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
@@ -292,13 +304,13 @@
           style="display: flex; height: 100%; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
           <img id="hero-primary-img" alt="imbiss Hero" class="hero-full-img is-loaded" decoding="async" fetchpriority="high"
             loading="eager" height="700" src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; height: 100%; object-fit: fill; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
+            style="width: 33.3333%; height: 100%; object-fit: cover; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
           <img alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
             src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; height: 100%; object-fit: fill; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
+            style="width: 33.3333%; height: 100%; object-fit: cover; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
           <img alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
             src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; height: 100%; object-fit: fill; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
+            style="width: 33.3333%; height: 100%; object-fit: cover; flex: 0 0 33.3333%; max-width: none; pointer-events: none; user-select: none;" width="1600" />
         </div>
         <div class="carousel-indicators" id="hero-indicators"
           style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
