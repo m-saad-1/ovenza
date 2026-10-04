@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   imbiss - Centralized Site Configuration
+   Demo - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,20 +7,20 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'imbiss',
+    name: 'Demo',
     tagline: 'Premium Burgers & Fast Food',
-    instagram: 'https://www.instagram.com/imbiss/',
-    phone: '+92 3232000888',
-    phonePretty: '+92 3232000888',
-    whatsapp: 'https://wa.me/923001013556',
-    email: 'info@imbiss.com',
-    copyright: '© 2026 imbiss. All rights reserved.',
+    instagram: 'https://www.instagram.com/Demo/',
+    phone: '+92 30000000000',
+    phonePretty: '+92 30000000000',
+    whatsapp: 'https://wa.me/9230000000000',
+    email: 'info@Demo.com',
+    copyright: '© 2026 Demo. All rights reserved.',
   },
 
 
   /* ── Images (all relative to project root) ──────────────── */
   images: {
-    logo:   'assets/images/logo.avif',
+    logo:   'assets/images/logo.svg',
     hero:   'assets/images/hero-main.avif',
     offer:  'assets/images/combo-2.avif',
 

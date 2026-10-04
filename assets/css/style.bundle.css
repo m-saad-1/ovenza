@@ -6,8 +6,8 @@ html {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
   --clr-surface-dark: #1e1e1e;
-  --clr-primary: #719397;
-  --clr-primary-dark: #719397;
+  --clr-primary: #F2634C;
+  --clr-primary-dark: #F2634C;
   --clr-text-primary: #1e1e1e;
   --clr-text-secondary: #545454;
   --clr-text-on-dark: #fdfbf7;
@@ -7316,7 +7316,7 @@ html.dark-mode .social-proof-toast {
 .order-progress-panel {
   padding: 1.25rem;
   margin-top: 1rem;
-  border: 1px solid rgba(113, 147, 151, 0.18);
+  border: 1px solid rgba(242, 99, 76, 0.18);
   border-radius: 12px;
   background: #f2f4f4;
 }
@@ -7667,7 +7667,7 @@ html.dark-mode .about-section-subtitle {
 
 /* Accessibility contrast overrides */
 :root {
-  --clr-primary: #719397; /* Reverted to match exact brand color */
+  --clr-primary: #F2634C; /* Reverted to match exact brand color */
 }
 .card-desc {
   color: #595959 !important; /* Darkened from #777 */

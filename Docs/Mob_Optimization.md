@@ -1,4 +1,4 @@
-﻿# Performance & Accessibility Fix Plan — imbiss.vercel.app
+﻿# Performance & Accessibility Fix Plan — Demo.vercel.app
 
 **Source audit:** PageSpeed Insights / Lighthouse 13.4.1, Moto G Power emulation, Slow 4G throttling, captured Sep 4, 2026
 **Current scores:** Performance 64 · Accessibility 88 · Best Practices 92 · SEO 100 · Agentic Browsing 0/2
@@ -48,7 +48,7 @@ Nearly every image on the page is shipped far larger than its rendered size — 
 | `./assets/images/burger-5.avif` | 300×300 | 182×182 | 9.6 KiB |
 | `./assets/images/burger-3.avif` | 300×300 | 182×182 | 7.9 KiB |
 | `./assets/images/mountain-dew.avif` | 300×300 | 66×66 | 7.6 KiB |
-| `./assets/images/logo.avif` | 200×200 | 120×120 | 5.6 KiB |
+| `./assets/images/logo.svg` | 200×200 | 120×120 | 5.6 KiB |
 
 **Highest ratio, do these first:** the category-circle icons (`cheese-fries`, `roll-1`, `burger-1`, `mountain-dew`) are shipping 300–500px images into 66×66px circles — a 5–8x oversize for a tiny thumbnail. The App Store/Google Play badges are the single worst offender (2172×724 → 120×40).
 

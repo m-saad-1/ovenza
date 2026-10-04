@@ -1,4 +1,4 @@
-// Orders Management & Drawer Logic
+﻿// Orders Management & Drawer Logic
 window._orderTypeFilter = 'All';
 
 window.filterOrdersByType = function(type, btn) {
@@ -325,7 +325,7 @@ window.openOrderDrawer = function(orderId) {
                 const product = state.products && state.products.find(productItem => productItem.id === item.id);
                 const unitPrice = Number(item.unitPrice ?? (Number(item.basePrice ?? item.price ?? product?.price ?? 0) + Number(item.addonsTotal || 0)));
                 const quantity = Number(item.qty || 1);
-                const image = item.image || product?.image || '../assets/images/logo.avif';
+                const image = item.image || product?.image || '../assets/images/logo.svg';
                 return `
                 <div class="order-detail-item">
                     <img src="${image}" alt="${item.name || item.title || 'Order item'}" loading="lazy" decoding="async">

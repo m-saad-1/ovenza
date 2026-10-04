@@ -1,10 +1,10 @@
-﻿// Centralized Demo Data State for imbiss Dashboard
+﻿// Centralized Demo Data State for Demo Dashboard
 // Simulating a realistic restaurant: "Urban Flame Kitchen"
 
 const Store = {
     state: {
         ...window.crustDemoData,
-        currentBranch: "Lahore : Opposite Jinnah Hospital",
+        currentBranch: "Demo : Demo location",
         dateRange: "Today"
     },
 
