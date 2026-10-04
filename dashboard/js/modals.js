@@ -10,6 +10,11 @@ window.openGenericModal = function(type, editId = null) {
     if (!overlay || !title || !body || !saveBtn) return;
     
     currentModalContext = { type, editId };
+    // The shared Save button is also used by POS/admin forms. Clear any
+    // specialised handler before rendering a generic form.
+    saveBtn.onclick = null;
+    saveBtn.textContent = 'Save';
+    saveBtn.style.display = 'block';
     body.innerHTML = '';
     
     let state = window.Store.state;
@@ -208,7 +213,9 @@ window.openGenericModal = function(type, editId = null) {
 };
 
 window.closeGenericModal = function() {
-    document.getElementById('generic-modal-overlay').style.display = 'none';
+    const overlay = document.getElementById('generic-modal-overlay');
+    if (overlay) overlay.style.display = 'none';
+    currentModalContext = null;
     document.body.style.overflow = '';
 };
 

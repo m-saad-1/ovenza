@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /* --- Offer Banners --- */
 let mockOffers = [
     { id: 'o1', url: '../assets/images/hero.avif', name: 'Hero Banner' },
-    { id: 'o2', url: '../assets/images/offer-1.avif', name: 'Offer 1' },
-    { id: 'o3', url: '../assets/images/offer-2.avif', name: 'Offer 2' }
+    { id: 'o2', url: '../assets/images/offer-1.avif', name: 'Special Offer 1' },
+    { id: 'o3', url: '../assets/images/offer-2.avif', name: 'Special Offer 2' }
 ];
 
 function contentRenderOffers() {

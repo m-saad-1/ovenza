@@ -3,6 +3,18 @@ let posCart = [];
 let activeCategoryId = null; // Default to first dynamically
 let currentPOSOrderType = 'Dine-in';
 
+// Orders > New Order enters the same initialized POS workflow as the sidebar
+// POS tab instead of opening an unsupported generic order form.
+window.openNewOrderPOS = function() {
+    const posTab = document.querySelector('.nav-item[data-target="view-pos"]');
+    if (posTab) {
+        posTab.click();
+        return;
+    }
+    const posView = document.getElementById('view-pos');
+    if (posView) posView.classList.add('active');
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     window.Store.subscribe((state) => {
         if(document.getElementById('view-pos').classList.contains('active')){

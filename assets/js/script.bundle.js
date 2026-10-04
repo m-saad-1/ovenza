@@ -2335,31 +2335,19 @@ document.body.addEventListener(
   }
 
   var DELIVERY_STEPS = [
-    { key: "Pending", label: "Confirmed" },
+    { key: "Pending", label: "Pending" },
     { key: "Accepted", label: "Accepted" },
     { key: "Preparing", label: "Preparing" },
     { key: "Out for Delivery", label: "Out for Delivery" },
     { key: "Delivered", label: "Delivered" },
   ];
   var PICKUP_STEPS = [
-    { key: "Pending", label: "Confirmed" },
+    { key: "Pending", label: "Pending" },
     { key: "Accepted", label: "Accepted" },
     { key: "Preparing", label: "Preparing" },
     { key: "Ready", label: "Ready for Pickup" },
     { key: "Completed", label: "Picked Up" },
   ];
-  var STATUS_RANK = {
-    Pending: 0,
-    New: 0,
-    Accepted: 1,
-    "Sent for Preparing": 1,
-    Preparing: 2,
-    "Out for Delivery": 3,
-    Dispatched: 3,
-    Ready: 3,
-    Delivered: 4,
-    Completed: 4,
-  };
 
   function isPickup(o) {
     var t = (o.type || "").toLowerCase();
@@ -2367,7 +2355,32 @@ document.body.addEventListener(
   }
   function getActiveIdx(o) {
     if (o.status === "Cancelled") return -1;
-    return STATUS_RANK[o.status] !== undefined ? STATUS_RANK[o.status] : 0;
+    var pickupRanks = {
+      Pending: 0,
+      New: 0,
+      Accepted: 1,
+      "Sent for Preparing": 1,
+      Preparing: 2,
+      Ready: 3,
+      "Ready for Pickup": 3,
+      Completed: 4,
+      Delivered: 4,
+      "Picked Up": 4,
+    };
+    var deliveryRanks = {
+      Pending: 0,
+      New: 0,
+      Accepted: 1,
+      "Sent for Preparing": 1,
+      Preparing: 2,
+      Ready: 2,
+      Dispatched: 3,
+      "Out for Delivery": 3,
+      Delivered: 4,
+      Completed: 4,
+    };
+    var ranks = isPickup(o) ? pickupRanks : deliveryRanks;
+    return ranks[o.status] !== undefined ? ranks[o.status] : 0;
   }
   function statusStyle(s) {
     var sl = (s || "").toLowerCase();
@@ -2383,6 +2396,7 @@ document.body.addEventListener(
     var steps = isPickup(order) ? PICKUP_STEPS : DELIVERY_STEPS;
     var ai = getActiveIdx(order);
     var isCancelled = order.status === "Cancelled";
+    var isComplete = !isCancelled && ai === steps.length - 1;
     var pct =
       ai < 0 || steps.length < 2
         ? 0
@@ -2393,9 +2407,9 @@ document.body.addEventListener(
     var stepsHtml = steps
       .map(function (step, i) {
         var cls =
-          !isCancelled && i < ai
+          !isCancelled && (i < ai || (isComplete && i === ai))
             ? "completed"
-            : !isCancelled && i === ai
+            : !isCancelled && !isComplete && i === ai
               ? "pulsing"
               : "";
         return (

@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (mobileToggle && sidebar) {
         mobileToggle.addEventListener('click', () => {
+            if (window.innerWidth <= 768 && !sidebar.classList.contains('open')) {
+                // Mobile always opens the full overlay sidebar. Keep the
+                // saved desktop collapsed preference for the next resize.
+                sidebar.classList.remove('collapsed');
+            }
             sidebar.classList.toggle('open');
         });
     }
@@ -79,8 +84,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    window.addEventListener('resize', () => {
+        if (!sidebar || window.innerWidth <= 768) return;
+        sidebar.classList.remove('open');
+        sidebar.classList.toggle('collapsed', localStorage.getItem('sidebar_collapsed') === 'true');
+    }, { passive: true });
+
     document.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') return;
+
+        // Feature modules use both display-based and class-based overlays.
+        // Close the topmost visible one consistently from Escape.
+        const modalClosers = [
+            ['generic-modal-overlay', () => window.closeGenericModal && window.closeGenericModal()],
+            ['kitchen-confirm-modal', () => window.closeKitchenConfirmModal && window.closeKitchenConfirmModal()],
+            ['about-panel-modal', () => window.closeAboutPanelModal && window.closeAboutPanelModal()],
+            ['order-detail-modal', () => window.closeOrderDetailModal && window.closeOrderDetailModal()],
+            ['cancel-confirm-modal', () => window.closeCancelConfirmModal && window.closeCancelConfirmModal()],
+            ['dispatch-modal', () => window.closeDispatchModal && window.closeDispatchModal()],
+            ['branch-switch-modal', () => window.closeBranchSwitchModal && window.closeBranchSwitchModal()],
+            ['desktop-pref-modal', () => {
+                const modal = document.getElementById('desktop-pref-modal');
+                if (modal) modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }]
+        ];
+        for (let i = 0; i < modalClosers.length; i += 1) {
+            const [id, close] = modalClosers[i];
+            const modal = document.getElementById(id);
+            if (!modal) continue;
+            const visible = modal.classList.contains('open') || getComputedStyle(modal).display !== 'none';
+            if (visible) {
+                close();
+                event.preventDefault();
+                return;
+            }
+        }
         if (notificationDropdown) notificationDropdown.style.display = 'none';
         if (headerSearch && headerSearchInput && !headerSearchInput.value.trim()) {
             headerSearch.classList.remove('is-expanded');

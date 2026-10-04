@@ -3,7 +3,7 @@ function initCategorySticky() {
   let e = document.getElementById("category-sticky-wrapper");
   if (!e) return;
   let t = document.querySelector(".navbar"),
-      o = t ? 70 : 60;
+      o = t ? Math.ceil(t.getBoundingClientRect().height) : 60;
   e.style.top = o + "px";
 
   let i = document.createElement("div");
@@ -1628,12 +1628,14 @@ ${s}`,
     const r = () => {
       const s = document.querySelector(".navbar");
       if (s) {
-        const h = 70;
+        const h = Math.ceil(s.getBoundingClientRect().height);
         requestAnimationFrame(() => {
           document.documentElement.style.setProperty(
             "--header-height",
             `${h}px`,
           );
+          const placeholder = document.getElementById("navbar-placeholder");
+          if (placeholder) placeholder.style.height = `${h}px`;
         });
       }
     };

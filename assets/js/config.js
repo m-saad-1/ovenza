@@ -21,7 +21,7 @@ const BB_CONFIG = {
   /* ── Images (all relative to project root) ──────────────── */
   images: {
     logo:   'assets/images/logo.avif',
-    hero:   'assets/images/hero.avif',
+    hero:   'assets/images/hero-main.avif',
     offer:  'assets/images/combo-2.avif',
 
     /* Burgers */

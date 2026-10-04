@@ -1,52 +1,48 @@
-Implement the following fixes without changing unrelated design or functionality:
+Implement the following changes:
 
-1. Modals — Mobile & Desktop
+1. Desktop Search
 
-* Mobile: Ensure every modal is fully visible within the viewport with proper top spacing on all screen sizes.
-* Apply this to Search, Order Confirmation, and all other modals.
-* If modal content exceeds the available height, keep the modal size within the viewport and make only the modal content scrollable.
-* Desktop: For the Order Confirmation modal, hide the website header behind/within the modal view.
-* Keep the desktop modal size fixed; if content exceeds the available height, add an internal scrollbar instead of increasing the modal from the top or bottom.
-* Ensure no modal causes page overflow or gets clipped.
+* Move the search container below the main header.
+* Add proper vertical spacing between the header and search container.
+* Keep it aligned with the main page content and responsive.
 
-2. Desktop Side Spacing
+2. Hero Image
 
-* Remove the unnecessary side-wall/cutter constraints.
-* Content such as review cards, tabs, and other sections must not be cut off on the left or right.
-* Ensure proper responsive width and horizontal spacing across desktop screen sizes.
+* Reduce the hero image height while maintaining its aspect ratio.
+* Use a clean, responsive size without cropping important content.
+* Target resolution: **1600 × 700 px** for the main hero image.
+* Remove the separate offer images from the hero section.
+* Keep only the main hero image.
+* Display the same hero image as 3 seamless copies in an infinite horizontal carousel/marquee.
+* The transition must be continuous with no visible jump or reset.
+* Give the hero image/background a color that matches the website’s main theme.
 
-3. Mobile Reviews & WhatsApp
+3. Menu Page Offer Image
 
-* On the mobile Home page, display all customer reviews as text and move them below the “Rate Us” section.
-* On the Reviews page, temporarily hide the “Submit Review” button.
-* Use the same WhatsApp icon/asset from the header Contact modal in the Home page Contact section.
+* Use the new offer image from the images folder.
+* Display 3 copies in an infinite seamless carousel.
+* Keep the animation smooth with no visible reset/jump.
+* Match the image/background color with the website’s main theme.
 
-4. Mobile Menu & Social Indicator
+4. Mobile Home — Reviews
 
-* On the mobile Menu page, make the category bar touch/align closely with the header.
-* Slightly soften the social indicator border line in dark mode.
+* Display reviews in a single horizontal row.
+* Make the reviews horizontally scrollable.
+* Use the same card dimensions/style as the desktop review cards.
+* Move “Rate Us” above the reviews and align it to the right of the Reviews heading.
+* Change “All Reviews” to a simple text-style link.
+* Place “All Reviews” below the Rate Us control.
 
-5. Footer Social Icons
+5. Floating About/Dashboard Controls
 
-* Match the footer social icon colors with the social icons used in the hamburger menu.
-* Add all available social icons to the footer.
+* Hide the exclamation/floating About Demo and Dashboard icons/buttons from the main screen.
+* Keep the About Demo option accessible through the hamburger menu.
+* Do not remove the underlying functionality.
 
-6. Modal Scrolling & Back Behavior
+6. Mobile Search Icon
 
-* When a modal has internal scrolling, prevent the background page from scrolling.
-* Scrolling must remain limited to the active modal.
-* Back buttons must correctly close the current modal or return to the previous modal/page state instead of navigating unexpectedly.
+* Move the search icon to the left side of the chatbot icon.
+* Match the search icon’s size, shape, positioning, and interaction behavior exactly with the chatbot floating icon.
+* Keep both icons consistently aligned and responsive.
 
-7. Dark Mode Visibility
-
-* Fix all badges, icons, and small UI elements that have poor visibility in dark mode.
-* Ensure proper background, border, and text contrast.
-* Pay particular attention to:
-
-  * Menu modal category badges
-  * About page badges
-  * About page icons
-  * Other badges/icons currently missing a visible background
-* Do not use harsh white backgrounds or borders; keep the existing dark theme aesthetic while making every element clearly visible.
-
-Verify all changes on mobile and desktop, including different viewport sizes. Do not introduce horizontal overflow, clipping, layout shifts, or regressions.
+Ensure all changes work correctly across desktop and mobile without horizontal overflow, clipping, or layout shifts.
