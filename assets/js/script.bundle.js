@@ -2464,7 +2464,7 @@ document.body.addEventListener(
         var ex = [];
         if (item.size) ex.push(item.size);
         if (item.extras && item.extras.length) ex = ex.concat(item.extras);
-        var image = item.image || "../assets/images/logo.svg";
+        var image = item.image || "../assets/images/logo.avif";
         return (
           '<div class="order-history-item">' +
           '<img src="' + image + '" alt="' + name + '" loading="lazy" decoding="async">' +
