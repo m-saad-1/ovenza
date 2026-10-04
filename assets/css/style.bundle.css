@@ -3656,7 +3656,8 @@ textarea:focus {
 #hero-carousel-track .hero-full-img {
   aspect-ratio: 16 / 7;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
+  width: 100%;
   background: var(--clr-primary);
 }
 #hero-carousel-container {
@@ -3669,7 +3670,8 @@ textarea:focus {
 #menu-carousel-track .hero-full-img {
   aspect-ratio: 1600 / 609;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
+  width: 100%;
   background: var(--clr-primary);
 }
 #menu-carousel-container {
