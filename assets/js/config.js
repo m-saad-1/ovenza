@@ -20,7 +20,7 @@ const BB_CONFIG = {
 
   /* ── Images (all relative to project root) ──────────────── */
   images: {
-    logo:   'assets/images/logo.avif',
+    logo:   'assets/images/logo.svg',
     hero:   'assets/images/hero-main.avif',
     offer:  'assets/images/combo-2.avif',
 
