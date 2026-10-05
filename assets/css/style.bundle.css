@@ -7780,6 +7780,82 @@ html.dark-mode #reorder-confirm-modal > div {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Keep the unified home menu on the same compact two-column card treatment. */
+@media (max-width: 768px) {
+  #cardapio .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+  #cardapio .menu-grid .product-card {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    grid-column: auto !important;
+    width: auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+  #cardapio .menu-grid .product-card .card-image {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+  }
+  #cardapio .menu-grid .product-card .card-content {
+    padding: 0.65rem 0.75rem 0.75rem !important;
+    justify-content: normal !important;
+  }
+}
+
+/* The root page is the menu: reuse the compact homepage card presentation. */
+#cardapio .card-desc {
+  display: -webkit-box !important;
+}
+#cardapio .card-content {
+  padding: 1rem;
+}
+#cardapio .card-header {
+  margin-bottom: 0.5rem;
+}
+@media (max-width: 768px) {
+  #cardapio .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  #cardapio .product-card {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    border-radius: 14px;
+  }
+  #cardapio .card-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+  #cardapio .card-content {
+    padding: 0.65rem 0.75rem 0.75rem;
+    gap: 0.3rem;
+  }
+  #cardapio .card-header h3 {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+  #cardapio .price {
+    font-size: 0.95rem;
+  }
+  #cardapio .card-footer {
+    margin-top: 0.25rem;
+  }
+  #cardapio .card-footer .btn {
+    padding: 0.3rem 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+  .mobile-tab-bar #mobile-search-tab {
+    color: #999 !important;
+  }
+}
+
 .modal-overlay {
   padding: max(var(--modal-viewport-gap), env(safe-area-inset-top)) var(--page-gutter)
     max(var(--modal-viewport-gap), env(safe-area-inset-bottom)) !important;
@@ -8064,6 +8140,33 @@ html.dark-mode .mobile-social-icons .tw-circle svg {
   #demo-modal.modal-overlay > .modal-sheet,
   #about-demo-modal.modal-overlay > .modal-sheet {
     max-height: calc(100dvh - (var(--modal-viewport-gap, 20px) * 2)) !important;
+  }
+}
+
+/* Final mobile precedence for the unified homepage catalogue. */
+@media (max-width: 768px) {
+  #cardapio .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+  #cardapio .menu-grid .product-card {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    grid-column: auto !important;
+    width: auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+  #cardapio .menu-grid .product-card .card-image {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+  }
+  #cardapio .menu-grid .product-card .card-content {
+    padding: 0.65rem 0.75rem 0.75rem !important;
+    justify-content: normal !important;
   }
 }
 

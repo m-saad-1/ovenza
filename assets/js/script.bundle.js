@@ -460,12 +460,13 @@
         (m &&
           m.addEventListener("click", (p) => {
             p.preventDefault();
+            if (window.openSearchModal) {
+              window.openSearchModal();
+              return;
+            }
             let c = document.querySelector(".header-desktop-search"),
               B = document.getElementById("desktop-search-input");
-            c &&
-              B &&
-              (c.classList.add("mobile-force-show"),
-              setTimeout(() => B.focus(), 50));
+            c && B && (c.classList.add("mobile-force-show"), setTimeout(() => B.focus(), 50));
           }),
           document.addEventListener("click", (p) => {
             let c = document.querySelector(".header-desktop-search");
@@ -874,6 +875,7 @@
         if (menuS) {
           T = menuS.category || T;
           d && (d.textContent = T);
+          y && !w && (y.textContent = menuS.desc || "");
         }
       }
       if (
