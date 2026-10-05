@@ -169,7 +169,7 @@ function initCategorySticky() {
   <div class="container">
     <div class="nav-left" style="display: flex; align-items: center; gap: 0.5rem; max-width: calc(100% - 130px);">
       <a href="${v("index.html")}" class="logo" style="flex-shrink: 0;">
-        <img decoding="async" src="${r}" alt="meldough Logo" class="header-logo" width="120" height="40">
+        <img decoding="async" src="${r}" alt="imbiss Logo" class="header-logo" width="120" height="40">
       </a>
       <div id="change-location-btn" style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; flex: 1; min-width: 0; max-width: 200px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -241,6 +241,10 @@ function initCategorySticky() {
           <span class="call-number">${e.brand.phonePretty}</span>
         </div>
       </a>
+
+      <button class="icon-btn search-trigger-btn mobile-hide" aria-label="Search" onclick="if(window.openSearchModal) window.openSearchModal(); else window.location.href='${v("pages/menu.html")}';" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--clr-text-primary);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
 
       <button class="theme-toggle-btn desktop-theme-toggle" aria-label="Toggle Dark Mode" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--clr-text-primary);">
         <svg class="moon-icon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -327,12 +331,12 @@ function initCategorySticky() {
           <li><span>Email:</span> ${e.brand.email}</li>
           <li><span>Location:</span> 
             <ul style="padding-left: 1rem; margin-top: 0.2rem; display: block; list-style-type: disc;">
-              <li>Royal Garden, Burewala</li>
+              <li>Lahore : Opposite Jinnah Hospital</li>
             </ul>
           </li>
           <li style="margin-top: 0.5rem;"><span>Opening Hours:</span>
             <ul style="padding-left: 1rem; margin-top: 0.2rem; display: block; list-style-type: disc;">
-              <li>Open Daily: 11:00 AM � 2:00 AM</li>
+              <li>Open Daily: 11:00 AM – 2:00 AM</li>
             </ul>
           </li>
         </ul>
@@ -364,36 +368,35 @@ function initCategorySticky() {
   function N() {
     const e = q(),
       i = `<nav class="mobile-tab-bar">${[
-          {
-            href: 'index.html',
-            label: 'Menu',
-            icon: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="12" y2="16"></line>',
-          },
-          {
-            href: 'pages/offers.html',
-            label: 'Offers',
-            icon: '<polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>',
-          },
-          {
-            href: 'pages/orders.html',
-            label: 'Orders',
-            icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>',
-          },
-          {
-            href: '#',
-            label: 'Search',
-            icon: '<circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>',
-            onclick: "event.preventDefault(); if(window.openSearchModal) window.openSearchModal(); else window.location.href='" + "${v('pages/menu.html')}" + "';"
-          },
-          {
-            href: 'pages/profile.html',
-            label: 'Profile',
-            icon: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>',
-          },
-        ].map((a) => {
+        {
+          href: "index.html",
+          label: "Home",
+          icon: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>',
+        },
+        {
+          href: "pages/menu.html",
+          label: "Menu",
+          icon: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="12" y2="16"></line>',
+        },
+        {
+          href: "pages/offers.html",
+          label: "Offers",
+          icon: '<polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>',
+        },
+        {
+          href: "pages/orders.html",
+          label: "Orders",
+          icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>',
+        },
+        {
+          href: "pages/profile.html",
+          label: "Profile",
+          icon: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>',
+        },
+      ].map((a) => {
         const c = e === a.href.split("/").pop() ? " active" : "";
-        const clickAttr = a.onclick ? ` onclick="${a.onclick}"` : "";
-          return `<a href="${a.href === "#" ? "#" : v(a.href)}" class="tab-item${c}"${a.id ? ` id="${a.id}"` : ""}${clickAttr}>``` + "\n" + `        <div style="position:relative; display:inline-block; width:24px; height:24px; margin:0 auto;">
+        return `<a href="${a.href === "#" ? "#" : v(a.href)}" class="tab-item${c}"${a.id ? ` id="${a.id}"` : ""}>
+        <div style="position:relative; display:inline-block; width:24px; height:24px; margin:0 auto;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:100%; height:100%; display:block;">${a.icon}</svg>
           ${a.label === "Offers" ? '<span class="offer-blink-dot" style="right:-4px; top:-2px;"></span>' : ""}
         </div>
@@ -538,8 +541,8 @@ ${s}`,
         "Johar Town, Lahore",
         "Clifton Block 5, Karachi",
         "Defence Phase 6, Karachi",
-        "Royal Garden, Burewala, Karachi",
-        "Royal Garden, Burewala, Karachi",
+        "Lahore : Opposite Jinnah Hospital, Karachi",
+        "8A Commercial, Pak Arab, Lahore, Karachi",
         "Saddar, Rawalpindi",
         "Bahria Town Phase 4, Rawalpindi",
         "Westridge, Rawalpindi",
@@ -549,7 +552,10 @@ ${s}`,
         "DC Colony, Gujranwala",
         "Civil Lines, Faisalabad",
       ],
-      n = ['meldough'],
+      n = [
+        "imbiss \u2013 Lahore : Opposite Jinnah Hospital",
+        "imbiss \u2013 8A Commercial, Pak Arab, Lahore",
+      ],
       r = (c, o) =>
         c
           .map(
@@ -688,7 +694,7 @@ ${s}`,
         var openMins = 11 * 60;
         var closeMins = 24 * 60;
         var isOpen = totalMins >= openMins && totalMins < closeMins;
-        statusEl.textContent = isOpen ? "Open" : "Closed";
+        statusEl.textContent = isOpen ? "● Open" : "● Closed";
         statusEl.style.color = isOpen ? "#28a745" : "#dc3545";
         statusEl.style.display = "block";
       }
@@ -1023,7 +1029,7 @@ ${s}`,
         <div class="chatbot-title">
           <span class="chatbot-avatar">\u{1F916}</span>
           <div>
-            <h4>meldough Assistant</h4>
+            <h4>imbiss Assistant</h4>
             <span class="online-status">Online now</span>
           </div>
         </div>
@@ -1032,7 +1038,7 @@ ${s}`,
     </div>
     <div class="chatbot-messages">
       <div class="chat-message bot">
-        <div class="msg-content">Hello, welcome to meldough! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
+        <div class="msg-content">Hello, welcome to imbiss! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
       </div>
     </div>
     <div class="chatbot-suggestions">
@@ -1241,7 +1247,7 @@ ${s}`,
     
     <div class="adm-body" style="padding: 1.5rem; overflow-y: auto; flex-grow: 1;">
       <p style="margin-bottom: 1rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 1.05rem;">
-        A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>meldough</strong>.
+        A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>imbiss</strong>.
       </p>
       <p style="margin-bottom: 1.5rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 0.95rem;">
         The menu, orders, and data shown are sample data only. Your actual system will be fully rebuilt around your real branding, menu, branches, and workflows.
@@ -1594,7 +1600,7 @@ ${s}`,
         "Hurry! Only 2 'Ultimate Duo Combo' deals left in stock.",
         "Someone just ordered the Tower Burger!",
         "Ali just saved Rs 600 on the Family Feast Combo!",
-        "Hot deal! 3 people are viewing the Crown meldough Pizza.",
+        "Hot deal! 3 people are viewing the Crown imbiss Pizza.",
         "Ayesha just ordered a Double Beef Smash.",
         "Usman just claimed the Crispy Combo deal!",
         "Only 1 Mega Feast Combo remaining at this price!",
@@ -1726,7 +1732,3 @@ ${s}`,
     syncModalScrollLock();
   });
 })();
-
-
-
-

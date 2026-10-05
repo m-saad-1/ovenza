@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #EB1C24 to #F04420. 
+Change the complete website color from #719397 to #F04420. 
 
 Apply it consistently while maintaining proper contrast and readability.
 

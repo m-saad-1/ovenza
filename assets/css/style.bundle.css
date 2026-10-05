@@ -1,4 +1,4 @@
-body,
+﻿body,
 html {
   overflow-x: hidden;
 }
@@ -6,8 +6,8 @@ html {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
   --clr-surface-dark: #1e1e1e;
-  --clr-primary: #EB1C24;
-  --clr-primary-dark: #EB1C24;
+  --clr-primary: #719397;
+  --clr-primary-dark: #719397;
   --clr-text-primary: #1e1e1e;
   --clr-text-secondary: #545454;
   --clr-text-on-dark: #fdfbf7;
@@ -6407,7 +6407,7 @@ html.dark-mode .demo-modal-footer-note {
   color: #999;
 }
 .mobile-menu-btn {
-    background: #e9290e1a !important;
+  background: #e9290e1a !important;
   color: var(--clr-primary) !important;
   animation: tl-firstvisit-pulse 2s infinite ease-in-out !important;
 }
@@ -7669,7 +7669,7 @@ html.dark-mode .about-section-subtitle {
 
 /* Accessibility contrast overrides */
 :root {
-  --clr-primary: #EB1C24; /* Reverted to match exact brand color */
+  --clr-primary: #719397; /* Reverted to match exact brand color */
 }
 .card-desc {
   color: #595959 !important; /* Darkened from #777 */
@@ -8069,23 +8069,4 @@ html.dark-mode .mobile-social-icons .tw-circle svg {
     max-height: calc(100dvh - (var(--modal-viewport-gap, 20px) * 2)) !important;
   }
 }
-
-
-/* Compact product cards modifications */
-.product-card .card-content, .menu-card .card-content { padding: 0.5rem !important; gap: 0.5rem !important; justify-content: center; }
-.product-card .card-header, .menu-card .card-header { margin-bottom: 0 !important; }
-.product-card .card-header h3, .menu-card .card-header h3 { margin-bottom: 0.25rem !important; font-size: 1.1rem !important; }
-.product-card .card-footer, .menu-card .card-footer { margin-top: 0 !important; }
-@media (max-width: 768px) { .menu-grid .product-card, .menu-grid .menu-card { min-height: 90px !important; grid-template-columns: 90px minmax(0, 1fr) !important; } .menu-grid .product-card .card-image, .menu-grid .menu-card .card-image { width: 90px !important; min-height: 90px !important; } .menu-grid .product-card .card-content, .menu-grid .menu-card .card-content { padding: 0.5rem !important; } }
-
-/* Professional Menu Cards */
-.product-card .card-content { background: #fff; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); }
-.product-card .card-header h3 { font-size: 1.15rem !important; font-weight: 800 !important; color: var(--clr-text-primary) !important; letter-spacing: -0.02em; margin-bottom: 0.3rem !important; }
-.product-card .price { font-size: 1.25rem !important; font-weight: 900 !important; color: var(--clr-primary) !important; }
-html.dark-mode .product-card .card-content { background: #1e1e1e; border-top: 1px solid rgba(255,255,255,0.05); }
-html.dark-mode .product-card .card-header h3 { color: #fff !important; }
-/* Hero Image Borders */
-.hero-image-frame { padding: 8px; background: transparent; }
-.hero-image-frame img { border: 4px solid var(--clr-primary); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-
 
