@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   imbiss - Centralized Site Configuration
+   Meldough - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,14 +7,14 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'imbiss',
-    tagline: 'Premium Burgers & Fast Food',
-    instagram: 'https://www.instagram.com/imbiss/',
-    phone: '+92 3232000888',
-    phonePretty: '+92 3232000888',
-    whatsapp: 'https://wa.me/923001013556',
-    email: 'info@imbiss.com',
-    copyright: '© 2026 imbiss. All rights reserved.',
+    name: 'Meldough',
+    tagline: 'Burgers, Pizza & Fast Food',
+    instagram: 'https://www.instagram.com/meldough/',
+    phone: '+92 3111163536',
+    phonePretty: '+92 311 1163536',
+    whatsapp: 'https://wa.me/923111163536',
+    email: 'info@meldough.com',
+    copyright: '© 2026 Meldough. All rights reserved.',
   },
 
 
@@ -25,15 +25,15 @@ const BB_CONFIG = {
     offer:  'assets/images/combo-2.avif',
 
     /* Burgers */
-    burger:   'assets/images/burger-1.avif',
-    burger1:  'assets/images/burger-1.avif',
+    burger:   'assets/images/burger-3.avif',
+    burger1:  'assets/images/burger-3.avif',
     burger3:  'assets/images/burger-3.avif',
-    burgers1: 'assets/images/burger-1.avif',
-    burgers2: 'assets/images/burger-2.avif',
+    burgers1: 'assets/images/burger-3.avif',
+    burgers2: 'assets/images/burger-4.avif',
     burgers3: 'assets/images/burger-3.avif',
     burgers4: 'assets/images/burger-4.avif',
     burgers5: 'assets/images/burger-5.avif',
-    burgers6: 'assets/images/burger-1.avif',
+    burgers6: 'assets/images/burger-7.avif',
 
     /* Pizzas (named) */
     chickenPizza:    'assets/images/chicken-pizza.avif',
@@ -72,15 +72,19 @@ const BB_CONFIG = {
     ranchSauce:     'assets/images/ranch-sauce.avif',
     sirirachaSauce: 'assets/images/siriracha-sauce.avif',
 
-    /* About Video */
-    aboutVideo: 'assets/images/about.mp4',
+    /* About */
+    about: 'assets/images/about.avif',
   },
 
   /* ── Gallery ─────────────────────────────────────────────── */
   gallery: {
-    images: [1,2,3,4,5].map(n => `assets/gallery/gallery-${n}.avif`),
-    videos: [1].map(n => `assets/gallery/gallery-${n}.mp4`),
+    images: Array.from({ length: 12 }, (_, index) => `assets/gallery/gallery-${index + 1}.avif`),
+    videos: [],
   },
+
+  locations: [
+    'Royal Garden, Burewala',
+  ],
 
   /* ── Opening Hours ───────────────────────────────────────── */
   hours: [

@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build:assets": "node scripts/minify-assets.js",
-    "build:images": "node scripts/responsive-images.js"
+    "build:images": "node scripts/responsive-images.js",
+    "verify": "node scripts/verify-site.mjs"
   },
   "dependencies": {
     "clean-css": "^5.3.3",

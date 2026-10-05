@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             discount: pDiscount, stock: pStock,
                             sizes: pSizes, modifiers: pModifiers,
                             dealEnd: pDealEnd, categoryId: pCat, status: pStatus,
-                            image: '../assets/images/burger-1.avif'
+            image: '../assets/images/burger-3.avif'
                         });
                     }
                 }

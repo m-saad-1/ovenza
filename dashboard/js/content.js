@@ -19,9 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* --- Offer Banners --- */
 let mockOffers = [
-    { id: 'o1', url: '../assets/images/hero.avif', name: 'Hero Banner' },
-    { id: 'o2', url: '../assets/images/offer-1.avif', name: 'Special Offer 1' },
-    { id: 'o3', url: '../assets/images/offer-2.avif', name: 'Special Offer 2' }
+    { id: 'hero', url: '../assets/images/hero-main.avif', name: 'Homepage Hero' },
+    { id: 'banner1', url: '../assets/images/offer-1.avif', name: 'Offer Banner 1' },
+    { id: 'banner2', url: '../assets/images/offer-2.avif', name: 'Offer Banner 2' },
+    { id: 'o1', url: '../assets/images/Deals/crispy-combo.avif', name: 'Crispy Combo' },
+    { id: 'o2', url: '../assets/images/Deals/family-feast-combo.avif', name: 'Family Feast Combo' },
+    { id: 'o3', url: '../assets/images/Deals/mega-feast-combo.avif', name: 'Mega Feast Combo' },
+    { id: 'o4', url: '../assets/images/Deals/ultimate-duo-combo.avif', name: 'Ultimate Duo Combo' }
 ];
 
 function contentRenderOffers() {
@@ -152,12 +156,12 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-    name: "imbiss Restaurant",
-    phone: "+92 3232000888",
-    email: "contact@imbiss.com",
-    whatsapp: "+92 3232000888",
-    address: "123 Food Street, Karachi, Pakistan",
-    map: "https://maps.google.com/?q=karachi"
+            name: "Meldough",
+            phone: "+92 3111163536",
+            email: "info@meldough.com",
+            whatsapp: "+92 3111163536",
+            address: "Royal Garden, Burewala",
+            map: "https://www.google.com/maps/search/?api=1&query=Royal+Garden+Burewala"
 };
 
 window.contentLoadContact = function() {

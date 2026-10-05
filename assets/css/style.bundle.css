@@ -6,8 +6,8 @@ html {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
   --clr-surface-dark: #1e1e1e;
-  --clr-primary: #719397;
-  --clr-primary-dark: #719397;
+  --clr-primary: #EB1C24;
+  --clr-primary-dark: #c9141b;
   --clr-text-primary: #1e1e1e;
   --clr-text-secondary: #545454;
   --clr-text-on-dark: #fdfbf7;
@@ -7669,7 +7669,7 @@ html.dark-mode .about-section-subtitle {
 
 /* Accessibility contrast overrides */
 :root {
-  --clr-primary: #719397; /* Reverted to match exact brand color */
+  --clr-primary: #EB1C24;
 }
 .card-desc {
   color: #595959 !important; /* Darkened from #777 */
