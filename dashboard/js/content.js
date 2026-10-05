@@ -152,10 +152,10 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-    name: "Demo Restaurant",
-    phone: "+92 30000000000",
-    email: "contact@Demo.com",
-    whatsapp: "+92 30000000000",
+    name: "imbiss Restaurant",
+    phone: "+92 3232000888",
+    email: "contact@imbiss.com",
+    whatsapp: "+92 3232000888",
     address: "123 Food Street, Karachi, Pakistan",
     map: "https://maps.google.com/?q=karachi"
 };

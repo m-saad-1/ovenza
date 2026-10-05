@@ -3,7 +3,7 @@
    ========================================================================== */
 :root {
   /* Colors */
-  --clr-primary: #F2634C;
+  --clr-primary: #719397;
   --clr-primary-hover: #c41e0a;
   --clr-accent: #111111;
 
@@ -2574,7 +2574,7 @@ body.kiosk-mode .app-main { padding: 1rem !important; margin: 0 !important; max-
 .table-wrapper,
 .kds-column {
   scrollbar-width: thin;
-  scrollbar-color: rgba(242, 99, 76, 0.75) transparent;
+  scrollbar-color: rgba(113, 147, 151, 0.75) transparent;
 }
 .sidebar-nav::-webkit-scrollbar,
 .pos-cart-items::-webkit-scrollbar,
@@ -2591,7 +2591,7 @@ body.kiosk-mode .app-main { padding: 1rem !important; margin: 0 !important; max-
 .kitchen-modal-body::-webkit-scrollbar-thumb,
 .table-wrapper::-webkit-scrollbar-thumb,
 .kds-column::-webkit-scrollbar-thumb {
-  background: rgba(242, 99, 76, 0.72) !important;
+  background: rgba(113, 147, 151, 0.72) !important;
   border-radius: 999px;
 }
 .sidebar-nav::-webkit-scrollbar-button,
@@ -2831,7 +2831,7 @@ html.dark-mode .adm-about-close svg {
 .pos-cart::-webkit-scrollbar { width: 2px !important; }
 .pos-cart::-webkit-scrollbar-track { background: transparent; }
 .pos-cart::-webkit-scrollbar-thumb {
-  background: rgba(242, 99, 76, 0.72);
+  background: rgba(113, 147, 151, 0.72);
   border-radius: 999px;
 }
 .pos-cart::-webkit-scrollbar-button {
