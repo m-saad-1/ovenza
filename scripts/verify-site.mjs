@@ -65,7 +65,27 @@ for (const image of imageFiles) {
   }
 }
 
-const failures = { missing, legacyReferences, mojibake, oldContent, unreadable };
+const performanceIssues = [];
+const publicCss = fs.readFileSync(path.join(root, 'assets', 'css', 'style.bundle.css'), 'utf8');
+if (/transition\s*:\s*all\b/i.test(publicCss)) performanceIssues.push('Public CSS contains transition: all');
+if (!/img\.is-loaded\s*\{[^}]*transition:\s*opacity 0\.3s ease, transform 0\.3s ease;/s.test(publicCss)) {
+  performanceIssues.push('Loaded images do not use composited-only transitions');
+}
+const whatsapp = await sharp(path.join(root, 'assets', 'images', 'whatsapp.avif')).metadata();
+if (whatsapp.width > 120 || whatsapp.height > 120 || !whatsapp.hasAlpha) {
+  performanceIssues.push('WhatsApp AVIF must be at most 120x120 and preserve transparency');
+}
+for (const page of ['index.html', path.join('pages', 'menu.html')]) {
+  const html = fs.readFileSync(path.join(root, page), 'utf8');
+  for (const match of html.matchAll(/<div class="circle-img"><img\s+([^>]+)>/g)) {
+    if (!/sizes="70px"/.test(match[1])) performanceIssues.push(`${page}: category icon has incorrect sizes`);
+    if (!/96\.avif 96w/.test(match[1])) performanceIssues.push(`${page}: category icon lacks a small source candidate`);
+  }
+}
+const loaderSource = fs.readFileSync(path.join(root, 'assets', 'js', 'loader.js'), 'utf8');
+if (/<h4 class="adm-customize-title">/.test(loaderSource)) performanceIssues.push('Customize heading still skips a level');
+
+const failures = { missing, legacyReferences, mojibake, oldContent, unreadable, performanceIssues };
 for (const [name, items] of Object.entries(failures)) {
   console.log(`${name}: ${items.length}`);
   items.forEach(item => console.log(`  ${item}`));

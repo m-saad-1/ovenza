@@ -607,8 +607,12 @@
     let r = e.querySelectorAll(".category-circle-btn");
     r.forEach((s) => {
       s.addEventListener("click", () => {
-        (r.forEach((y) => y.classList.remove("active")),
-          s.classList.add("active"));
+        (r.forEach((y) => {
+          y.classList.remove("active");
+          y.setAttribute("aria-selected", "false");
+        }),
+          s.classList.add("active"),
+          s.setAttribute("aria-selected", "true"));
       });
     });
     let n = document.querySelectorAll(
@@ -623,6 +627,7 @@
                 let v = h.getAttribute("href") === `#${l}`;
                 if (
                   (h.classList.toggle("active", v),
+                  h.setAttribute("aria-selected", String(v)),
                   v && window.matchMedia('(max-width: 768px)').matches)
                 ) {
                   let u = e.querySelector(".category-circles-wrapper");

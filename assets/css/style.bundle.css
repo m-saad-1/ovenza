@@ -82,7 +82,7 @@ h6 {
     var(--clr-primary),
     var(--clr-primary-dark)
   );
-  color: var(--clr-text-primary);
+  color: #000;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
@@ -1110,14 +1110,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  transition:
-    var(--transition),
-    width 0.3s ease,
-    height 0.3s ease,
-    opacity 0.3s ease,
-    transform 0.3s ease,
-    margin 0.3s ease,
-    padding 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   border: 2px solid transparent;
   overflow: hidden;
 }
@@ -7631,6 +7624,7 @@ img.is-loaded {
   background: none !important;
   animation: none !important;
   color: inherit !important;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -7694,6 +7688,9 @@ html.dark-mode .about-section-subtitle {
 :not(html.dark-mode) #loc-delivery-trigger-text,
 :not(html.dark-mode) .loc-trigger-bar {
   color: #444444 !important;
+}
+#loc-status-dot {
+  color: #ff767c !important;
 }
 :not(html.dark-mode) .btn.btn-outline {
   color: #444444 !important;

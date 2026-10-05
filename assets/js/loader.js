@@ -18,8 +18,12 @@ function initCategorySticky() {
   let r = e.querySelectorAll(".category-circle-btn");
   r.forEach(s => {
     s.addEventListener("click", () => {
-      r.forEach(y => y.classList.remove("active"));
+      r.forEach(y => {
+        y.classList.remove("active");
+        y.setAttribute("aria-selected", "false");
+      });
       s.classList.add("active");
+      s.setAttribute("aria-selected", "true");
     });
   });
 
@@ -31,6 +35,7 @@ function initCategorySticky() {
             r.forEach(h => {
               let v = h.getAttribute("href") === `#${l}`;
               h.classList.toggle("active", v);
+              h.setAttribute("aria-selected", String(v));
               if (v && window.innerWidth <= 768) {
                 let u = e.querySelector(".category-circles-wrapper");
                 u && setTimeout(() => {
@@ -1253,7 +1258,7 @@ ${s}`,
         <div class="adm-feature-item"><span class="adm-check">&#10003;</span><div><strong>Support &amp; Maint.</strong><span>Ongoing assistance</span></div></div>
       </div>
       <div class="adm-customize-card">
-        <h4 class="adm-customize-title">Customized For Your Restaurant</h4>
+        <h3 class="adm-customize-title">Customized For Your Restaurant</h3>
         <div class="adm-customize-grid">
           <div class="adm-customize-item">&bull; Restaurant branding</div><div class="adm-customize-item">&bull; Delivery areas</div>
           <div class="adm-customize-item">&bull; Logo &amp; colors</div><div class="adm-customize-item">&bull; Order workflows</div>
