@@ -4228,9 +4228,11 @@ header:has(.header-desktop-search:focus-within) .nav-center {
     gap: 10px;
   }
   .mobile-floating-search-btn {
-    position: static !important;
+    position: fixed !important;
     display: flex !important;
-    order: -1;
+    left: max(16px, env(safe-area-inset-left)) !important;
+    right: auto !important;
+    bottom: calc(var(--cart-offset, 0px) + 110px) !important;
     width: 50px !important;
     height: 50px !important;
     min-width: 50px;
