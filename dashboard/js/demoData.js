@@ -1,11 +1,11 @@
-window.crustDemoData = {
+﻿window.crustDemoData = {
         restaurant: {
             name: "Urban Flame Kitchen",
             currency: "Rs.",
             taxRate: 0.16, // 16% GST
         },
         branches: [
-            { id: "b1", name: "Lahore : Opposite Jinnah Hospital", status: "Open", todayRevenue: 124500 },
+            { id: "b1", name: "Royal Garden, Burewala", status: "Open", todayRevenue: 124500 },
 
         ],
         categories: [
@@ -36,11 +36,11 @@ window.crustDemoData = {
             { id: "p13", name: "Tower Burger", desc: "Triple-stacked patties with all the toppings.", price: 950, categoryId: "c2", status: "Available", image: "../assets/images/burger-7.avif" },
             // Pizzas
             { id: "p14", name: "Chicken Pizza", desc: "Grilled chicken with golden cheese topping.", price: 1400, categoryId: "c3", status: "Available", image: "../assets/images/chicken-pizza.avif" },
-            { id: "p15", name: "Crown imbiss Pizza", desc: "Signature crown imbiss loaded with cheese.", price: 1600, categoryId: "c3", status: "Available", image: "../assets/images/crown-crust-pizza.avif" },
+            { id: "p15", name: "Crown meldough Pizza", desc: "Signature crown meldough loaded with cheese.", price: 1600, categoryId: "c3", status: "Available", image: "../assets/images/crown-crust-pizza.avif" },
             { id: "p16", name: "Mughlai Pizza", desc: "Rich Mughlai spices with tender chicken.", price: 1500, categoryId: "c3", status: "Available", image: "../assets/images/mughali-pizza.avif" },
             { id: "p17", name: "Special Pizza", desc: "Our chef's special with premium toppings.", price: 1700, categoryId: "c3", status: "Available", image: "../assets/images/special-pizza.avif" },
             { id: "p18", name: "Tandoori Pizza", desc: "Classic tandoori flavours on a crispy base.", price: 1450, categoryId: "c3", status: "Available", image: "../assets/images/tandoori-pizza.avif" },
-            { id: "p19", name: "Thin imbiss Pizza", desc: "Ultra-thin, crispy base with fresh toppings.", price: 1300, categoryId: "c3", status: "Available", image: "../assets/images/thin-crust-pizza.avif" },
+            { id: "p19", name: "Thin meldough Pizza", desc: "Ultra-thin, crispy base with fresh toppings.", price: 1300, categoryId: "c3", status: "Available", image: "../assets/images/thin-crust-pizza.avif" },
             { id: "p20", name: "Chicken Fajita Pizza", desc: "Spiced fajita chicken with fresh veggies.", price: 1350, categoryId: "c3", status: "Available", image: "../assets/images/pizza-1.avif" },
             { id: "p21", name: "Tikka Sensation Pizza", desc: "Spicy chicken tikka chunks on a rich base.", price: 1450, categoryId: "c3", status: "Available", image: "../assets/images/pizza-2.avif" },
             { id: "p22", name: "Pepperoni Classic Pizza", desc: "Loaded with premium pepperoni slices.", price: 1600, categoryId: "c3", status: "Available", image: "../assets/images/pizza-3.avif" },
@@ -127,7 +127,7 @@ window.crustDemoData = {
             return demoOrders;
         })(),
         customers: [
-            { id: "u1", name: "Ahmed Khan", phone: "+92 3232000888", orders: 24, lifetimeSpend: 48500, lastOrder: "2 days ago" },
+            { id: "u1", name: "Ahmed Khan", phone: "+92 3111163536", orders: 24, lifetimeSpend: 48500, lastOrder: "2 days ago" },
             { id: "u2", name: "Sara Ali", phone: "0333-9876543", orders: 3, lifetimeSpend: 4200, lastOrder: "Today" }
         ],
         riders: [
@@ -148,7 +148,7 @@ window.crustDemoData = {
             { productId: "p30", name: "Mountain Dew", ingredients: ["1x 330ml Can"], cost: 65.00, price: 150 }
         ],
         suppliers: [
-            { id: "s1", name: "National Poultry Farms", contact: "+92 3232000888", categories: "Meat, Chicken", balance: 45000, lastDelivery: "Yesterday", recentPOs: "#PO-1042", status: "Active" },
+            { id: "s1", name: "National Poultry Farms", contact: "+92 3111163536", categories: "Meat, Chicken", balance: 45000, lastDelivery: "Yesterday", recentPOs: "#PO-1042", status: "Active" },
             { id: "s2", name: "Dawn Bread Co.", contact: "0333-4445556", categories: "Bakery", balance: 0, lastDelivery: "Today", recentPOs: "#PO-1043", status: "Active" },
             { id: "s3", name: "Metro Cash & Carry", contact: "0321-7778889", categories: "Dairy, Oil, Groceries", balance: 12500, lastDelivery: "3 days ago", recentPOs: "#PO-1039", status: "Active" },
             { id: "s4", name: "Fresh Veggies Ltd.", contact: "0345-1234567", categories: "Produce, Vegetables", balance: 5000, lastDelivery: "Today", recentPOs: "#PO-1044", status: "Active" }
@@ -172,7 +172,7 @@ window.crustDemoData = {
             { id: "T6", status: "Occupied", capacity: 8, customer: "Ahmed Khan", amount: "Rs. 5600" }
         ],
         crm: [
-            { id: "c1", name: "Ahmed Khan", phone: "+92 3232000888", orders: 45, lifetimeSpend: 62500, segment: "VIP", lastOrder: "2 days ago", tier: "Gold", points: 2450 },
+            { id: "c1", name: "Ahmed Khan", phone: "+92 3111163536", orders: 45, lifetimeSpend: 62500, segment: "VIP", lastOrder: "2 days ago", tier: "Gold", points: 2450 },
             { id: "c2", name: "Sarah Ali", phone: "0321-9876543", orders: 2, lifetimeSpend: 2100, segment: "New", lastOrder: "Today", tier: "Bronze", points: 120 },
             { id: "c3", name: "Usman Tariq", phone: "0333-5556667", orders: 18, lifetimeSpend: 15400, segment: "At-Risk", lastOrder: "45 days ago", tier: "Silver", points: 800 }
         ],

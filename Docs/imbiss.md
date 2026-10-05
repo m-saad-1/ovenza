@@ -2,7 +2,7 @@
 
 ### Read the instruction in @Agent.md first.
 
-We are working on the **imbiss** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
+We are working on the **meldough** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
 
 ### 1. Assets & Menu — CRITICAL
 
@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #719397 to #719397. 
+Change the complete website color from #EB1C24 to #EB1C24. 
 
 Apply it consistently while maintaining proper contrast and readability.
 
@@ -81,7 +81,7 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📞 +92 3232000888
+📞 +92 3111163536
 
 📍Lahore  : Opposite Jinnah Hospital
 
@@ -205,5 +205,5 @@ Finally, verify the complete website on **desktop and mobile** and ensure there 
 
 After complete implementation and validation,First create a PRIVATE repo and then push the changes to the `main` branch of the git repository.
 
-Repo Should be: `https://github.com/m-saad-1/imbiss`
+Repo Should be: `https://github.com/m-saad-1/meldough`
 

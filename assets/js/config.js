@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   imbiss - Centralized Site Configuration
+   meldough - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,14 +7,14 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'imbiss',
+    name: 'meldough',
     tagline: 'Premium Burgers & Fast Food',
-    instagram: 'https://www.instagram.com/imbiss/',
-    phone: '+92 3232000888',
-    phonePretty: '+92 3232000888',
+    instagram: 'https://www.instagram.com/meldough/',
+    phone: '+92 3111163536',
+    phonePretty: '+92 3111163536',
     whatsapp: 'https://wa.me/923001013556',
-    email: 'info@imbiss.com',
-    copyright: '© 2026 imbiss. All rights reserved.',
+    email: 'info@meldough.com',
+    copyright: '© 2026 meldough. All rights reserved.',
   },
 
 
