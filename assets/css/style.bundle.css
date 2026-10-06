@@ -7908,7 +7908,6 @@ html.dark-mode #reorder-confirm-modal > div {
 /* Always render the menu-item photo in a true square frame. */
 @media (max-width: 768px) {
   #item-modal .modal-img-wrap {
-    position: relative;
     width: 100% !important;
     height: auto !important;
     aspect-ratio: 1 / 1 !important;
@@ -7916,10 +7915,11 @@ html.dark-mode #reorder-confirm-modal > div {
   }
 
   #item-modal .modal-img-wrap img {
-    position: absolute;
-    inset: 0;
+    position: static !important;
+    display: block !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
     object-fit: cover !important;
   }
 }
