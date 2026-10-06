@@ -7738,28 +7738,6 @@ html.dark-mode #cardapio .menu-card .card-desc {
   color: #c8c8c8 !important;
 }
 
-/* Match Delizia's full-height mobile navigation panel below the fixed header. */
-@media (max-width: 768px) {
-  .nav-center {
-    position: fixed;
-    top: var(--header-height, 70px);
-    right: 0;
-    left: 0;
-    width: 100%;
-    max-width: none;
-    height: calc(100dvh - var(--header-height, 70px));
-    padding: 0;
-    border-top: 1px solid var(--clr-border);
-    overflow: hidden;
-    overscroll-behavior: contain;
-    z-index: 99999;
-  }
-
-  .nav-center.active {
-    max-width: none;
-  }
-}
-
 html.modal-open,
 body.modal-open {
   overflow: hidden !important;
