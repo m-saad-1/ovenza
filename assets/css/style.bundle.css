@@ -8044,13 +8044,26 @@ html.dark-mode #reorder-confirm-modal > div {
     flex-direction: column !important;
   }
 
-  #item-modal .modal-img-wrap,
+  #item-modal .modal-img-wrap {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    aspect-ratio: 1 / 1 !important;
+    overflow: hidden !important;
+  }
+
+  #item-modal .modal-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover !important;
+  }
+
   #offer-modal .modal-img-wrap {
     max-height: min(34dvh, 260px) !important;
     aspect-ratio: auto !important;
   }
 
-  #item-modal .modal-img-wrap img,
   #offer-modal .modal-img-wrap img {
     height: 100% !important;
     object-fit: contain !important;
