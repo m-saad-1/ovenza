@@ -7815,6 +7815,96 @@ html.dark-mode #reorder-confirm-modal > div {
   }
 }
 
+/* Keep the menu-item modal identical to Delizia's mobile bottom sheet. */
+#item-modal {
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#item-modal.active {
+  visibility: visible;
+}
+
+@media (max-width: 599px) {
+  #item-modal.modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  #item-modal > .modal-sheet {
+    display: block !important;
+    width: 100% !important;
+    max-width: 560px !important;
+    max-height: 92vh !important;
+    margin: 0 !important;
+    border-radius: 24px 24px 0 0 !important;
+    overflow-y: auto !important;
+    transform: translateY(100%);
+  }
+
+  #item-modal.active > .modal-sheet {
+    transform: translateY(0);
+  }
+
+  #item-modal .modal-img-wrap {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+
+  #item-modal .modal-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  #item-modal .modal-body {
+    overflow: visible !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 768px) {
+  #item-modal.modal-overlay {
+    align-items: center !important;
+    padding: 0 !important;
+  }
+
+  #item-modal > .modal-sheet {
+    display: block !important;
+    width: 100% !important;
+    max-width: 700px !important;
+    max-height: calc(100vh - 150px) !important;
+    margin: 60px 0 0 !important;
+    border-radius: 24px !important;
+    overflow-y: auto !important;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  #item-modal.active > .modal-sheet {
+    transform: translateY(0) scale(1);
+  }
+
+  #item-modal .modal-img-wrap {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+
+  #item-modal .modal-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  #item-modal .modal-body {
+    overflow: visible !important;
+  }
+}
+
 /* The root page is the menu: reuse the compact homepage card presentation. */
 #cardapio .card-desc {
   display: -webkit-box !important;
