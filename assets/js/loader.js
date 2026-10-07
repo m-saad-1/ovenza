@@ -536,7 +536,29 @@ ${s}`,
     );
   }
   function V() {
-    const e = ["Royal Garden, Burewala"],
+    const e = [
+        "Royal Garden, Burewala",
+        "F-6 Markaz, Islamabad",
+        "Blue Area, Islamabad",
+        "G-9 Markaz, Islamabad",
+        "E-7, Islamabad",
+        "DHA Phase 1, Lahore",
+        "Gulberg III, Lahore",
+        "Model Town, Lahore",
+        "Johar Town, Lahore",
+        "Clifton Block 5, Karachi",
+        "Defence Phase 6, Karachi",
+        "Hospital Road Central Park, Lahore",
+        "8A Commercial, Pak Arab, Lahore",
+        "Saddar, Rawalpindi",
+        "Bahria Town Phase 4, Rawalpindi",
+        "Westridge, Rawalpindi",
+        "Cantt Area, Peshawar",
+        "Hayatabad Phase 3, Peshawar",
+        "Satellite Town, Gujranwala",
+        "DC Colony, Gujranwala",
+        "Civil Lines, Faisalabad",
+      ],
       n = ["Meldough \u2013 Royal Garden, Burewala"],
       r = (c, o) =>
         c
