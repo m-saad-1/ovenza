@@ -446,7 +446,7 @@
         "We are located at Sialkot Cantt. Come visit us!")
                   : p.includes("Contact")
                     ? (c =
-        "You can reach us at +92 341 1010085 or email us at info@stackpakistan.com.")
+        "You can reach us at +92 341 1010085 or email us at info@meldough.com.")
                     : p.includes("Hours")
                       ? (c =
                           "We are open Monday to Sunday from 10:00 AM to 12:00 AM.")

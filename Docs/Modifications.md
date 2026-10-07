@@ -2,8 +2,8 @@ Implement the following changes while preserving the existing design and functio
 
 1. Home Page → Menu/Home
 - Make the current Menu page the new Home page.
-- Use `stackpakistan/index.html` as the new Home/Menu page.
-- Keep `stackpakistan/pages/other.html` for the other page content/routes.
+- Use `meldough/index.html` as the new Home/Menu page.
+- Keep `meldough/pages/other.html` for the other page content/routes.
 - The new Home/Menu page should contain all product categories currently available on the Menu page.
 - Keep the category tab bar and behavior exactly like the current Menu page.
 - Keep the App Install, Reviews, and Contact sections on this page.

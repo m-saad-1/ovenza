@@ -1,5 +1,5 @@
-﻿// Centralized demo data state for the stackpakistan dashboard.
-// Demo data for the stackpakistan restaurant dashboard.
+﻿// Centralized demo data state for the meldough dashboard.
+// Demo data for the meldough restaurant dashboard.
 
 const Store = {
     state: {

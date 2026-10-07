@@ -1,6 +1,6 @@
 window.crustDemoData = {
         restaurant: {
-            name: "stackpakistan",
+            name: "meldough",
             currency: "Rs.",
             taxRate: 0.16, // 16% GST
         },

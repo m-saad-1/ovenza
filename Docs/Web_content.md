@@ -2,7 +2,7 @@
 
 ### Read the instruction in @Agent.md first.
 
-We are working on the **stackpakistan** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
+We are working on the **meldough** project. Update the entire website consistently. **Do not partially update assets. Every relevant page and component must use the new assets and content.**
 
 ### 1. Assets & Menu — CRITICAL
 
@@ -204,5 +204,5 @@ Finally, verify the complete website on **desktop and mobile** and ensure there 
 
 After complete implementation and validation,First create a PRIVATE repo and then push the changes to the `main` branch of the git repository.
 
-Repo Should be: `https://github.com/m-saad-1/stackpakistan`
+Repo Should be: `https://github.com/m-saad-1/meldough`
 

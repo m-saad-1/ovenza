@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   stackpakistan - Smart Search
+   meldough - Smart Search
    Reads menu items from the DOM, shows results in a floating overlay.
    Does NOT alter or scroll the underlying page.
    ========================================================================== */

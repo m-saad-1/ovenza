@@ -156,9 +156,9 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-            name: "stackpakistan",
+            name: "meldough",
             phone: "+92 341 1010085",
-            email: "info@stackpakistan.com",
+            email: "info@meldough.com",
             whatsapp: "+92 341 1010085",
             address: "Sialkot Cantt",
             map: "https://www.google.com/maps/search/?api=1&query=Sialkot+Cantt"

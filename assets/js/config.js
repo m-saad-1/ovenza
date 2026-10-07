@@ -1,5 +1,5 @@
 /* ==========================================================================
-   stackpakistan - Centralized Site Configuration
+   meldough - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,14 +7,14 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'stackpakistan',
+    name: 'meldough',
     tagline: 'Burgers, Pizza & Fast Food',
-    instagram: 'https://www.instagram.com/stackpakistan/',
+    instagram: 'https://www.instagram.com/meldough/',
     phone: '+92 3411010085',
     phonePretty: '+92 341 1010085',
     whatsapp: 'https://wa.me/923411010085',
-    email: 'info@stackpakistan.com',
-    copyright: '© 2026 stackpakistan. All rights reserved.',
+    email: 'info@meldough.com',
+    copyright: '© 2026 meldough. All rights reserved.',
   },
 
 
