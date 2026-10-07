@@ -6,8 +6,8 @@ html {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
   --clr-surface-dark: #1e1e1e;
-  --clr-primary: #EB1C24;
-  --clr-primary-dark: #c9141b;
+  --clr-primary: #FF8C00;
+  --clr-primary-dark: #e07b00;
   --clr-text-primary: #1e1e1e;
   --clr-text-secondary: #545454;
   --clr-text-on-dark: #fdfbf7;
@@ -7663,7 +7663,7 @@ html.dark-mode .about-section-subtitle {
 
 /* Accessibility contrast overrides */
 :root {
-  --clr-primary: #EB1C24;
+  --clr-primary: #FF8C00;
 }
 .card-desc {
   color: #595959 !important; /* Darkened from #777 */

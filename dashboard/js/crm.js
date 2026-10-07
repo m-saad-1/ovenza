@@ -120,7 +120,7 @@ window.openCustomerProfile = function(id) {
                 <div style="position:relative;">
                     <div style="position:absolute; left:-1.45rem; top:0.2rem; width:12px; height:12px; border-radius:50%; background:var(--clr-text-muted); border:2px solid var(--clr-bg-panel);"></div>
                     <div style="font-size:0.85rem; font-weight:600;">Account Created</div>
-                        <div style="font-size:0.8rem; color:var(--clr-text-secondary);">Joined Meldough.</div>
+                        <div style="font-size:0.8rem; color:var(--clr-text-secondary);">Joined stackpakistan.</div>
                 </div>
             </div>
         </div>

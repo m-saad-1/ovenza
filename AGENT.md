@@ -12,7 +12,7 @@ This is an existing, functional project. Your primary directive is to **make exa
 - Never let existing functionality, styling, or content disappear accidentally.
 
 ### 2. Follow the Exact User Scope
-Make the **smallest change necessary** to achieve the user's exact request.
+Make the **smallest change necessary** to achieve the user's exact request. 
 - **Do not modify**: Colors, typography, spacing, layouts, animations, logic, or component structures unless explicitly instructed.
 - **Do not modernize**: Do not rewrite vanilla CSS into Tailwind or refactor functional JS into modern frameworks without permission.
 - **Prefer CSS**: For visual changes, prefer CSS over modifying HTML structures.

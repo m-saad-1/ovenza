@@ -3,8 +3,8 @@
    ========================================================================== */
 :root {
   /* Colors */
-  --clr-primary: #EB1C24;
-  --clr-primary-hover: #c9141b;
+  --clr-primary: #FF8C00;
+  --clr-primary-hover: #e07b00;
   --clr-accent: #111111;
 
   --clr-bg-app: #f5f6f8;
@@ -1699,7 +1699,7 @@ button {
 
 /* Send to Kitchen button */
 .btn-kitchen {
-  background: linear-gradient(135deg, var(--clr-primary) 0%, #c9141b 100%);
+  background: linear-gradient(135deg, var(--clr-primary) 0%, #e07b00 100%);
   color: white;
   font-weight: 700;
   font-size: 0.95rem;

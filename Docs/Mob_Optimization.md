@@ -48,7 +48,7 @@ Nearly every image on the page is shipped far larger than its rendered size — 
 | `./assets/images/burger-5.avif` | 300×300 | 182×182 | 9.6 KiB |
 | `./assets/images/burger-3.avif` | 300×300 | 182×182 | 7.9 KiB |
 | `./assets/images/mountain-dew.avif` | 300×300 | 66×66 | 7.6 KiB |
-| `./assets/images/logo.avif` | 200×200 | 120×120 | 5.6 KiB |
+| `./assets/images/logo.webp` | 200×200 | 120×120 | 5.6 KiB |
 
 **Highest ratio, do these first:** the category-circle icons (`cheese-fries`, `roll-1`, `burger-1`, `mountain-dew`) are shipping 300–500px images into 66×66px circles — a 5–8x oversize for a tiny thumbnail. The App Store/Google Play badges are the single worst offender (2172×724 → 120×40).
 

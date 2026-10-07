@@ -159,7 +159,7 @@ function renderDelivery(state) {
         window.zoneChartInstance = new Chart(zoneChartCtx, {
             type: 'doughnut',
             data: {
-            labels: ['Royal Garden, Burewala'],
+            labels: ['Sialkot Cantt'],
                 datasets: [{
                     data: [45, 25, 20, 10],
                     backgroundColor: ['#4f46e5', '#0ea5e9', '#8b5cf6', '#10b981'],

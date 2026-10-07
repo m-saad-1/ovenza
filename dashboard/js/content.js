@@ -156,12 +156,12 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-            name: "Meldough",
-            phone: "+92 3111163536",
-            email: "info@meldough.com",
-            whatsapp: "+92 3111163536",
-            address: "Royal Garden, Burewala",
-            map: "https://www.google.com/maps/search/?api=1&query=Royal+Garden+Burewala"
+            name: "stackpakistan",
+            phone: "+92 341 1010085",
+            email: "info@stackpakistan.com",
+            whatsapp: "+92 341 1010085",
+            address: "Sialkot Cantt",
+            map: "https://www.google.com/maps/search/?api=1&query=Sialkot+Cantt"
 };
 
 window.contentLoadContact = function() {

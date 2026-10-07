@@ -1,5 +1,5 @@
-﻿/* ==========================================================================
-   Meldough - Centralized Site Configuration
+/* ==========================================================================
+   stackpakistan - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,20 +7,20 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'Meldough',
+    name: 'stackpakistan',
     tagline: 'Burgers, Pizza & Fast Food',
-    instagram: 'https://www.instagram.com/meldough/',
-    phone: '+92 3111163536',
-    phonePretty: '+92 311 1163536',
-    whatsapp: 'https://wa.me/923111163536',
-    email: 'info@meldough.com',
-    copyright: '© 2026 Meldough. All rights reserved.',
+    instagram: 'https://www.instagram.com/stackpakistan/',
+    phone: '+92 3411010085',
+    phonePretty: '+92 341 1010085',
+    whatsapp: 'https://wa.me/923411010085',
+    email: 'info@stackpakistan.com',
+    copyright: '© 2026 stackpakistan. All rights reserved.',
   },
 
 
   /* ── Images (all relative to project root) ──────────────── */
   images: {
-    logo:   'assets/images/logo.avif',
+    logo:   'assets/images/logo.webp',
     hero:   'assets/images/hero-main.avif',
     offer:  'assets/images/combo-2.avif',
 
@@ -83,7 +83,7 @@ const BB_CONFIG = {
   },
 
   locations: [
-    'Royal Garden, Burewala',
+    'Sialkot Cantt',
   ],
 
   /* ── Opening Hours ───────────────────────────────────────── */
