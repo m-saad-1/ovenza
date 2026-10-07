@@ -648,14 +648,15 @@ html.dark-mode .desktop-call-bar {
   }
 }
 .header-logo {
-  height: 70px;
+  height: 72px;
   width: auto;
-  aspect-ratio: 3 / 1;
+  max-width: 190px;
+  object-fit: contain;
+  object-position: left center;
   display: block;
-  max-width: 100%;
   position: relative;
   z-index: 105;
-  transform: translateY(-5px);
+  transform: none;
 }
 .mobile-social-icons {
   display: none !important;
@@ -868,7 +869,9 @@ html.dark-mode .moon-icon-thumb {
     display: none;
   }
   .header-logo {
-    height: 45px !important;
+    height: 56px !important;
+    max-width: 132px;
+    margin: 0 !important;
   }
   .logo > span {
     font-size: 1.2rem !important;
@@ -1719,11 +1722,6 @@ body {
   }
   h3 {
     font-size: 18px !important;
-  }
-  .header-logo {
-    height: 95px;
-    margin-top: -15px;
-    margin-bottom: -25px;
   }
   .header-order-btn {
     display: none;
