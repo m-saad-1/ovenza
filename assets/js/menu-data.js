@@ -1,5 +1,5 @@
 ﻿/* ==========================================================================
-   meldough - Static Menu Data
+   Meldough - Static Menu Data
    Used by search.js on pages that don't have product cards in the DOM.
    ========================================================================== */
 

@@ -304,9 +304,9 @@
               "Cash on Delivery":
                 "Please keep the exact change ready at the time of delivery.",
               Easypaisa:
-      "Transfer the total amount to Easypaisa account: +92 341 1010085. Include your order ID in the reference.",
+      "Transfer the total amount to Easypaisa account: +92 3111163536. Include your order ID in the reference.",
               JazzCash:
-      "Transfer the total amount to JazzCash account: +92 341 1010085. Include your order ID in the reference.",
+      "Transfer the total amount to JazzCash account: +92 3111163536. Include your order ID in the reference.",
               Wallet:
                 "Your order total will be seamlessly deducted from your available Wallet balance.",
             },
@@ -443,10 +443,10 @@
                     "You can view our complete menu by <a href='menu.html' style='color:var(--clr-primary);text-decoration:underline;'>clicking here</a>.")
                 : p.includes("located")
                   ? (c =
-        "We are located at Sialkot Cantt. Come visit us!")
+        "We are located at Royal Garden, Burewala. Come visit us!")
                   : p.includes("Contact")
                     ? (c =
-        "You can reach us at +92 341 1010085 or email us at info@meldough.com.")
+        "You can reach us at +92 3111163536 or email us at info@meldough.com.")
                     : p.includes("Hours")
                       ? (c =
                           "We are open Monday to Sunday from 10:00 AM to 12:00 AM.")
@@ -2113,7 +2113,7 @@
               #modal-btn-confirm {
                 flex: 2;
                 background: #ffffff !important;
-        color: var(--clr-primary, #FF8C00) !important;
+        color: var(--clr-primary, #EB1C24) !important;
                 border: 2px solid #ffffff !important;
                 border-radius: 50px;
                 padding: 0.8rem 1rem;
@@ -2122,7 +2122,7 @@
               }
               #modal-btn-confirm:hover {
                 background: #f8f8f8 !important;
-        color: var(--clr-primary, #FF8C00) !important;
+        color: var(--clr-primary, #EB1C24) !important;
                 transform: translateY(-2px);
               }
               #modal-btn-confirm:active {
@@ -2142,12 +2142,12 @@
               html.dark-mode #order-confirm-modal .modal-right-pane > div:nth-child(3) { border-top-color: rgba(255,255,255,0.08) !important; }
               html.dark-mode #modal-btn-confirm {
                 background: #ffffff !important;
-        color: var(--clr-primary, #FF8C00) !important;
+        color: var(--clr-primary, #EB1C24) !important;
                 border-color: #ffffff !important;
               }
               html.dark-mode #modal-btn-confirm:hover {
                 background: #f0f0f0 !important;
-        color: var(--clr-primary, #FF8C00) !important;
+        color: var(--clr-primary, #EB1C24) !important;
               }
             </style>
         `;
@@ -2471,7 +2471,7 @@ document.body.addEventListener(
         var ex = [];
         if (item.size) ex.push(item.size);
         if (item.extras && item.extras.length) ex = ex.concat(item.extras);
-        var image = item.image || "../assets/images/logo.webp";
+        var image = item.image || "../assets/images/logo.avif";
         return (
           '<div class="order-history-item">' +
           '<img src="' + image + '" alt="' + name + '" loading="lazy" decoding="async">' +

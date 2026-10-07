@@ -1,10 +1,10 @@
-﻿// Centralized demo data state for the meldough dashboard.
-// Demo data for the meldough restaurant dashboard.
+﻿// Centralized demo data state for the Meldough dashboard.
+// Demo data for the Meldough restaurant dashboard.
 
 const Store = {
     state: {
         ...window.crustDemoData,
-        currentBranch: "Sialkot Cantt",
+        currentBranch: "Royal Garden, Burewala",
         dateRange: "Today"
     },
 

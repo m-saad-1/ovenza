@@ -34,7 +34,7 @@ Update the restaurant name, About, menu, prices, categories, offers, contact det
 
 ### 3. Theme
 
-Change the complete website color from #FF8C00 to #FF8C00.
+Change the complete website color from #719397 to #EB1C24.
 
 Apply it consistently while maintaining proper contrast and readability.
 
@@ -81,9 +81,9 @@ Search the entire codebase for:
 ### 6. Update Locations, Map and contact
 
 
-📞 +92 3411010085
+📞 +92 3111163536
 
-📍 Sialkot Cantt
+📍 Royal Garden, Burewala
 
 * When there is just one location, dont show the branch selection bar in the Dashboard.
 

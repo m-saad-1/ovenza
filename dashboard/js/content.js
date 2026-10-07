@@ -156,12 +156,12 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-            name: "meldough",
-            phone: "+92 341 1010085",
+            name: "Meldough",
+            phone: "+92 3111163536",
             email: "info@meldough.com",
-            whatsapp: "+92 341 1010085",
-            address: "Sialkot Cantt",
-            map: "https://www.google.com/maps/search/?api=1&query=Sialkot+Cantt"
+            whatsapp: "+92 3111163536",
+            address: "Royal Garden, Burewala",
+            map: "https://www.google.com/maps/search/?api=1&query=Royal+Garden+Burewala"
 };
 
 window.contentLoadContact = function() {

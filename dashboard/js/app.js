@@ -199,22 +199,6 @@ function renderHeader(state) {
                     openBranchSwitchModal();
                 }
             };
-            if (state.branches && state.branches.length <= 1) {
-                branchSelector.style.setProperty('display', 'none', 'important');
-                const navItem = document.querySelector('.nav-item[data-target="view-branches"]');
-                if (navItem) navItem.style.display = 'none';
-            } else {
-                branchSelector.style.setProperty('display', 'block', 'important');
-                const navItem = document.querySelector('.nav-item[data-target="view-branches"]');
-                if (navItem) navItem.style.display = 'flex';
-            }
-                // Reset selector visually
-                e.target.value = state.currentBranch;
-                // Require authentication by opening the modal
-                if (typeof openBranchSwitchModal === 'function') {
-                    openBranchSwitchModal();
-                }
-            };
         }
     }
 

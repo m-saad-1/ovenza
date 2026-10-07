@@ -216,7 +216,7 @@ function initAnalyticsCharts() {
         plugins: { legend: { position: 'right' } }
     };
 
-    const brandColor = '#FF8C00';
+    const brandColor = '#EB1C24';
     const accentColor = '#3b82f6';
     const successColor = '#10b981';
     const warningColor = '#f59e0b';
@@ -302,7 +302,7 @@ function initAnalyticsCharts() {
     analyticsCharts.branchRevenue = new Chart(document.getElementById('chartBranchRevenue'), {
         type: 'doughnut',
         data: {
-            labels: ['Sialkot Cantt'],
+            labels: ['Royal Garden, Burewala'],
             datasets: [{
                 data: [55, 30, 15],
                 backgroundColor: [brandColor, accentColor, warningColor]

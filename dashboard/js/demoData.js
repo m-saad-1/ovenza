@@ -1,11 +1,11 @@
 window.crustDemoData = {
         restaurant: {
-            name: "meldough",
+            name: "Meldough",
             currency: "Rs.",
             taxRate: 0.16, // 16% GST
         },
         branches: [
-            { id: "b1", name: "Sialkot Cantt", status: "Open", todayRevenue: 124500 },
+            { id: "b1", name: "Royal Garden, Burewala", status: "Open", todayRevenue: 124500 },
         ],
         categories: [
             { id: "c1", name: "Combos" },
