@@ -7687,9 +7687,6 @@ html.dark-mode .about-section-subtitle {
 :not(html.dark-mode) .loc-trigger-bar {
   color: #444444 !important;
 }
-#loc-status-dot {
-  color: #ff767c !important;
-}
 :not(html.dark-mode) .btn.btn-outline {
   color: #444444 !important;
   border-color: #444444 !important;
