@@ -4,7 +4,7 @@
     <script>if(localStorage.getItem('crust_theme') !== 'light') document.documentElement.classList.add('dark-mode');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Meldough</title>
+    <title>My Profile - Ovenza</title>
     <link rel="icon" type="image/avif" href="../assets/images/favicon.avif">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -175,7 +175,7 @@
 .loader-bar-fill {
   height: 100%;
   width: 0%;
-  background: var(--clr-primary, #fb6815);
+  background: var(--clr-primary, #790909);
   border-radius: 4px;
   animation: loader-fill 2s ease-in-out infinite;
 }
@@ -204,7 +204,7 @@ html.dark-mode .loader-bar-track {
   width: 40px;
   height: 40px;
   border: 3px solid rgba(139, 69, 184, 0.2);
-  border-top-color: var(--clr-primary, #fb6815);
+  border-top-color: var(--clr-primary, #790909);
   border-radius: 50%;
   animation: loader-spin 0.8s linear infinite;
 }
@@ -216,7 +216,7 @@ html.dark-mode .loader-bar-track {
 </head>
 <body>
 <div id="page-loader" class="page-loader">
-    <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="Meldough" width="80" height="80" decoding="async"/>
+    <img class="loader-logo" id="loader-logo-img" src="../assets/images/logo.avif" alt="Ovenza" width="80" height="80" decoding="async"/>
   <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
   <div class="loader-spinner"></div>
 </div>
@@ -361,7 +361,7 @@ html.dark-mode .loader-bar-track {
                             </div>
                             <span style="display: inline-block; background: var(--clr-primary); color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Default</span>
                             <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">Home</h4>
-                            <p style="margin: 0; opacity: 0.8; font-size: 0.95rem; line-height: 1.5;">House 45, Street 1<br>Burewala</p>
+                            <p style="margin: 0; opacity: 0.8; font-size: 0.95rem; line-height: 1.5;">House 45, Street 1<br>Peshawar</p>
                         </div>
                         <div class="address-card">
                             <div class="address-actions">
@@ -370,7 +370,7 @@ html.dark-mode .loader-bar-track {
                                 <button class="action-icon-btn danger" title="Delete" onclick="confirm('Delete address?')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
                             </div>
                             <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">Office</h4>
-                            <p style="margin: 0; opacity: 0.8; font-size: 0.95rem; line-height: 1.5;">Plaza 12, Main Boulevard<br>Burewala</p>
+                            <p style="margin: 0; opacity: 0.8; font-size: 0.95rem; line-height: 1.5;">Plaza 12, Main Boulevard<br>Peshawar</p>
                         </div>
                     </div>
 
@@ -390,7 +390,7 @@ html.dark-mode .loader-bar-track {
                             <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                                 <div>
                                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Phone Number</label>
-                        <input type="tel" id="pd-phone" class="profile-input" value="+92 3111163536" required>
+                        <input type="tel" id="pd-phone" class="profile-input" value="0328 5741158" required>
                                 </div>
                                 <div>
                                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Email</label>
@@ -470,7 +470,7 @@ html.dark-mode .loader-bar-track {
                 </div>
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">City</label>
-                    <input type="text" class="profile-input" value="Burewala" required>
+                    <input type="text" class="profile-input" value="Peshawar" required>
                 </div>
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Zip Code</label>
@@ -494,7 +494,7 @@ html.dark-mode .loader-bar-track {
 
         const pName = localStorage.getItem('profileName') || 'Maria Silva';
         const pEmail = localStorage.getItem('profileEmail') || 'maria.silva@email.com';
-            const pPhone = localStorage.getItem('profilePhone') || '+92 3111163536';
+            const pPhone = localStorage.getItem('profilePhone') || '0328 5741158';
         
         document.getElementById('profile-name').textContent = pName;
         document.getElementById('profile-email').textContent = pEmail;
@@ -514,7 +514,7 @@ html.dark-mode .loader-bar-track {
         const logEmail = document.getElementById('log-email');
         const logPwd = document.querySelector('#login-form input[type="password"]');
         if (logEmail && !logEmail.value) {
-                logEmail.value = 'demo@meldough.com';
+                logEmail.value = 'demo@ovenza.com';
             if (logPwd) logPwd.value = 'demo1234';
             
             // Add a subtle hint message

@@ -1,11 +1,12 @@
 window.crustDemoData = {
         restaurant: {
-            name: "Meldough",
+            name: "Ovenza",
             currency: "Rs.",
             taxRate: 0.16, // 16% GST
         },
         branches: [
-            { id: "b1", name: "Royal Garden, Burewala", status: "Open", todayRevenue: 124500 },
+            { id: "b1", name: "Opposite to Jawad tower university road, Peshawar", status: "Open", todayRevenue: 124500 },
+            { id: "b2", name: "Lexus Mall Gulberg Greens, Islamabad", status: "Open", todayRevenue: 95500 },
         ],
         categories: [
             { id: "c1", name: "Combos" },
@@ -111,7 +112,7 @@ window.crustDemoData = {
                             status: demo.status,
                             paymentMethod: demo.payment === "Paid" ? "Card" : "Cash on Delivery",
                             type: demo.type,
-                            customer: { name: demo.customer, phone: "0300-0000000", address: "Sample Address", city: "Burewala" },
+                            customer: { name: demo.customer, phone: "0300-0000000", address: "Sample Address", city: "Peshawar" },
                             items: demo.items.map(i => ({ title: i.name, qty: i.qty, basePrice: 0, extras: i.variant ? [i.variant] : [] }))
                         });
                         changed = true;

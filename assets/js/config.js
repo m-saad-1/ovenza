@@ -1,5 +1,5 @@
-﻿/* ==========================================================================
-   Meldough - Centralized Site Configuration
+/* ==========================================================================
+   Ovenza - Centralized Site Configuration
    One source of truth for all images, links, and site data.
    ========================================================================== */
 
@@ -7,14 +7,14 @@ const BB_CONFIG = {
 
   /* ── Brand Info ─────────────────────────────────────────── */
   brand: {
-    name: 'Meldough',
+    name: 'Ovenza',
     tagline: 'Burgers, Pizza & Fast Food',
-    instagram: 'https://www.instagram.com/meldough/',
-    phone: '+92 3111163536',
+    instagram: 'https://www.instagram.com/ovenza/',
+    phone: '0328 5741158',
     phonePretty: '+92 311 1163536',
-    whatsapp: 'https://wa.me/923111163536',
-    email: 'info@meldough.com',
-    copyright: '© 2026 Meldough. All rights reserved.',
+    whatsapp: 'https://wa.me/923285741158',
+    email: 'info@ovenza.com',
+    copyright: '© 2026 Ovenza. All rights reserved.',
   },
 
 
@@ -83,7 +83,8 @@ const BB_CONFIG = {
   },
 
   locations: [
-    'Royal Garden, Burewala',
+    'Opposite to Jawad tower university road, Peshawar',
+    'Lexus Mall Gulberg Greens, Islamabad',
   ],
 
   /* ── Opening Hours ───────────────────────────────────────── */

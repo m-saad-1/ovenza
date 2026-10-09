@@ -174,7 +174,7 @@ function initCategorySticky() {
   <div class="container">
     <div class="nav-left" style="display: flex; align-items: center; gap: 0.5rem; max-width: calc(100% - 130px);">
       <a href="${v("index.html")}" class="logo" style="flex-shrink: 0;">
-        <img decoding="async" src="${r}" alt="Meldough Logo" class="header-logo" width="120" height="40">
+        <img decoding="async" src="${r}" alt="Ovenza Logo" class="header-logo" width="120" height="40">
       </a>
       <div id="change-location-btn" style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer; flex: 1; min-width: 0; max-width: 200px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--clr-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -336,7 +336,8 @@ function initCategorySticky() {
           <li><span>Email:</span> ${e.brand.email}</li>
           <li><span>Location:</span> 
             <ul style="padding-left: 1rem; margin-top: 0.2rem; display: block; list-style-type: disc;">
-              <li>Royal Garden, Burewala</li>
+              <li>Opposite to Jawad tower university road, Peshawar</li>
+<li>Lexus Mall Gulberg Greens, Islamabad</li>
             </ul>
           </li>
           <li style="margin-top: 0.5rem;"><span>Opening Hours:</span>
@@ -537,7 +538,7 @@ ${s}`,
   }
   function V() {
     const e = [
-        "Royal Garden, Burewala",
+        "Opposite to Jawad tower university road, Peshawar",
         "F-6 Markaz, Islamabad",
         "Blue Area, Islamabad",
         "G-9 Markaz, Islamabad",
@@ -559,7 +560,7 @@ ${s}`,
         "DC Colony, Gujranwala",
         "Civil Lines, Faisalabad",
       ],
-      n = ["Meldough \u2013 Royal Garden, Burewala"],
+      n = ["Ovenza \u2013 Opposite to Jawad tower university road, Peshawar"],
       r = (c, o) =>
         c
           .map(
@@ -1030,7 +1031,7 @@ ${s}`,
         <div class="chatbot-title">
           <span class="chatbot-avatar">\u{1F916}</span>
           <div>
-          <h4>Meldough Assistant</h4>
+          <h4>Ovenza Assistant</h4>
             <span class="online-status">Online now</span>
           </div>
         </div>
@@ -1039,7 +1040,7 @@ ${s}`,
     </div>
     <div class="chatbot-messages">
       <div class="chat-message bot">
-        <div class="msg-content">Hello, welcome to Meldough! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
+        <div class="msg-content">Hello, welcome to Ovenza! I can help you with FAQs, menu information, orders, table reservations, and more. How can I assist you today?</div>
       </div>
     </div>
     <div class="chatbot-suggestions">
@@ -1248,7 +1249,7 @@ ${s}`,
     
     <div class="adm-body" style="padding: 1.5rem; overflow-y: auto; flex-grow: 1;">
       <p style="margin-bottom: 1rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 1.05rem;">
-          A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>Meldough</strong>.
+          A live example of a complete restaurant website + management system &mdash; built to show what's possible for <strong>Ovenza</strong>.
       </p>
       <p style="margin-bottom: 1.5rem; color: var(--clr-text-secondary); line-height: 1.6; font-size: 0.95rem;">
         The menu, orders, and data shown are sample data only. Your actual system will be fully rebuilt around your real branding, menu, branches, and workflows.

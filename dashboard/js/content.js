@@ -156,12 +156,12 @@ window.contentDeleteGallery = function(id) {
 
 /* --- Contact Info --- */
 let mockContact = {
-            name: "Meldough",
-            phone: "+92 3111163536",
-            email: "info@meldough.com",
-            whatsapp: "+92 3111163536",
-            address: "Royal Garden, Burewala",
-            map: "https://www.google.com/maps/search/?api=1&query=Royal+Garden+Burewala"
+            name: "Ovenza",
+            phone: "0328 5741158",
+            email: "info@ovenza.com",
+            whatsapp: "0328 5741158",
+            address: "Opposite to Jawad tower university road, Peshawar",
+            map: "https://www.google.com/maps/search/?api=1&query=Opposite+to+Jawad+tower+university+road,+Peshawar"
 };
 
 window.contentLoadContact = function() {

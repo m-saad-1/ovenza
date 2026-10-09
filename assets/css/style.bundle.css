@@ -20,12 +20,12 @@ html {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
   --clr-surface-dark: #1e1e1e;
-  --clr-primary: #EB1C24;
+  --clr-primary: #790909;
   --clr-primary-dark: #c9141b;
   --clr-text-primary: #1e1e1e;
   --clr-text-secondary: #545454;
   --clr-text-on-dark: #fdfbf7;
-  --clr-badge-danger: #fb6815;
+  --clr-badge-danger: #790909;
   --clr-star: #f57f17;
   --clr-border: rgba(0, 0, 0, 0.08);
   --ff-heading: "Poppins", sans-serif;
@@ -384,7 +384,7 @@ html.dark-mode .review-card-skeleton {
 .loader-bar-fill {
   height: 100%;
   width: 0%;
-  background: var(--clr-primary, #fb6815);
+  background: var(--clr-primary, #790909);
   border-radius: 99px;
   animation: loaderBarFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -428,7 +428,7 @@ html.dark-mode .loader-bar-track {
   width: 40px;
   height: 40px;
   border: 3px solid rgba(139, 69, 184, 0.2);
-  border-top-color: var(--clr-primary, #fb6815);
+  border-top-color: var(--clr-primary, #790909);
   border-radius: 50%;
   animation: loader-spin 0.8s linear infinite;
 }
@@ -2267,7 +2267,7 @@ body {
   position: absolute;
   top: -2px;
   right: -2px;
-  background: var(--clr-primary, #fb6815);
+  background: var(--clr-primary, #790909);
   color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
@@ -6440,7 +6440,7 @@ html.dark-mode .mobile-menu-btn {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: var(--clr-primary, #fb6815);
+  background-color: var(--clr-primary, #790909);
   color: #fff;
   display: flex;
   align-items: center;
@@ -6806,7 +6806,7 @@ html.dark-mode .adm-subtitle {
   margin-top: 2px;
 }
 .adm-close-btn:hover {
-  background: var(--clr-primary, #fb6815);
+  background: var(--clr-primary, #790909);
   color: #fff;
 }
 html.dark-mode .adm-close-btn {
@@ -6840,7 +6840,7 @@ html.dark-mode .adm-sub-text {
 }
 .adm-pricing-card {
   background: linear-gradient(135deg, #e9290e0f, #e9290e05);
-  border: 2px solid var(--clr-primary, #fb6815);
+  border: 2px solid var(--clr-primary, #790909);
   border-radius: 14px;
   padding: 1.4rem 1.5rem;
   text-align: center;
@@ -6862,14 +6862,14 @@ html.dark-mode .adm-pricing-card {
   height: 44px;
   border-radius: 50%;
   background: #e9290e1a;
-  color: var(--clr-primary, #fb6815);
+  color: var(--clr-primary, #790909);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 .adm-pricing-heading {
-  color: var(--clr-primary, #fb6815);
+  color: var(--clr-primary, #790909);
   font-size: 1.05rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -6937,7 +6937,7 @@ html.dark-mode .adm-section-title {
   /* transition removed for perf */
 }
 .adm-feature-item:hover {
-  border-color: var(--clr-primary, #fb6815);
+  border-color: var(--clr-primary, #790909);
   background: #e9290e08;
 }
 html.dark-mode .adm-feature-item {
@@ -6946,7 +6946,7 @@ html.dark-mode .adm-feature-item {
   color: #ccc;
 }
 html.dark-mode .adm-feature-item:hover {
-  border-color: var(--clr-primary, #fb6815);
+  border-color: var(--clr-primary, #790909);
   background: #e9290e14;
 }
 .adm-feature-item > div {
@@ -6971,7 +6971,7 @@ html.dark-mode .adm-feature-item span {
   color: #5a5a5a;
 }
 .adm-check {
-  color: var(--clr-primary, #fb6815);
+  color: var(--clr-primary, #790909);
   font-weight: 700;
   font-size: 0.85rem;
   flex-shrink: 0;
@@ -7675,7 +7675,7 @@ html.dark-mode .about-section-subtitle {
 
 /* Accessibility contrast overrides */
 :root {
-  --clr-primary: #EB1C24;
+  --clr-primary: #790909;
 }
 .card-desc {
   color: #595959 !important; /* Darkened from #777 */

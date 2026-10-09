@@ -4,7 +4,7 @@
     <script>if(localStorage.getItem('crust_theme') !== 'light') document.documentElement.classList.add('dark-mode');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Meldough</title>
+    <title>Checkout - Ovenza</title>
     <link rel="icon" type="image/avif" href="../assets/images/favicon.avif">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -60,7 +60,7 @@
 .loader-bar-fill {
   height: 100%;
   width: 0%;
-  background: var(--clr-primary, #fb6815);
+  background: var(--clr-primary, #790909);
   border-radius: 4px;
   animation: loader-fill 2s ease-in-out infinite;
 }
@@ -89,7 +89,7 @@ html.dark-mode .loader-bar-track {
   width: 40px;
   height: 40px;
   border: 3px solid rgba(139, 69, 184, 0.2);
-  border-top-color: var(--clr-primary, #fb6815);
+  border-top-color: var(--clr-primary, #790909);
   border-radius: 50%;
   animation: loader-spin 0.8s linear infinite;
 }
@@ -223,7 +223,7 @@ html.dark-mode .loader-bar-track {
                                         <label for="cust-city" class="field-label" style="margin-bottom: 0;">City / Area</label>
                                         <a href="#" onclick="event.preventDefault(); if(window._tl_openLocationModal) window._tl_openLocationModal();" style="font-size: 0.85rem; color: var(--clr-primary); font-weight: 600; text-decoration: none;">Edit Location</a>
                                     </div>
-                                    <input type="text" id="cust-city" class="checkout-input" placeholder="e.g. Royal Garden, Burewala" required>
+                                    <input type="text" id="cust-city" class="checkout-input" placeholder="e.g. Opposite to Jawad tower university road, Peshawar" required>
                                 </div>
                                 <div style="grid-column: 1 / -1;">
                                     <label for="cust-notes" class="field-label">Additional Order Notes (Optional)</label>

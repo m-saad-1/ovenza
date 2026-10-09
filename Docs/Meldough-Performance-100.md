@@ -1,12 +1,12 @@
-# Meldough Mobile Performance: 89 to 100
+# Ovenza Mobile Performance: 89 to 100
 
-This document records the production-first approach used to raise the Meldough homepage's reported mobile PageSpeed performance score from **89 to 100**. It is also a maintenance guide: future changes should preserve the principles and checks below rather than treating the score as a one-time result.
+This document records the production-first approach used to raise the Ovenza homepage's reported mobile PageSpeed performance score from **89 to 100**. It is also a maintenance guide: future changes should preserve the principles and checks below rather than treating the score as a one-time result.
 
 ## Result
 
 - Starting production mobile score: **89**
 - Final production mobile score reported after deployment: **100**
-- Production site: `https://meldough.vercel.app/`
+- Production site: `https://ovenza.vercel.app/`
 - Optimization commits:
   - `2bdac51` — Improve mobile loading performance
   - `9b2de2e` — Reduce production homepage payload

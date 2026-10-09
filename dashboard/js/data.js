@@ -1,10 +1,10 @@
-﻿// Centralized demo data state for the Meldough dashboard.
-// Demo data for the Meldough restaurant dashboard.
+﻿// Centralized demo data state for the Ovenza dashboard.
+// Demo data for the Ovenza restaurant dashboard.
 
 const Store = {
     state: {
         ...window.crustDemoData,
-        currentBranch: "Royal Garden, Burewala",
+        currentBranch: "Opposite to Jawad tower university road, Peshawar",
         dateRange: "Today"
     },
 
