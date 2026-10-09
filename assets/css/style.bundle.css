@@ -2,6 +2,20 @@
 html {
   overflow-x: hidden;
 }
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: optional;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: optional;
+  src: url("../fonts/poppins-latin.woff2") format("woff2");
+}
 :root {
   --clr-background: #fdfbf7;
   --clr-surface: #ffffff;
