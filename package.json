@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build:assets": "node scripts/minify-assets.js",
+    "build:home-css": "node scripts/build-home-css.mjs",
     "build:images": "node scripts/responsive-images.js",
     "verify": "node scripts/verify-site.mjs"
   },
