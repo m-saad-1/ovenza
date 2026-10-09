@@ -4,7 +4,7 @@
 
 <head>
   <script>
-    if (localStorage.getItem("crust_theme") === "dark") {
+    if (localStorage.getItem("crust_theme") !== "light") {
       document.documentElement.classList.add("dark-mode");
     }
   </script>
@@ -197,22 +197,10 @@
       <div class="hero-image-frame" id="hero-carousel-container"
         style="position: relative; overflow: hidden; width: 100%; touch-action: pan-y;">
         <div class="hero-carousel-track" id="hero-carousel-track"
-          style="display: flex; transition: transform 0.5s ease-in-out; width: 300%; cursor: grab;">
+          style="display: flex; width: 100%;">
       <img srcset="./assets/images/responsive/hero-main-480.avif 480w, ./assets/images/responsive/hero-main-800.avif 800w, ./assets/images/hero-main.avif 1600w" sizes="(max-width: 768px) calc(100vw - 16px), calc(100vw - 48px)" id="hero-primary-img" alt="Meldough burger meal" class="hero-full-img is-loaded" decoding="async" fetchpriority="high"
-            loading="eager" height="700" src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
-          <img srcset="./assets/images/responsive/hero-main-480.avif 480w, ./assets/images/responsive/hero-main-800.avif 800w, ./assets/images/hero-main.avif 1600w" sizes="(max-width: 768px) calc(100vw - 16px), calc(100vw - 48px)" alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
-            src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
-          <img srcset="./assets/images/responsive/hero-main-480.avif 480w, ./assets/images/responsive/hero-main-800.avif 800w, ./assets/images/hero-main.avif 1600w" sizes="(max-width: 768px) calc(100vw - 16px), calc(100vw - 48px)" alt="" aria-hidden="true" class="hero-full-img is-loaded" decoding="async" loading="eager" height="700"
-            src="./assets/images/hero-main.avif"
-            style="width: 33.3333%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
-        </div>
-        <div class="carousel-indicators" id="hero-indicators"
-          style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
-          <span class="indicator active" data-slide="0" style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 1;"></span>
-          <span class="indicator" data-slide="1" style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
-          <span class="indicator" data-slide="2" style="width: 12px; height: 12px; background: white; border-radius: 50%; cursor: pointer; transition: 0.3s; opacity: 0.5;"></span>
+            loading="eager" height="750" src="./assets/images/hero-main.avif"
+            style="width: 100%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
         </div>
         <!-- hero order button removed -->
       </div>
