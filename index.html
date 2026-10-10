@@ -15,7 +15,9 @@
   <meta content="The best fast food and deals. The perfect place to eat well and gather friends." name="description" />
   <!-- Fonts are self-hosted in the homepage stylesheet to avoid third-party connections. -->
   <link rel="stylesheet" href="./assets/css/style.home.min.css?v=1">
-  <link as="image" fetchpriority="high" href="./assets/images/hero-main.avif" rel="preload" />
+  <link as="image" fetchpriority="high" href="./assets/images/hero-main.avif" rel="preload"
+    imagesrcset="./assets/images/responsive/hero-main-480.avif 480w, ./assets/images/responsive/hero-main-800.avif 800w, ./assets/images/responsive/hero-main-1200.avif 1200w, ./assets/images/hero-main.avif 1827w"
+    imagesizes="100vw" />
   <!-- Component Loader -->
   <script defer="" src="./assets/js/config.js"></script>
   <script defer="" fetchpriority="low" src="./assets/js/loader.min.js?v=33"></script>
@@ -188,8 +190,9 @@
         <div class="hero-carousel-track" id="hero-carousel-track"
           style="display: flex; width: 100%;">
       <img id="hero-primary-img" alt="Ovenza burger meal" class="hero-full-img is-loaded" decoding="async" fetchpriority="high"
-            loading="eager" height="750" src="./assets/images/hero-main.avif"
-            style="width: 100%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1600" />
+            loading="eager" height="861" src="./assets/images/hero-main.avif"
+            srcset="./assets/images/responsive/hero-main-480.avif 480w, ./assets/images/responsive/hero-main-800.avif 800w, ./assets/images/responsive/hero-main-1200.avif 1200w, ./assets/images/hero-main.avif 1827w"
+            sizes="100vw" style="width: 100%; flex-shrink: 0; pointer-events: none; user-select: none;" width="1827" />
         </div>
         <!-- hero order button removed -->
       </div>
@@ -200,27 +203,27 @@
 <div class="category-sticky-wrapper" id="category-sticky-wrapper">
 <div class="category-circles-wrapper" id="category-circles" role="tablist" aria-label="Menu categories">
 <a class="category-circle-btn active" href="#combos" style="text-decoration:none;" role="tab" aria-selected="true">
-<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="228" src="./assets/images/combo-1.avif" width="228"/></div>
+<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="96" src="./assets/images/responsive/combo-1-96.avif" srcset="./assets/images/responsive/combo-1-96.avif 1x, ./assets/images/responsive/combo-1-192.avif 2x" width="96"/></div>
 <span class="circle-label">Combos</span>
 </a>
 <a class="category-circle-btn" href="#burgers" style="text-decoration:none;" role="tab" aria-selected="false">
-<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="228" src="./assets/images/burger-3.avif" width="228"/></div>
+<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="96" src="./assets/images/responsive/burger-3-96.avif" srcset="./assets/images/responsive/burger-3-96.avif 1x, ./assets/images/responsive/burger-3-192.avif 2x" width="96"/></div>
 <span class="circle-label">Burgers</span>
 </a>
 <a class="category-circle-btn" href="#pizzas" style="text-decoration:none;" role="tab" aria-selected="false">
-<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="228" src="./assets/images/chicken-pizza.avif" width="228"/></div>
+<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="96" src="./assets/images/responsive/chicken-pizza-96.avif" srcset="./assets/images/responsive/chicken-pizza-96.avif 1x, ./assets/images/responsive/chicken-pizza-192.avif 2x" width="96"/></div>
 <span class="circle-label">Pizzas</span>
 </a>
 <a class="category-circle-btn" href="#rolls" style="text-decoration:none;" role="tab" aria-selected="false">
-<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="228" src="./assets/images/roll-1.avif" width="228"/></div>
+<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="96" src="./assets/images/responsive/roll-1-96.avif" srcset="./assets/images/responsive/roll-1-96.avif 1x, ./assets/images/responsive/roll-1-192.avif 2x" width="96"/></div>
 <span class="circle-label">Rolls</span>
 </a>
 <a class="category-circle-btn" href="#fries" style="text-decoration:none;" role="tab" aria-selected="false">
-<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="228" src="./assets/images/cheese-fries.avif" width="228"/></div>
+<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="96" src="./assets/images/responsive/cheese-fries-96.avif" srcset="./assets/images/responsive/cheese-fries-96.avif 1x, ./assets/images/responsive/cheese-fries-192.avif 2x" width="96"/></div>
 <span class="circle-label">Fries</span>
 </a>
 <a class="category-circle-btn" href="#drinks" style="text-decoration:none;" role="tab" aria-selected="false">
-<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="228" src="./assets/images/mountain-dew.avif" width="228"/></div>
+<div class="circle-img"><img loading="lazy" fetchpriority="low" alt="" decoding="async" height="96" src="./assets/images/responsive/mountain-dew-96.avif" srcset="./assets/images/responsive/mountain-dew-96.avif 1x, ./assets/images/responsive/mountain-dew-192.avif 2x" width="96"/></div>
 <span class="circle-label">Drinks</span>
 </a>
 
@@ -231,19 +234,19 @@
 </div>
 <div class="menu-grid">
 <div class="product-card">
-<div class="card-image"><img alt="Combo 1" decoding="async" loading="lazy" height="228" src="./assets/images/combo-1.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 1" decoding="async" loading="lazy" height="240" src="./assets/images/responsive/combo-1-240.avif" srcset="./assets/images/responsive/combo-1-240.avif 240w, ./assets/images/responsive/combo-1-480.avif 480w" sizes="(max-width: 768px) calc((100vw - 2.5rem) / 2), 228px" width="240"/></div>
 <div class="card-content"><div class="card-header"><h3>Combo 1</h3></div><p class="card-desc">Classic burgers, fried chicken, fries, cola, and cheese dip.</p><div class="card-footer"><span class="price">Rs 1499</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div></div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Combo 2" decoding="async" loading="lazy" height="228" src="./assets/images/combo-2.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 2" decoding="async" loading="lazy" height="240" src="./assets/images/responsive/combo-2-240.avif" srcset="./assets/images/responsive/combo-2-240.avif 240w, ./assets/images/responsive/combo-2-480.avif 480w" sizes="(max-width: 768px) calc((100vw - 2.5rem) / 2), 228px" width="240"/></div>
 <div class="card-content"><div class="card-header"><h3>Combo 2</h3></div><p class="card-desc">Chicken pizza, wings, a refreshing drink, and dips.</p><div class="card-footer"><span class="price">Rs 1799</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div></div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Combo 3" decoding="async" loading="lazy" height="228" src="./assets/images/combo-3.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 3" decoding="async" loading="lazy" height="240" src="./assets/images/responsive/combo-3-240.avif" srcset="./assets/images/responsive/combo-3-240.avif 240w, ./assets/images/responsive/combo-3-480.avif 480w" sizes="(max-width: 768px) calc((100vw - 2.5rem) / 2), 228px" width="240"/></div>
 <div class="card-content"><div class="card-header"><h3>Combo 3</h3></div><p class="card-desc">Cheeseburger, nuggets, fries, cheese dip, and NEXT Cola.</p><div class="card-footer"><span class="price">Rs 1299</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div></div>
 </div>
 <div class="product-card">
-<div class="card-image"><img alt="Combo 4" decoding="async" loading="lazy" height="228" src="./assets/images/combo-4.avif" width="228"/></div>
+<div class="card-image"><img alt="Combo 4" decoding="async" loading="lazy" height="240" src="./assets/images/responsive/combo-4-240.avif" srcset="./assets/images/responsive/combo-4-240.avif 240w, ./assets/images/responsive/combo-4-480.avif 480w" sizes="(max-width: 768px) calc((100vw - 2.5rem) / 2), 228px" width="240"/></div>
 <div class="card-content"><div class="card-header"><h3>Combo 4</h3></div><p class="card-desc">Chicken pizzas, wings, Pepsi, and dips for sharing.</p><div class="card-footer"><span class="price">Rs 2299</span><button class="btn btn-primary" style="padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;">Add</button></div></div>
 </div>
 </div>
