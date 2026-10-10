@@ -11,7 +11,7 @@ const BB_CONFIG = {
     tagline: 'Burgers, Pizza & Fast Food',
     instagram: 'https://www.instagram.com/ovenza/',
     phone: '0328 5741158',
-    phonePretty: '+92 311 1163536',
+    phonePretty: '0328 5741158 / 0344 5057791',
     whatsapp: 'https://wa.me/923285741158',
     email: 'info@ovenza.com',
     copyright: '© 2026 Ovenza. All rights reserved.',
